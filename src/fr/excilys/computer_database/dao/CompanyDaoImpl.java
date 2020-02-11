@@ -37,6 +37,7 @@ public class CompanyDaoImpl implements CompanyDao {
     
     @Override
     public List<Company> lister() {
+    	
         List<Company> companies = new ArrayList<Company>();
         Connection connexion = null;
         Statement statement = null;

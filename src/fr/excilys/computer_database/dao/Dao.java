@@ -1,73 +1,43 @@
 package fr.excilys.computer_database.dao;
 
-
 import java.sql.Connection;
-
 import java.sql.DriverManager;
-
 import java.sql.SQLException;
-
 
 public class Dao {
 
-    private String url;
+	private String url;
+	private String username;
+	private String password;
 
-    private String username;
+	Dao(String url, String username, String password) {
+		this.url = url;
+		this.username = username;
+		this.password = password;
+	}
 
-    private String password;
+	public static Dao getInstance() {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+		}
+		Dao instance = new Dao(
+				"jdbc:mysql://localhost:3306/", "admincdb", "qwerty1234");
+		return instance;
+	}
 
+	public Connection getConnection() throws SQLException {
+		return DriverManager.getConnection(url, username, password);
+	}
 
-    Dao(String url, String username, String password) {
+	// Récupération du Dao
 
-        this.url = url;
+	public CompanyDao getCompanyDao() {
+		return new CompanyDaoImpl(this);
+	}
 
-        this.username = username;
-
-        this.password = password;
-
-    }
-
-
-    public static Dao getInstance() {
-
-        try {
-
-            Class.forName("com.mysql.jdbc.Driver");
-
-        } catch (ClassNotFoundException e) {
-
-
-        }
-
-
-        Dao instance = new Dao(
-
-                "jdbc:mysql://localhost:3306/", "admincdb", "qwerty1234");
-
-        return instance;
-
-    }
-
-
-    public Connection getConnection() throws SQLException {
-
-        return DriverManager.getConnection(url, username, password);
-
-    }
-
-
-    // Récupération du Dao
-
-    public CompanyDao getCompanyDao() {
-
-        return new CompanyDaoImpl(this);
-
-    }
-    
-    public ComputerDao getComputerDao() {
-
-        return new ComputerDaoImpl(this);
-
-    }
+	public ComputerDao getComputerDao() {
+		return new ComputerDaoImpl(this);
+	}
 
 }
