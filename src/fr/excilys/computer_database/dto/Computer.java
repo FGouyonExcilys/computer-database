@@ -4,13 +4,11 @@ import java.sql.Date;
 
 public class Computer {
 	
-
 	private int id;
 	private String name;
 	private Date introduced;
 	private Date discontinued;
 	private int company_id;
-	
 
 	public Computer(int id, String name, Date introduced, Date discontinued, int company_id) {
 		this.id = id;
