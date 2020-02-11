@@ -20,7 +20,6 @@ public class Computer {
 	
 	public Computer() {
 	}
-
 	
 	public int getId() {
 		return id;

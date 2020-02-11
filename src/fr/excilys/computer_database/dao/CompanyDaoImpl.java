@@ -8,6 +8,17 @@ import fr.excilys.computer_database.dto.Company;
 
 public class CompanyDaoImpl implements CompanyDao {
     
+	private static CompanyDaoImpl INSTANCE = null;
+    
+    /** Point d'accès pour l'instance unique du singleton */
+    public static CompanyDaoImpl getInstance(Dao dao)
+    {
+        if (INSTANCE == null)
+        {   INSTANCE = new CompanyDaoImpl(dao); 
+        }
+        return INSTANCE;
+    }
+	
 	private Dao dao;
 
 	public CompanyDaoImpl(Dao dao) {
@@ -38,8 +49,6 @@ public class CompanyDaoImpl implements CompanyDao {
 
                 companies.add(company);
             }
-            
-            connexion.close();
   
         } catch (SQLException e) {
             e.printStackTrace();

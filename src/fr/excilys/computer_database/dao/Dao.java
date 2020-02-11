@@ -22,7 +22,7 @@ public class Dao {
 		} catch (ClassNotFoundException e) {
 		}
 		Dao instance = new Dao(
-				"jdbc:mysql://localhost:3306/computer-database-db", "admincdb", "qwerty1234");
+				"jdbc:mysql://localhost:3306/computer-database-db?useSSL=false", "admincdb", "qwerty1234");
 		return instance;
 	}
 
@@ -30,14 +30,5 @@ public class Dao {
 		return DriverManager.getConnection(url, username, password);
 	}
 
-	// Récupération du Dao
-
-	public CompanyDao getCompanyDao() {
-		return new CompanyDaoImpl(this);
-	}
-
-	public ComputerDao getComputerDao() {
-		return new ComputerDaoImpl(this);
-	}
 
 }
