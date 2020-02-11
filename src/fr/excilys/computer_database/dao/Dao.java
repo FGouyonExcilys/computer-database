@@ -10,7 +10,7 @@ public class Dao {
 	private String username;
 	private String password;
 
-	Dao(String url, String username, String password) {
+	public Dao(String url, String username, String password) {
 		this.url = url;
 		this.username = username;
 		this.password = password;
@@ -22,7 +22,7 @@ public class Dao {
 		} catch (ClassNotFoundException e) {
 		}
 		Dao instance = new Dao(
-				"jdbc:mysql://localhost:3306/", "admincdb", "qwerty1234");
+				"jdbc:mysql://localhost:3306/computer-database-db", "admincdb", "qwerty1234");
 		return instance;
 	}
 

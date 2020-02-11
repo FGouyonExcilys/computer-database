@@ -10,7 +10,7 @@ public class ComputerDaoImpl implements ComputerDao {
     
 	private Dao dao;
 
-    ComputerDaoImpl(Dao dao) {
+    public ComputerDaoImpl(Dao dao) {
         this.dao = dao;
     }
 
@@ -49,7 +49,7 @@ public class ComputerDaoImpl implements ComputerDao {
         	
             connexion = dao.getConnection();
             statement = connexion.createStatement();
-            resultat = statement.executeQuery("SELECT id, prenom FROM computer;");
+            resultat = statement.executeQuery("SELECT id, name, introduced, discontinued, company_id FROM computer;");
 
             while (resultat.next()) {
                 int id = resultat.getInt("id");

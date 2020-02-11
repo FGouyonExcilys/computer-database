@@ -10,7 +10,7 @@ public class CompanyDaoImpl implements CompanyDao {
     
 	private Dao dao;
 
-    CompanyDaoImpl(Dao dao) {
+	public CompanyDaoImpl(Dao dao) {
         this.dao = dao;
     }
 
@@ -47,7 +47,7 @@ public class CompanyDaoImpl implements CompanyDao {
         	
             connexion = dao.getConnection();
             statement = connexion.createStatement();
-            resultat = statement.executeQuery("SELECT id, prenom FROM company;");
+            resultat = statement.executeQuery("SELECT id, name FROM company;");
 
             while (resultat.next()) {
                 int id = resultat.getInt("id");

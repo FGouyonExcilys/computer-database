@@ -67,8 +67,8 @@ public class Computer {
 
 	@Override
 	public String toString() {
-		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
-				+ ", company_id=" + company_id + "]";
+		return "Computer [ id= " + id + ", name= " + name + ", introduced= " + introduced + ", discontinued= " + discontinued
+				+ ", company_id= " + company_id + " ]";
 	}
 	
 	
