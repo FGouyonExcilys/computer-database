@@ -4,8 +4,7 @@ public class Company {
 
 	private int id;
 	private String name;
-	
-	
+
 	public Company(int id, String name) {
 		this.id = id;
 		this.name = name;
@@ -13,7 +12,6 @@ public class Company {
 	
 	public Company() {
 	}
-	
 
 	public int getId() {
 		return id;
@@ -36,5 +34,4 @@ public class Company {
 		return "Company [ id= " + id + ", name= " + name + " ]";
 	}
 
-		
 }

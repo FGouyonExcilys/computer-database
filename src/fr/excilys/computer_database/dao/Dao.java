@@ -21,14 +21,16 @@ public class Dao {
 			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 		}
-		Dao instance = new Dao(
-				"jdbc:mysql://localhost:3306/computer-database-db?useSSL=false", "admincdb", "qwerty1234");
+		Dao instance = new Dao("jdbc:mysql://localhost:3306/computer-database-db?useSSL=false", "admincdb",
+				"qwerty1234");
 		return instance;
 	}
 
 	public Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(url, username, password);
 	}
-
-
+	
+	public void closeConnection(Connection con) throws SQLException {
+		con.close();
+	}
 }
