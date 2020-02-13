@@ -6,12 +6,12 @@ import java.util.List;
 
 import fr.excilys.computer_database.dto.Company;
 
-public class CompanyDaoImpl implements CompanyDao {
+public final class CompanyDaoImpl implements CompanyDao {
 
-	private static CompanyDaoImpl INSTANCE = null;
+	private static volatile CompanyDaoImpl INSTANCE = null;
 
 	/** Point d'accès pour l'instance unique du singleton */
-	public static CompanyDaoImpl getInstance(Dao dao) {
+	public final static CompanyDaoImpl getInstance(Dao dao) {
 		if (INSTANCE == null) {
 			INSTANCE = new CompanyDaoImpl(dao);
 		}

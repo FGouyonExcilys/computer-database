@@ -7,16 +7,15 @@ import java.util.List;
 import fr.excilys.computer_database.dto.Company;
 import fr.excilys.computer_database.dto.Computer;
 
-public class ComputerDaoImpl implements ComputerDao {
+public final class ComputerDaoImpl implements ComputerDao {
 
-	private static ComputerDaoImpl INSTANCE = null;
+	private static volatile ComputerDaoImpl INSTANCE = null;
 
 	/**
 	 * Point d'accès pour l'instance unique du singleton
 	 * 
 	 */
-
-	public static ComputerDaoImpl getInstance(Dao dao) {
+	public final static ComputerDaoImpl getInstance(Dao dao) {
 		if (INSTANCE == null) {
 			INSTANCE = new ComputerDaoImpl(dao);
 		}

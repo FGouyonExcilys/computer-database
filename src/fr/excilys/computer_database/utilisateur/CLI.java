@@ -40,7 +40,7 @@ public class CLI {
 				choix.nextLine();
 
 				switch (str) {
-
+                     
 				case "1":		// Pagination de la liste de tous les ordinateurs
 					System.out.println("Entrez un pas de pagination : ");
 					String strPasComputer = choix.nextLine();
