@@ -47,8 +47,9 @@ public class CompanyDaoImpl implements CompanyDao {
 
 				companies.add(company);
 				
-				dao.closeConnection(connexion);
 			}
+			
+			dao.closeConnection(connexion);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -84,8 +85,10 @@ public class CompanyDaoImpl implements CompanyDao {
 
 				companies.add(company);
 
-				dao.closeConnection(connexion);
+				
 			}
+			
+			dao.closeConnection(connexion);
 
 		} catch (SQLException e) {
 			e.printStackTrace();

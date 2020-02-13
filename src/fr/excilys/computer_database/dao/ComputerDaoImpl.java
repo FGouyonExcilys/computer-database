@@ -135,7 +135,6 @@ public class ComputerDaoImpl implements ComputerDao {
 
 				computers.add(computer);
 				
-				
 			}
 
 		} catch (SQLException e) {
