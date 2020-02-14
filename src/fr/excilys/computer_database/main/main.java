@@ -1,4 +1,4 @@
-package fr.excilys.computer_database.dto;
+package fr.excilys.computer_database.main;
 
 import fr.excilys.computer_database.utilisateur.CLI;
 

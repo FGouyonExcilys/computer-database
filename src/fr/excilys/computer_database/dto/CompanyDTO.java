@@ -1,16 +1,21 @@
 package fr.excilys.computer_database.dto;
 
-public class Company {
-
+public class CompanyDTO {
+	
 	private int id;
 	private String name;
 
-	public Company(int id, String name) {
+	public CompanyDTO() {
+
+	}
+
+	public CompanyDTO(String id) {
+		this.id = Integer.parseInt(id);
+	}
+
+	public CompanyDTO(int id, String name) {
 		this.id = id;
 		this.name = name;
-	}
-	
-	public Company() {
 	}
 
 	public int getId() {
@@ -31,7 +36,6 @@ public class Company {
 
 	@Override
 	public String toString() {
-		return "Company [ id= " + id + ", name= " + name + " ]";
+		return "CompanyDTO [id=" + id + ", name=" + name + "]";
 	}
-
 }

@@ -1,13 +1,17 @@
 package fr.excilys.computer_database.utilisateur;
 
+import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Scanner;
 
-import fr.excilys.computer_database.dao.CompanyDaoImpl;
-import fr.excilys.computer_database.dao.ComputerDaoImpl;
-import fr.excilys.computer_database.dao.Dao;
-import fr.excilys.computer_database.dto.Company;
-import fr.excilys.computer_database.dto.Computer;
+import fr.excilys.computer_database.utilisateur.Action;
+import fr.excilys.computer_database.dao.CompanyDAO;
+import fr.excilys.computer_database.dao.ComputerDAO;
+import fr.excilys.computer_database.dao.DAO;
+import fr.excilys.computer_database.model.Company;
+import fr.excilys.computer_database.model.Computer;
 
 public class CLI {
 
@@ -15,10 +19,10 @@ public class CLI {
 
 		try {
 
-			Dao dao = Dao.getInstance();
+			DAO dao = DAO.getInstance();
 
-			ComputerDaoImpl computerDao = ComputerDaoImpl.getInstance(dao);
-			CompanyDaoImpl companyDao = CompanyDaoImpl.getInstance(dao);
+			ComputerDAO computerDao = ComputerDAO.getInstance(dao);
+			CompanyDAO companyDao = CompanyDAO.getInstance(dao);
 
 			int menu = 0;
 
@@ -38,36 +42,20 @@ public class CLI {
 				System.out.println("Que voulez-vous faire : ");
 				String str = choix.next();
 				choix.nextLine();
-
-				switch (str) {
+				
+				Action action = Action.valueOf(Integer.parseInt(str));
+				
+				switch (action) {
                      
-				case "1":		// Pagination de la liste de tous les ordinateurs
-					System.out.println("Entrez un pas de pagination : ");
-					String strPasComputer = choix.nextLine();
-					int pasComputer = Integer.parseInt(strPasComputer);
-
-					for (int i = 0; i < computerDao.lister().size(); i += pasComputer) {
-						for (Computer c : computerDao.lister(i, pasComputer)) {
-							System.out.println(c.toString());
-						}
-						System.in.read();
-					}
+				case LISTER_COMPUTER:
+					listerComputer(choix, computerDao);
 					break;
-				case "2":		// Pagination de la liste de toutes les entreprises
-					System.out.println("Entrez un pas de pagination : ");
-					String strPasCompany = choix.nextLine();
-					int pasCompany = Integer.parseInt(strPasCompany);
-
-					for (int i = 0; i < companyDao.lister().size(); i += pasCompany) {
-						for (Company c : companyDao.lister(i, pasCompany)) {
-							System.out.println(c.toString());
-						}
-						System.in.read();
-					}
-					System.out.println("");
+					
+				case LISTER_COMPANY:		
+					listerCompany(choix, companyDao);
 					break;
-				case "3":		// Infos détaillées d'un ordinateur
-
+					
+				case LISTER_DETAILS_ORDI:		
 					System.out.println("Entrez l'id d'un ordinateur : ");
 					String strDetails = choix.nextLine();
 					int details = Integer.parseInt(strDetails);
@@ -80,8 +68,7 @@ public class CLI {
 					}
 					break;
 
-				case "4": 		// Ajouter un ordinateur
-
+				case AJOUT: 
 					System.out.println("Entrez le nom de l'ordinateur: ");
 					String strName = choix.nextLine();
 
@@ -94,12 +81,16 @@ public class CLI {
 					System.out.println("Entrez l'id de l'entreprise de l'ordinateur : ");
 					String strCompanyId = choix.nextLine();
 
-					computerDao.ajouter(new Computer(1, strName, Date.valueOf(strIntroduced),
-							Date.valueOf(strDiscontinued), new Company(Integer.parseInt(strCompanyId), "")));
-
+					computerDao.ajouter(new Computer.ComputerBuilder(strName)
+										.setIntroduced(Date.valueOf(strIntroduced).toLocalDate())
+										.setDiscontinued(Date.valueOf(strDiscontinued).toLocalDate())
+										.setCompany(new Company.CompanyBuilder()
+														.setId(Integer.parseInt(strCompanyId))
+														.build())
+										.build());
 					break;
 
-				case "5":
+				case MODIF:
 
 					System.out.println("Entrez l'id d'un ordinateur à modifier: ");
 					String strIdModif = choix.nextLine();
@@ -116,14 +107,21 @@ public class CLI {
 
 					System.out.println("Entrez l'id de l'entreprise de l'ordinateur: ");
 					String strCompanyIdModif = choix.nextLine();
+					
+					Computer computer = new Computer.ComputerBuilder(strNameModif)
+							.setIntroduced(Date.valueOf(strIntroducedModif).toLocalDate())
+							.setDiscontinued(Date.valueOf(strDiscontinuedModif).toLocalDate())
+							.setCompany(new Company.CompanyBuilder()
+											.setId(Integer.parseInt(strCompanyIdModif))
+											.build())
+							.build();
+					computer.setId(Integer.parseInt(strIdModif));
 
-					computerDao.modifier(new Computer(Integer.parseInt(strIdModif), strNameModif,
-							Date.valueOf(strIntroducedModif), Date.valueOf(strDiscontinuedModif),
-							new Company(Integer.parseInt(strCompanyIdModif), "")));
+					computerDao.modifier(computer);
 
 					break;
 
-				case "6":
+				case SUPPR:
 
 					System.out.println("Entrez l'id d'un ordinateur à supprimer: ");
 					String strIdDel = choix.nextLine();
@@ -131,11 +129,14 @@ public class CLI {
 					computerDao.supprimer(Integer.parseInt(strIdDel));
 
 					break;
-				case "7":
+					
+				case QUITTER:
 					menu = 1;
 					break;
+					
 				default:
-					System.out.println("\nVeuillez choisir un input valide\n");
+					System.out.println("\nVeuillez choisir un input valide (PRESSEZ ENTRER POUR CONTINUER)\n");
+					System.in.read();
 					break;
 				}
 
@@ -146,6 +147,54 @@ public class CLI {
 		} catch (Exception e) {
 			// gestion des exceptions
 		}
+		
+		
 
 	}
+	
+	public static void listerComputer(Scanner choix, ComputerDAO computerDao) {
+		System.out.println("Entrez un pas de pagination : ");
+		String strPasComputer = choix.nextLine();
+		int pasComputer = Integer.parseInt(strPasComputer);
+
+		try {
+			for (int i = 0; i < computerDao.lister().size(); i += pasComputer) {
+				for (Computer c : computerDao.lister(i, pasComputer)) {
+					System.out.println(c.toString());
+				}
+				System.in.read();
+			}
+		} catch (SQLException | IOException e) {
+			// TODO Auto-generated catch block
+		}
+	}
+	public static void listerCompany(Scanner choix, CompanyDAO companyDao) throws IOException {
+		System.out.println("Entrez un pas de pagination : ");
+		String strPasCompany = choix.nextLine();
+		int pasCompany = Integer.parseInt(strPasCompany);
+	
+		for (int i = 0; i < companyDao.lister().size(); i += pasCompany) {
+			for (Company c : companyDao.lister(i, pasCompany)) {
+				System.out.println(c.toString());
+			}
+			System.in.read();
+		}
+	}
+	public static void listeDetailsOrdi(Scanner choix, ComputerDAO computerDao) {
+		System.out.println("Entrez l'id d'un ordinateur : ");
+		String strDetails = choix.nextLine();
+		int details = Integer.parseInt(strDetails);
+
+		try {
+			if ( details <= computerDao.lister().size() && details > 0) {
+				System.out.println("\n" + computerDao.afficherInfoComputer(details) + "\n");
+			}
+			else {
+				System.out.println("\nAucun ordinateur n'a été trouvé \n");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+		}
+	}
+	
 }

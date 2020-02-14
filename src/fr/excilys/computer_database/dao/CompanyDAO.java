@@ -2,32 +2,34 @@ package fr.excilys.computer_database.dao;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
-import fr.excilys.computer_database.dto.Company;
+import fr.excilys.computer_database.model.Company;
 
-public final class CompanyDaoImpl implements CompanyDao {
+public final class CompanyDAO {
 
-	private static volatile CompanyDaoImpl INSTANCE = null;
+	private final static String LISTER = "SELECT * FROM company;";
+	private final static String LISTER_LIMIT = "SELECT * FROM company LIMIT ?,?;";
+	
+	
+	private static volatile CompanyDAO INSTANCE = null;
 
 	/** Point d'accès pour l'instance unique du singleton */
-	public final static CompanyDaoImpl getInstance(Dao dao) {
+	public final static CompanyDAO getInstance(DAO dao) {
 		if (INSTANCE == null) {
-			INSTANCE = new CompanyDaoImpl(dao);
+			INSTANCE = new CompanyDAO(dao);
 		}
 		return INSTANCE;
 	}
 
-	private Dao dao;
+	private DAO dao;
 
-	public CompanyDaoImpl(Dao dao) {
+	public CompanyDAO(DAO dao) {
 		this.dao = dao;
 	}
 
-	@Override
-	public List<Company> lister() {
+	public ArrayList<Company> lister() {
 
-		List<Company> companies = new ArrayList<Company>();
+		ArrayList<Company> companies = new ArrayList<Company>();
 		Statement statement = null;
 		ResultSet resultat = null;
 
@@ -35,15 +37,13 @@ public final class CompanyDaoImpl implements CompanyDao {
 
 			Connection connexion = dao.getConnection();
 			statement = connexion.createStatement();
-			resultat = statement.executeQuery("SELECT * FROM company;");
+			resultat = statement.executeQuery(LISTER);
 
 			while (resultat.next()) {
 				int id = resultat.getInt("id");
 				String name = resultat.getString("name");
 
-				Company company = new Company();
-				company.setId(id);
-				company.setName(name);
+				Company company = new Company.CompanyBuilder().setId(id).setName(name).build();
 
 				companies.add(company);
 				
@@ -59,17 +59,16 @@ public final class CompanyDaoImpl implements CompanyDao {
 		return companies;
 	}
 	
-	@Override
-	public List<Company> lister(int offset, int pas) {
+	public ArrayList<Company> lister(int offset, int pas) {
 
-		List<Company> companies = new ArrayList<Company>();
+		ArrayList<Company> companies = new ArrayList<Company>();
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
 
 		try {
 
 			connexion = dao.getConnection();
-			preparedStatement = connexion.prepareStatement("SELECT * FROM company LIMIT ?,?;");
+			preparedStatement = connexion.prepareStatement(LISTER_LIMIT);
 			preparedStatement.setInt(1, offset);
 			preparedStatement.setInt(2, pas);
 
@@ -78,10 +77,8 @@ public final class CompanyDaoImpl implements CompanyDao {
 			while (resultat.next()) {
 				int id = resultat.getInt("id");
 				String name = resultat.getString("name");
-
-				Company company = new Company();
-				company.setId(id);
-				company.setName(name);
+				
+				Company company = new Company.CompanyBuilder().setId(id).setName(name).build();
 
 				companies.add(company);
 
