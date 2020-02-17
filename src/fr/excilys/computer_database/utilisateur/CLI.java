@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import fr.excilys.computer_database.utilisateur.Action;
@@ -82,8 +83,8 @@ public class CLI {
 					String strCompanyId = choix.nextLine();
 
 					computerDao.ajouter(new Computer.ComputerBuilder(strName)
-										.setIntroduced(Date.valueOf(strIntroduced).toLocalDate())
-										.setDiscontinued(Date.valueOf(strDiscontinued).toLocalDate())
+										.setIntroduced(strIntroduced.equals("null")?null:LocalDate.parse(strIntroduced))
+										.setDiscontinued(strDiscontinued.equals("null")?null:LocalDate.parse(strDiscontinued))
 										.setCompany(new Company.CompanyBuilder()
 														.setId(Integer.parseInt(strCompanyId))
 														.build())
@@ -109,8 +110,8 @@ public class CLI {
 					String strCompanyIdModif = choix.nextLine();
 					
 					Computer computer = new Computer.ComputerBuilder(strNameModif)
-							.setIntroduced(Date.valueOf(strIntroducedModif).toLocalDate())
-							.setDiscontinued(Date.valueOf(strDiscontinuedModif).toLocalDate())
+							.setIntroduced(strIntroducedModif.equals("null")?null:LocalDate.parse(strIntroducedModif))
+							.setDiscontinued(strDiscontinuedModif.equals("null")?null:LocalDate.parse(strDiscontinuedModif))
 							.setCompany(new Company.CompanyBuilder()
 											.setId(Integer.parseInt(strCompanyIdModif))
 											.build())
@@ -152,31 +153,28 @@ public class CLI {
 
 	}
 	
-	public static void listerComputer(Scanner choix, ComputerDAO computerDao) {
+	public static void listerComputer(Scanner choix, ComputerDAO computerDao) throws SQLException {
 		System.out.println("Entrez un pas de pagination : ");
 		String strPasComputer = choix.nextLine();
 		int pasComputer = Integer.parseInt(strPasComputer);
 
 		try {
 			for (int i = 0; i < computerDao.lister().size(); i += pasComputer) {
-				for (Computer c : computerDao.lister(i, pasComputer)) {
-					System.out.println(c.toString());
-				}
+				computerDao.lister(i, pasComputer).stream().forEach(listePCDetails->System.out.println(listePCDetails));
 				System.in.read();
 			}
 		} catch (SQLException | IOException e) {
 			// TODO Auto-generated catch block
 		}
 	}
+	
 	public static void listerCompany(Scanner choix, CompanyDAO companyDao) throws IOException {
 		System.out.println("Entrez un pas de pagination : ");
-		String strPasCompany = choix.nextLine();
+		String strPasCompany = choix.next();
 		int pasCompany = Integer.parseInt(strPasCompany);
-	
+		
 		for (int i = 0; i < companyDao.lister().size(); i += pasCompany) {
-			for (Company c : companyDao.lister(i, pasCompany)) {
-				System.out.println(c.toString());
-			}
+			companyDao.lister(i, pasCompany).stream().forEach(listeCompanyDetails->System.out.println(listeCompanyDetails));
 			System.in.read();
 		}
 	}

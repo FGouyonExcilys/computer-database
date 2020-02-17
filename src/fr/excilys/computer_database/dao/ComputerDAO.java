@@ -2,6 +2,7 @@ package fr.excilys.computer_database.dao;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,11 @@ public final class ComputerDAO {
 	private final static String LISTER_LIMIT = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
 											 + "FROM computer "
 											 + "LEFT JOIN company ON computer.company_id = company.id "
-											 + "LIMIT ?,?;";
+											 + "LIMIT ?, ?;";
+	
+	private final static String DETAILS_ORDI = "SELECT * FROM computer "
+											 + "LEFT JOIN company ON company_id = company.id "
+											 + "WHERE computer.id = ?;";
 	
 	private final static String TROUVERID = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.id=:id";
 	private final static String TROUVERNOM = "SELECT  computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE LOWER(computer.name) LIKE :recherche OR LOWER(company.name) LIKE :recherche OR introduced LIKE :recherche OR discontinued LIKE :recherche;";
@@ -61,8 +66,8 @@ public final class ComputerDAO {
 			PreparedStatement preparedStatement = connexion.prepareStatement(AJOUTER);
 			
 			preparedStatement.setString(1, computer.getName());
-			preparedStatement.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced().toString()));
-			preparedStatement.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued().toString()));
+			preparedStatement.setTimestamp(2, computer.getIntroduced()!=null?Timestamp.valueOf(computer.getIntroduced().atTime(LocalTime.MIDNIGHT)):null);
+			preparedStatement.setTimestamp(3, computer.getDiscontinued()!=null?Timestamp.valueOf(computer.getDiscontinued().atTime(LocalTime.MIDNIGHT)):null);
 			preparedStatement.setInt(4, computer.getCompany().getId());
 
 			preparedStatement.executeUpdate();
@@ -89,8 +94,8 @@ public final class ComputerDAO {
 			preparedStatement = connexion.prepareStatement(MODIFIER);
 
 			preparedStatement.setString(1, computer.getName());
-			preparedStatement.setTimestamp(2, Timestamp.valueOf(computer.getIntroduced().toString()));
-			preparedStatement.setTimestamp(3, Timestamp.valueOf(computer.getDiscontinued().toString()));
+			preparedStatement.setTimestamp(2, computer.getIntroduced()!=null?Timestamp.valueOf(computer.getIntroduced().atTime(LocalTime.MIDNIGHT)):null);
+			preparedStatement.setTimestamp(3, computer.getDiscontinued()!=null?Timestamp.valueOf(computer.getDiscontinued().atTime(LocalTime.MIDNIGHT)):null);
 			preparedStatement.setObject(4, computer.getCompany().getId());
 			preparedStatement.setInt(5, computer.getId());    
 
@@ -137,8 +142,8 @@ public final class ComputerDAO {
 			while (resultat.next()) {
 				int id = resultat.getInt("computer.id");
 				String name = resultat.getString("computer.name");
-				LocalDate introduced = resultat.getDate("introduced").toLocalDate();
-				LocalDate discontinued = resultat.getDate("discontinued").toLocalDate();
+				LocalDate introduced = resultat.getTimestamp("introduced")!=null?resultat.getTimestamp("introduced").toLocalDateTime().toLocalDate():null;
+				LocalDate discontinued = resultat.getTimestamp("discontinued")!=null?resultat.getTimestamp("discontinued").toLocalDateTime().toLocalDate():null;
 				int company_id = resultat.getInt("company.id");
 				String company_name = resultat.getString("company.name");
 				
@@ -149,7 +154,6 @@ public final class ComputerDAO {
 												.setDiscontinued(discontinued)
 												.setCompany(company).build();
 				computer.setId(id);
-
 				computers.add(computer);
 			}
 
@@ -179,9 +183,9 @@ public final class ComputerDAO {
 			while (resultat.next()) {
 				int id = resultat.getInt("id");
 				String name = resultat.getString("name");
-				LocalDate introduced = resultat.getDate("introduced").toLocalDate();
-				LocalDate discontinued = resultat.getDate("discontinued").toLocalDate();
-				int company_id = resultat.getInt("company_id");
+				LocalDate introduced = resultat.getTimestamp("introduced")!=null?resultat.getTimestamp("introduced").toLocalDateTime().toLocalDate():null;
+				LocalDate discontinued = resultat.getTimestamp("discontinued")!=null?resultat.getTimestamp("discontinued").toLocalDateTime().toLocalDate():null;
+				int company_id = resultat.getInt("company.id");
 				String company_name = resultat.getString("company.name");
 				
 				Company company = new Company.CompanyBuilder().setId(company_id).setName(company_name).build();
@@ -192,7 +196,7 @@ public final class ComputerDAO {
 						.setCompany(company).build();
 				computer.setId(id);
 				
-
+				System.out.println(computer);
 				computers.add(computer);
 				
 			}
@@ -214,15 +218,16 @@ public final class ComputerDAO {
 		try {
 
 			Connection connexion = dao.getConnection();
-			preparedStatement = connexion.prepareStatement("SELECT * FROM computer "
-							+ "LEFT JOIN company ON company_id = company.id WHERE computer.id = " + id + ";");
+			preparedStatement = connexion.prepareStatement(DETAILS_ORDI);
+			preparedStatement.setInt(1, id);
+			
 			ResultSet resultat = preparedStatement.executeQuery();
 
 			while (resultat.next()) {
 				String name = resultat.getString("name");
-				LocalDate introduced = resultat.getDate("introduced").toLocalDate();
-				LocalDate discontinued = resultat.getDate("discontinued").toLocalDate();
-				int company_id = resultat.getInt("company_id");
+				LocalDate introduced = resultat.getTimestamp("introduced")!=null?resultat.getTimestamp("introduced").toLocalDateTime().toLocalDate():null;
+				LocalDate discontinued = resultat.getTimestamp("discontinued")!=null?resultat.getTimestamp("discontinued").toLocalDateTime().toLocalDate():null;
+				int company_id = resultat.getInt("company.id");
 				String company_name = resultat.getString("company.name");
 				
 				Company company = new Company.CompanyBuilder().setId(company_id).setName(company_name).build();
