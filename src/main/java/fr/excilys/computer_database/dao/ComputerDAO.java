@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 
@@ -73,7 +74,7 @@ public final class ComputerDAO {
 			preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-			//TODO Loggers
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode ajouter n'a pas abouti");
 		}
 		dao.closeConnection(connexion);
 	}
@@ -102,7 +103,7 @@ public final class ComputerDAO {
 			preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-			//TODO Loggers
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode modifier n'a pas abouti");
 		}
 		
 		dao.closeConnection(connexion);
@@ -122,7 +123,7 @@ public final class ComputerDAO {
 			preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-			//TODO Loggers
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode supprimer n'a pas abouti");
 		}
 		dao.closeConnection(connexion);
 	}
@@ -158,7 +159,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			//TODO Loggers
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode lister n'a pas abouti");
 		}
 		
 		dao.closeConnection(connexion);
@@ -202,7 +203,7 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			//TODO Loggers
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode lister avec limit n'a pas abouti");
 		}
 		
 		dao.closeConnection(connexion);
@@ -244,7 +245,7 @@ public final class ComputerDAO {
 			dao.closeConnection(connexion);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode afficherInfosComputer n'a pas abouti");
 		}
 
 		return computer.toString();

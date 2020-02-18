@@ -3,6 +3,7 @@ package fr.excilys.computer_database.dao;
 import java.sql.*;
 import java.util.ArrayList;
 
+import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 
 public final class CompanyDAO {
@@ -52,7 +53,7 @@ public final class CompanyDAO {
 			dao.closeConnection(connexion);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Loggers.afficherMessageError("Exception SQL CompanyDAO, la méthode lister n'a pas abouti");
 		}
 		
 		
@@ -88,7 +89,7 @@ public final class CompanyDAO {
 			dao.closeConnection(connexion);
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			Loggers.afficherMessageError("Exception SQL CompanyDAO, la méthode lister avec limit n'a pas abouti");
 		}
 
 		return companies;

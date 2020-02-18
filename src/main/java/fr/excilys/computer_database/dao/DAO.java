@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import fr.excilys.computer_database.logging.Loggers;
+
 public class DAO {
 
 	private String url;
@@ -18,8 +20,9 @@ public class DAO {
 
 	public static DAO getInstance() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
+			Loggers.afficherMessageError("com.mysql.cj.jdbc.Driver n'a pas pu être chargé");
 		}
 		DAO instance = new DAO("jdbc:mysql://localhost:3306/computer-database-db?useSSL=false", "admincdb",
 				"qwerty1234");

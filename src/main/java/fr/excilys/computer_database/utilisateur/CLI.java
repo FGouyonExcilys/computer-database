@@ -11,6 +11,7 @@ import fr.excilys.computer_database.utilisateur.Action;
 import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.dao.ComputerDAO;
 import fr.excilys.computer_database.dao.DAO;
+import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 
@@ -57,16 +58,7 @@ public class CLI {
 					break;
 					
 				case LISTER_DETAILS_ORDI:		
-					System.out.println("Entrez l'id d'un ordinateur : ");
-					String strDetails = choix.nextLine();
-					int details = Integer.parseInt(strDetails);
-
-					if ( details <= computerDao.lister().size() && details > 0) {
-						System.out.println("\n" + computerDao.afficherInfoComputer(details) + "\n");
-					}
-					else {
-						System.out.println("\nAucun ordinateur n'a été trouvé \n");
-					}
+					listerDetailsOrdi(choix, computerDao);
 					break;
 
 				case AJOUT: 
@@ -146,14 +138,14 @@ public class CLI {
 			Runtime.getRuntime().exec("clear");
 
 		} catch (Exception e) {
-			// gestion des exceptions
+			Loggers.afficherMessageError("CLI crash");
 		}
 		
 		
 
 	}
 	
-	public static void listerComputer(Scanner choix, ComputerDAO computerDao) throws SQLException {
+	public static void listerComputer(Scanner choix, ComputerDAO computerDao) {
 		System.out.println("Entrez un pas de pagination : ");
 		String strPasComputer = choix.nextLine();
 		int pasComputer = Integer.parseInt(strPasComputer);
@@ -163,8 +155,10 @@ public class CLI {
 				computerDao.lister(i, pasComputer).stream().forEach(listePCDetails->System.out.println(listePCDetails));
 				System.in.read();
 			}
-		} catch (SQLException | IOException e) {
-			// TODO Auto-generated catch block
+		} catch (SQLException e) {
+			Loggers.afficherMessageError("Exception SQL CLI, la méthode listerComputer n'a pas abouti");
+		} catch (IOException e){
+			Loggers.afficherMessageError("Exception IO CLI, la méthode listerComputer n'a pas abouti");
 		}
 	}
 	
@@ -178,7 +172,7 @@ public class CLI {
 			System.in.read();
 		}
 	}
-	public static void listeDetailsOrdi(Scanner choix, ComputerDAO computerDao) {
+	public static void listerDetailsOrdi(Scanner choix, ComputerDAO computerDao) {
 		System.out.println("Entrez l'id d'un ordinateur : ");
 		String strDetails = choix.nextLine();
 		int details = Integer.parseInt(strDetails);
@@ -188,10 +182,10 @@ public class CLI {
 				System.out.println("\n" + computerDao.afficherInfoComputer(details) + "\n");
 			}
 			else {
-				System.out.println("\nAucun ordinateur n'a été trouvé \n");
+				Loggers.afficherMessageInfo("Aucun ordinateur n'a été trouvé\n");
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Loggers.afficherMessageError("Exception SQL CLI, la méthode listerDetailsOrdi n'a pas abouti");
 		}
 	}
 	
