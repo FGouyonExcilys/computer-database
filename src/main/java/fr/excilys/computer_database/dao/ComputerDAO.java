@@ -4,7 +4,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
@@ -29,7 +28,7 @@ public final class ComputerDAO {
 	private final static String DETAILS_ORDI = "SELECT * FROM computer "
 											 + "LEFT JOIN company ON company_id = company.id "
 											 + "WHERE computer.id = ?;";
-	
+	/*
 	private final static String TROUVERID = "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.id=:id";
 	private final static String TROUVERNOM = "SELECT  computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE LOWER(computer.name) LIKE :recherche OR LOWER(company.name) LIKE :recherche OR introduced LIKE :recherche OR discontinued LIKE :recherche;";
 	private final static String EFFACER = "DELETE FROM computer WHERE id = :id";
@@ -38,7 +37,7 @@ public final class ComputerDAO {
 	private final static String ASCENDANT = " ASC";
 	private final static String DESCENDANT = " DESC";
 	private final static String ORDER = " ORDER BY ";
-	
+	*/
 	
 	private static volatile ComputerDAO INSTANCE = null;
 

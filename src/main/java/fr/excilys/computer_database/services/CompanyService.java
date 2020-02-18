@@ -23,8 +23,7 @@ public class CompanyService {
 	}
 	
 	public ArrayList<Company> getCompanyList() throws ClassNotFoundException {
-		ArrayList<Company> listCompa = companyDao.lister();
-		return listCompa;
+		return companyDao.lister();
 	}
 
 

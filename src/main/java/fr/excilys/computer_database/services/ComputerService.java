@@ -24,23 +24,19 @@ public class ComputerService {
 	}
 
 	public ArrayList<Computer> getComputerList() throws ClassNotFoundException, SQLException {
-		ArrayList<Computer> listComput = computerDao.lister();
-		return listComput;
+		return computerDao.lister();
 	}
 
-	public ArrayList<Computer> getComputerListPaginer(int offset, int pas)
-			throws ClassNotFoundException, SQLException {
-		ArrayList<Computer> listComput = computerDao.lister(offset, pas);
-		return listComput;
+	public ArrayList<Computer> getComputerListPaginer(int offset, int pas) throws ClassNotFoundException, SQLException {
+		return computerDao.lister(offset, pas);
 	}
 
-	public void editComputer(Computer comp) throws ClassNotFoundException, SQLException {
-		computerDao.modifier(comp);
+	public void editComputer(Computer computer) throws ClassNotFoundException, SQLException {
+		computerDao.modifier(computer);
 	}
 
 	public String findComputerById(int id) throws ClassNotFoundException {
-		String affichage = computerDao.afficherInfoComputer(id);
-		return affichage;
+		return computerDao.afficherInfoComputer(id);
 	}
 
 	public void deleteComputer(int id) throws ClassNotFoundException, SQLException {

@@ -1,10 +1,8 @@
 package fr.excilys.computer_database.utilisateur;
 
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import fr.excilys.computer_database.utilisateur.Action;
