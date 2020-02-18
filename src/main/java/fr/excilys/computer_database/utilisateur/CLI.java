@@ -162,7 +162,7 @@ public class CLI {
 	
 	public static void listerCompany(Scanner choix, CompanyDAO companyDao) throws IOException {
 		System.out.println("Entrez un pas de pagination : ");
-		String strPasCompany = choix.next();
+		String strPasCompany = choix.nextLine();
 		int pasCompany = Integer.parseInt(strPasCompany);
 		
 		for (int i = 0; i < companyDao.lister().size(); i += pasCompany) {

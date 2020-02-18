@@ -10,3 +10,53 @@ Message: Aucun ordinateur n'a été trouvé
 
 
 
+2020-02-18 15:38:20
+Niveau de log: INFO
+Message: Aucun ordinateur n'a été trouvé
+
+
+2020-02-18 17:02:59
+Niveau de log: ERROR
+Message: CLI crash
+
+2020-02-18 17:05:47
+Niveau de log: ERROR
+Message: CLI crash
+
+2020-02-18 17:08:48
+Niveau de log: ERROR
+Message: CLI crash
+
+2020-02-18 17:08:51
+Niveau de log: ERROR
+Message: CLI crash
+
+2020-02-18 17:08:58
+Niveau de log: ERROR
+Message: CLI crash
+
+2020-02-18 17:09:02
+Niveau de log: ERROR
+Message: CLI crash
+
+2020-02-18 17:37:28
+Niveau de log: ERROR
+Message: CLI crash
+
+2020-02-18 17:39:48
+Niveau de log: ERROR
+Message: CLI crash
+
+2020-02-18 17:40:00
+Niveau de log: INFO
+Message: Aucun ordinateur n'a été trouvé
+
+
+2020-02-18 17:40:52
+Niveau de log: ERROR
+Message: CLI crash
+
+2020-02-18 17:41:06
+Niveau de log: ERROR
+Message: Exception SQL ComputerDAO, la méthode lister n'a pas abouti
+

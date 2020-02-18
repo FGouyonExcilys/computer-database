@@ -58,9 +58,10 @@ public final class ComputerDAO {
 		this.dao = dao;
 	}
 
-	public void ajouter(Computer computer) throws SQLException {
+	public int ajouter(Computer computer) throws SQLException {
 
 		Connection connexion = dao.getConnection();
+		int executePS = 0;
 		
 		try {
 			PreparedStatement preparedStatement = connexion.prepareStatement(AJOUTER);
@@ -70,12 +71,14 @@ public final class ComputerDAO {
 			preparedStatement.setTimestamp(3, computer.getDiscontinued()!=null?Timestamp.valueOf(computer.getDiscontinued().atTime(LocalTime.MIDNIGHT)):null);
 			preparedStatement.setInt(4, computer.getCompany().getId());
 
-			preparedStatement.executeUpdate();
+			executePS = preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
 			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode ajouter n'a pas abouti");
 		}
 		dao.closeConnection(connexion);
+		
+		return executePS;
 	}
 
 	/**
@@ -84,10 +87,11 @@ public final class ComputerDAO {
 	 * 
 	 */
 	
-	public void modifier(Computer computer) throws SQLException {
+	public int modifier(Computer computer) throws SQLException {
 
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
+		int executePS = 0;
 		
 		try {
 			connexion = dao.getConnection();
@@ -99,32 +103,37 @@ public final class ComputerDAO {
 			preparedStatement.setObject(4, computer.getCompany().getId());
 			preparedStatement.setInt(5, computer.getId());    
 
-			preparedStatement.executeUpdate();
+			executePS = preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
 			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode modifier n'a pas abouti");
 		}
 		
 		dao.closeConnection(connexion);
+		
+		return executePS;
 
 	}
 
-	public void supprimer(int id) throws SQLException {
+	public int supprimer(int id) throws SQLException {
 
 		Connection connexion = null;
 		PreparedStatement preparedStatement = null;
+		int executePS = 0;
 
 		try {
 			connexion = dao.getConnection();
 			preparedStatement = connexion.prepareStatement(SUPPRIMER);
 			preparedStatement.setInt(1, id);
 
-			preparedStatement.executeUpdate();
+			executePS = preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
 			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode supprimer n'a pas abouti");
 		}
 		dao.closeConnection(connexion);
+		
+		return executePS;
 	}
 
 	public ArrayList<Computer> lister() throws SQLException {
