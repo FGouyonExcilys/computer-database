@@ -36,7 +36,7 @@ public class ComputerService {
 	}
 
 	public String findComputerById(int id) throws ClassNotFoundException {
-		return computerDao.afficherInfoComputer(id);
+		return computerDao.afficherInfoComputer(id).toString();
 	}
 
 	public void deleteComputer(int id) throws ClassNotFoundException, SQLException {

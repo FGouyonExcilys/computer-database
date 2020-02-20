@@ -31,14 +31,14 @@ public final class CompanyDAO {
 	public ArrayList<Company> lister() {
 
 		ArrayList<Company> companies = new ArrayList<Company>();
-		Statement statement = null;
+		PreparedStatement preparedStatement = null;
 		ResultSet resultat = null;
 
 		try {
 
 			Connection connexion = dao.getConnection();
-			statement = connexion.createStatement();
-			resultat = statement.executeQuery(LISTER);
+			preparedStatement = connexion.prepareStatement(LISTER);
+			resultat = preparedStatement.executeQuery();
 
 			while (resultat.next()) {
 				int id = resultat.getInt("id");

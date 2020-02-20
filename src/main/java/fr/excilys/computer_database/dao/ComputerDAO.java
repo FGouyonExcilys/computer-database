@@ -12,8 +12,13 @@ import fr.excilys.computer_database.model.Computer;
 public final class ComputerDAO {
 
 	
-	private final static String AJOUTER = "INSERT INTO computer(name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?);";
-	private final static String MODIFIER = "UPDATE computer SET name= ?, introduced= ?, discontinued= ?, company_id= ? WHERE id = ?;";
+	private final static String AJOUTER = "INSERT INTO computer(name, introduced, discontinued, company_id) "
+										+ "VALUES(?, ?, ?, ?);";
+	
+	private final static String MODIFIER = "UPDATE computer "
+										 + "SET name= ?, introduced= ?, discontinued= ?, company_id= ? "
+										 + "WHERE id = ?;";
+	
 	private final static String SUPPRIMER = "DELETE FROM computer WHERE id = ?;";
 
 	private final static String LISTER = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
@@ -25,7 +30,8 @@ public final class ComputerDAO {
 											 + "LEFT JOIN company ON computer.company_id = company.id "
 											 + "LIMIT ?, ?;";
 	
-	private final static String DETAILS_ORDI = "SELECT * FROM computer "
+	private final static String DETAILS_ORDI = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
+											 + "FROM computer "
 											 + "LEFT JOIN company ON company_id = company.id "
 											 + "WHERE computer.id = ?;";
 	/*
@@ -60,11 +66,12 @@ public final class ComputerDAO {
 
 	public int ajouter(Computer computer) throws SQLException {
 
-		Connection connexion = dao.getConnection();
+		
 		int executePS = 0;
 		
-		try {
-			PreparedStatement preparedStatement = connexion.prepareStatement(AJOUTER);
+		try (Connection connexion = dao.getConnection();
+				PreparedStatement preparedStatement = connexion.prepareStatement(AJOUTER);){
+			
 			
 			preparedStatement.setString(1, computer.getName());
 			preparedStatement.setTimestamp(2, computer.getIntroduced()!=null?Timestamp.valueOf(computer.getIntroduced().atTime(LocalTime.MIDNIGHT)):null);
@@ -76,7 +83,6 @@ public final class ComputerDAO {
 		} catch (SQLException e) {
 			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode ajouter n'a pas abouti");
 		}
-		dao.closeConnection(connexion);
 		
 		return executePS;
 	}
@@ -89,27 +95,25 @@ public final class ComputerDAO {
 	
 	public int modifier(Computer computer) throws SQLException {
 
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
 		int executePS = 0;
+		Connection connexion = null;
 		
 		try {
 			connexion = dao.getConnection();
-			preparedStatement = connexion.prepareStatement(MODIFIER);
-
+			
+			PreparedStatement preparedStatement = connexion.prepareStatement(MODIFIER);
+			
 			preparedStatement.setString(1, computer.getName());
 			preparedStatement.setTimestamp(2, computer.getIntroduced()!=null?Timestamp.valueOf(computer.getIntroduced().atTime(LocalTime.MIDNIGHT)):null);
 			preparedStatement.setTimestamp(3, computer.getDiscontinued()!=null?Timestamp.valueOf(computer.getDiscontinued().atTime(LocalTime.MIDNIGHT)):null);
-			preparedStatement.setObject(4, computer.getCompany().getId());
-			preparedStatement.setInt(5, computer.getId());    
-
+			preparedStatement.setInt(4, computer.getCompany().getId());
+			preparedStatement.setInt(5, computer.getId());
+			
 			executePS = preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode modifier n'a pas abouti");
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode modifier n'a pas abouti \n" + e.getMessage());
 		}
-		
-		dao.closeConnection(connexion);
 		
 		return executePS;
 
@@ -117,36 +121,28 @@ public final class ComputerDAO {
 
 	public int supprimer(int id) throws SQLException {
 
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
 		int executePS = 0;
 
-		try {
-			connexion = dao.getConnection();
-			preparedStatement = connexion.prepareStatement(SUPPRIMER);
+		try (Connection connexion = dao.getConnection();
+				PreparedStatement preparedStatement = connexion.prepareStatement(SUPPRIMER);){
+			
 			preparedStatement.setInt(1, id);
 
 			executePS = preparedStatement.executeUpdate();
 
 		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode supprimer n'a pas abouti");
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode supprimer n'a pas abouti\n" + e.getMessage());
 		}
-		dao.closeConnection(connexion);
 		
 		return executePS;
 	}
 
 	public ArrayList<Computer> lister() throws SQLException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
-		Connection connexion = null;
-		Statement statement = null;
-		ResultSet resultat = null;
 
-		try {
-
-			connexion = dao.getConnection();
-			statement = connexion.createStatement();
-			resultat = statement.executeQuery(LISTER);
+		try (Connection connexion = dao.getConnection();
+				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER);
+				ResultSet resultat = preparedStatement.executeQuery();){
 
 			while (resultat.next()) {
 				int id = resultat.getInt("computer.id");
@@ -167,23 +163,18 @@ public final class ComputerDAO {
 			}
 
 		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode lister n'a pas abouti");
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode lister n'a pas abouti\n" + e.getMessage());
 		}
-		
-		dao.closeConnection(connexion);
 		
 		return computers;
 	}
 
 	public ArrayList<Computer> lister(int offset, int pas) throws SQLException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
 
-		try {
+		try (Connection connexion = dao.getConnection();
+				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER_LIMIT);){
 
-			connexion = dao.getConnection();
-			preparedStatement = connexion.prepareStatement(LISTER_LIMIT);
 			preparedStatement.setInt(1, offset);
 			preparedStatement.setInt(2, pas);
 
@@ -205,29 +196,24 @@ public final class ComputerDAO {
 						.setCompany(company).build();
 				computer.setId(id);
 				
-				System.out.println(computer);
 				computers.add(computer);
 				
 			}
 
 		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode lister avec limit n'a pas abouti");
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode lister avec limit n'a pas abouti\n" + e.getMessage());
 		}
-		
-		dao.closeConnection(connexion);
 		
 		return computers;
 	}
 
-	public String afficherInfoComputer(int id) {
+	public Computer afficherInfoComputer(int id) {
 
-		Computer computer = null;
-		PreparedStatement preparedStatement = null;
+		Computer computer = new Computer.ComputerBuilder("nom_build").build();
 
-		try {
-
-			Connection connexion = dao.getConnection();
-			preparedStatement = connexion.prepareStatement(DETAILS_ORDI);
+		try (Connection connexion = dao.getConnection();
+			PreparedStatement preparedStatement = connexion.prepareStatement(DETAILS_ORDI);){
+			
 			preparedStatement.setInt(1, id);
 			
 			ResultSet resultat = preparedStatement.executeQuery();
@@ -245,18 +231,15 @@ public final class ComputerDAO {
 						.setIntroduced(introduced)
 						.setDiscontinued(discontinued)
 						.setCompany(company).build();
-				
 				computer.setId(id);
 				
 			}
-			
-			dao.closeConnection(connexion);
 
 		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode afficherInfosComputer n'a pas abouti");
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode afficherInfoComputer n'a pas abouti");
 		}
 
-		return computer.toString();
+		return computer;
 	}
 
 }

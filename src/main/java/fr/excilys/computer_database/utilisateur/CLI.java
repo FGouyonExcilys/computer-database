@@ -86,7 +86,7 @@ public class CLI {
 					System.out.println("Entrez l'id d'un ordinateur à modifier: ");
 					String strIdModif = choix.nextLine();
 
-					System.out.println(computerDao.afficherInfoComputer(Integer.parseInt(strIdModif)));
+					System.out.println(computerDao.afficherInfoComputer(Integer.parseInt(strIdModif)).toString());
 					System.out.println("Entrez le nouveau nom de l'ordinateur: ");
 					String strNameModif = choix.nextLine();
 
@@ -175,15 +175,11 @@ public class CLI {
 		String strDetails = choix.nextLine();
 		int details = Integer.parseInt(strDetails);
 
-		try {
-			if ( details <= computerDao.lister().size() && details > 0) {
-				System.out.println("\n" + computerDao.afficherInfoComputer(details) + "\n");
-			}
-			else {
-				Loggers.afficherMessageInfo("Aucun ordinateur n'a été trouvé\n");
-			}
-		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL CLI, la méthode listerDetailsOrdi n'a pas abouti");
+		if (details > 0) {
+			System.out.println("\n" + computerDao.afficherInfoComputer(details).toString() + "\n");
+		}
+		else {
+			Loggers.afficherMessageInfo("Aucun ordinateur n'a été trouvé\n");
 		}
 	}
 	

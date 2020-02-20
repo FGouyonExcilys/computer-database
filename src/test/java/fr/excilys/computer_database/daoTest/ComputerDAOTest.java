@@ -8,6 +8,7 @@ import org.junit.*;
 
 import fr.excilys.computer_database.dao.*;
 import fr.excilys.computer_database.logging.Loggers;
+import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 
 public class ComputerDAOTest {
@@ -25,22 +26,63 @@ public class ComputerDAOTest {
 	@After
 	public void tearDown() throws Exception 
 	{
-		System.setProperty("test","false");
+		
 	}
 
 	@Test
 	public void testAjouter() {
-		fail("Not yet implemented");
+		
+		Computer computer=new Computer.ComputerBuilder("MacBook Pro 15.4 inch")
+				   .setIntroduced(null)
+				   .setDiscontinued(null)
+				   .setCompany(new Company.CompanyBuilder()
+						   			  	  .setId(1)
+						   			  	  .setName("Apple Inc.").build())
+				   .build();
+		
+		try {
+			int i = computerDAO.ajouter(computer);
+			assertEquals(i, 1);
+			
+		} catch (SQLException e) {
+			Loggers.afficherMessageError("Exception SQL testAjouter()");
+		}
+		
+		
+		
 	}
 
 	@Test
 	public void testModifier() {
-		fail("Not yet implemented");
+		
+		Company company = new Company.CompanyBuilder().setId(1).build();
+		
+		Computer computer=new Computer.ComputerBuilder("MacBook Pro 15.4 inch")
+				   .setIntroduced(null)
+				   .setDiscontinued(null)
+				   .setCompany(company)
+				   .build();
+		computer.setId(20);
+		
+		try {
+			int i = computerDAO.modifier(computer);
+			assertEquals(i, 1);
+			
+		} catch (SQLException e) {
+			Loggers.afficherMessageError("Exception SQL testModifier()");
+		}
 	}
 
 	@Test
 	public void testSupprimer() {
-		fail("Not yet implemented");
+		
+		try {
+			int i = computerDAO.supprimer(20);
+			assertEquals(i, 1);
+			
+		} catch (SQLException e) {
+			Loggers.afficherMessageError("Exception SQL testSupprimer()");
+		}
 	}
 
 	@Test
@@ -64,11 +106,21 @@ public class ComputerDAOTest {
 	@Test
 	public void testAfficherInfoComputer() {
 
-		Computer computer1=new Computer.ComputerBuilder("MacBook Pro 15.4 inch").build();
-		computer1.setId(1);
+		int i = 1;
+		
+		Computer computer1=new Computer.ComputerBuilder("MacBook Pro 15.4 inch")
+									   .setIntroduced(null)
+									   .setDiscontinued(null)
+									   .setCompany(
+											   new Company.CompanyBuilder()
+											   			  .setId(1)
+									   					  .setName("Apple Inc.").build())
+									   .build();
+		computer1.setId(i);
+		
 		String stringComputer1=computer1.toString();
 		
-		String stringComputer2=computerDAO.afficherInfoComputer(1);
+		String stringComputer2=computerDAO.afficherInfoComputer(i).toString();
 		
 		assertNotNull(stringComputer2);
 		

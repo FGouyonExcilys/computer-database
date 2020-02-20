@@ -4,12 +4,19 @@ import static org.junit.Assert.*;
 
 import org.junit.*;
 
+import fr.excilys.computer_database.dao.CompanyDAO;
+import fr.excilys.computer_database.dao.DAO;
+
 public class CompanyDAOTest {
 
+	public static DAO daoTest;
+	public static CompanyDAO companyDAO;
+	
 	@Before
 	public void setUp() throws Exception 
 	{
-		System.setProperty("test","true");
+		daoTest = DAO.getInstanceH2();
+		companyDAO=CompanyDAO.getInstance(daoTest);
 	}
 	
 	@After
