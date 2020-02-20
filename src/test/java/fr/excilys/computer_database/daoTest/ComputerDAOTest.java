@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import org.junit.*;
 
 import fr.excilys.computer_database.dao.*;
+import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
@@ -30,7 +31,7 @@ public class ComputerDAOTest {
 	}
 
 	@Test
-	public void testAjouter() {
+	public void testAjouter() throws DAOConfigurationException {
 		
 		Computer computer=new Computer.ComputerBuilder("MacBook Pro 15.4 inch")
 				   .setIntroduced(null)
@@ -53,7 +54,7 @@ public class ComputerDAOTest {
 	}
 
 	@Test
-	public void testModifier() {
+	public void testModifier() throws DAOConfigurationException {
 		
 		Company company = new Company.CompanyBuilder().setId(1).build();
 		
@@ -74,7 +75,7 @@ public class ComputerDAOTest {
 	}
 
 	@Test
-	public void testSupprimer() {
+	public void testSupprimer() throws DAOConfigurationException {
 		
 		try {
 			int i = computerDAO.supprimer(20);
@@ -86,7 +87,7 @@ public class ComputerDAOTest {
 	}
 
 	@Test
-	public void testLister() {
+	public void testLister() throws DAOConfigurationException {
 		try {
 			assertTrue(computerDAO.lister().size()==20);
 		} catch (SQLException e) {
@@ -95,7 +96,7 @@ public class ComputerDAOTest {
 	}
 
 	@Test
-	public void testListerInt() {
+	public void testListerInt() throws DAOConfigurationException {
 		try {
 			assertTrue(computerDAO.lister(0,20).size()==20);
 		} catch (SQLException e) {
@@ -104,7 +105,7 @@ public class ComputerDAOTest {
 	}
 
 	@Test
-	public void testAfficherInfoComputer() {
+	public void testGetComputerById() throws DAOConfigurationException {
 
 		int i = 1;
 		
@@ -118,13 +119,12 @@ public class ComputerDAOTest {
 									   .build();
 		computer1.setId(i);
 		
-		String stringComputer1=computer1.toString();
 		
-		String stringComputer2=computerDAO.afficherInfoComputer(i).toString();
+		Computer computer2=computerDAO.getComputerById(i);
 		
-		assertNotNull(stringComputer2);
+		assertNotNull(computer2);
 		
-		assertEquals(stringComputer1, stringComputer2);
+		assertEquals(computer1.toString(), computer2.toString());
 		
 	}
 

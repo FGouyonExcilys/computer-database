@@ -9,6 +9,7 @@ import fr.excilys.computer_database.utilisateur.Action;
 import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.dao.ComputerDAO;
 import fr.excilys.computer_database.dao.DAO;
+import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
@@ -86,7 +87,7 @@ public class CLI {
 					System.out.println("Entrez l'id d'un ordinateur à modifier: ");
 					String strIdModif = choix.nextLine();
 
-					System.out.println(computerDao.afficherInfoComputer(Integer.parseInt(strIdModif)).toString());
+					System.out.println(computerDao.getComputerById(Integer.parseInt(strIdModif)).toString());
 					System.out.println("Entrez le nouveau nom de l'ordinateur: ");
 					String strNameModif = choix.nextLine();
 
@@ -143,7 +144,7 @@ public class CLI {
 
 	}
 	
-	public static void listerComputer(Scanner choix, ComputerDAO computerDao) {
+	public static void listerComputer(Scanner choix, ComputerDAO computerDao) throws DAOConfigurationException {
 		System.out.println("Entrez un pas de pagination : ");
 		String strPasComputer = choix.nextLine();
 		int pasComputer = Integer.parseInt(strPasComputer);
@@ -160,7 +161,7 @@ public class CLI {
 		}
 	}
 	
-	public static void listerCompany(Scanner choix, CompanyDAO companyDao) throws IOException {
+	public static void listerCompany(Scanner choix, CompanyDAO companyDao) throws IOException, DAOConfigurationException {
 		System.out.println("Entrez un pas de pagination : ");
 		String strPasCompany = choix.nextLine();
 		int pasCompany = Integer.parseInt(strPasCompany);
@@ -170,13 +171,13 @@ public class CLI {
 			System.in.read();
 		}
 	}
-	public static void listerDetailsOrdi(Scanner choix, ComputerDAO computerDao) {
+	public static void listerDetailsOrdi(Scanner choix, ComputerDAO computerDao) throws DAOConfigurationException {
 		System.out.println("Entrez l'id d'un ordinateur : ");
 		String strDetails = choix.nextLine();
 		int details = Integer.parseInt(strDetails);
 
 		if (details > 0) {
-			System.out.println("\n" + computerDao.afficherInfoComputer(details).toString() + "\n");
+			System.out.println("\n" + computerDao.getComputerById(details).toString() + "\n");
 		}
 		else {
 			Loggers.afficherMessageInfo("Aucun ordinateur n'a été trouvé\n");

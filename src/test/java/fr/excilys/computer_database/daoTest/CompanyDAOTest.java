@@ -6,6 +6,7 @@ import org.junit.*;
 
 import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.dao.DAO;
+import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 
 public class CompanyDAOTest {
 
@@ -26,13 +27,13 @@ public class CompanyDAOTest {
 	}
 	
 	@Test
-	public void testLister() {
-		fail("Not yet implemented");
+	public void testLister() throws DAOConfigurationException {
+		assertTrue(companyDAO.lister().size()==20);
 	}
 
 	@Test
-	public void testListerIntInt() {
-		fail("Not yet implemented");
+	public void testListerIntInt() throws DAOConfigurationException {
+		assertTrue(companyDAO.lister(0,20).size()==20);
 	}
 
 }

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import fr.excilys.computer_database.dao.ComputerDAO;
+import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Computer;
 
 public class ComputerService {
@@ -12,7 +13,7 @@ public class ComputerService {
 
 	private static volatile ComputerService INSTANCE = null;
 	
-	private ComputerService(ComputerDAO computerDao) {
+	public ComputerService(ComputerDAO computerDao) {
 		this.computerDao = computerDao;
 	}
 	
@@ -23,24 +24,30 @@ public class ComputerService {
 		return INSTANCE;
 	}
 
-	public ArrayList<Computer> getComputerList() throws ClassNotFoundException, SQLException {
+	public ArrayList<Computer> getComputerList() throws ClassNotFoundException, SQLException, DAOConfigurationException {
 		return computerDao.lister();
 	}
 
-	public ArrayList<Computer> getComputerListPaginer(int offset, int pas) throws ClassNotFoundException, SQLException {
+	public ArrayList<Computer> getComputerListPaginer(int offset, int pas) throws ClassNotFoundException, SQLException, DAOConfigurationException {
 		return computerDao.lister(offset, pas);
 	}
-
-	public void editComputer(Computer computer) throws ClassNotFoundException, SQLException {
-		computerDao.modifier(computer);
+	
+	public int addComputer(Computer computer) throws ClassNotFoundException, SQLException, DAOConfigurationException {
+		return computerDao.ajouter(computer);
 	}
 
-	public String findComputerById(int id) throws ClassNotFoundException {
-		return computerDao.afficherInfoComputer(id).toString();
+	public int editComputer(Computer computer) throws ClassNotFoundException, SQLException, DAOConfigurationException {
+		return computerDao.modifier(computer);
+	}
+	
+	public int deleteComputer(int id) throws ClassNotFoundException, SQLException, DAOConfigurationException {
+		return computerDao.supprimer(id);
 	}
 
-	public void deleteComputer(int id) throws ClassNotFoundException, SQLException {
-		computerDao.supprimer(id);
+	public Computer getComputerById(int id) throws ClassNotFoundException, DAOConfigurationException {
+		return computerDao.getComputerById(id);
 	}
+
+	
 
 }

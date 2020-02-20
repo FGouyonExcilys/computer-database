@@ -5,11 +5,12 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 
-public final class ComputerDAO {
+public class ComputerDAO {
 
 	
 	private final static String AJOUTER = "INSERT INTO computer(name, introduced, discontinued, company_id) "
@@ -64,12 +65,12 @@ public final class ComputerDAO {
 		this.dao = dao;
 	}
 
-	public int ajouter(Computer computer) throws SQLException {
+	public int ajouter(Computer computer) throws SQLException, DAOConfigurationException {
 
 		
 		int executePS = 0;
 		
-		try (Connection connexion = dao.getConnection();
+		try (Connection connexion = DAO.getInstance().getConnection();
 				PreparedStatement preparedStatement = connexion.prepareStatement(AJOUTER);){
 			
 			
@@ -90,16 +91,17 @@ public final class ComputerDAO {
 	/**
 	 * @param Computer computer
 	 * @throws SQLException 
+	 * @throws DAOConfigurationException 
 	 * 
 	 */
 	
-	public int modifier(Computer computer) throws SQLException {
+	public int modifier(Computer computer) throws SQLException, DAOConfigurationException {
 
 		int executePS = 0;
 		Connection connexion = null;
 		
 		try {
-			connexion = dao.getConnection();
+			connexion = DAO.getInstance().getConnection();
 			
 			PreparedStatement preparedStatement = connexion.prepareStatement(MODIFIER);
 			
@@ -119,11 +121,11 @@ public final class ComputerDAO {
 
 	}
 
-	public int supprimer(int id) throws SQLException {
+	public int supprimer(int id) throws SQLException, DAOConfigurationException {
 
 		int executePS = 0;
 
-		try (Connection connexion = dao.getConnection();
+		try (Connection connexion = DAO.getInstance().getConnection();
 				PreparedStatement preparedStatement = connexion.prepareStatement(SUPPRIMER);){
 			
 			preparedStatement.setInt(1, id);
@@ -137,10 +139,10 @@ public final class ComputerDAO {
 		return executePS;
 	}
 
-	public ArrayList<Computer> lister() throws SQLException {
+	public ArrayList<Computer> lister() throws SQLException, DAOConfigurationException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
-		try (Connection connexion = dao.getConnection();
+		try (Connection connexion = DAO.getInstance().getConnection();
 				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER);
 				ResultSet resultat = preparedStatement.executeQuery();){
 
@@ -169,10 +171,10 @@ public final class ComputerDAO {
 		return computers;
 	}
 
-	public ArrayList<Computer> lister(int offset, int pas) throws SQLException {
+	public ArrayList<Computer> lister(int offset, int pas) throws SQLException, DAOConfigurationException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
-		try (Connection connexion = dao.getConnection();
+		try (Connection connexion = DAO.getInstance().getConnection();
 				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER_LIMIT);){
 
 			preparedStatement.setInt(1, offset);
@@ -207,11 +209,11 @@ public final class ComputerDAO {
 		return computers;
 	}
 
-	public Computer afficherInfoComputer(int id) {
+	public Computer getComputerById(int id) throws DAOConfigurationException {
 
 		Computer computer = new Computer.ComputerBuilder("nom_build").build();
 
-		try (Connection connexion = dao.getConnection();
+		try (Connection connexion = DAO.getInstance().getConnection();
 			PreparedStatement preparedStatement = connexion.prepareStatement(DETAILS_ORDI);){
 			
 			preparedStatement.setInt(1, id);

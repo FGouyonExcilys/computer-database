@@ -3,10 +3,11 @@ package fr.excilys.computer_database.dao;
 import java.sql.*;
 import java.util.ArrayList;
 
+import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 
-public final class CompanyDAO {
+public class CompanyDAO {
 
 	private final static String LISTER = "SELECT * FROM company;";
 	private final static String LISTER_LIMIT = "SELECT * FROM company LIMIT ?,?;";
@@ -28,7 +29,7 @@ public final class CompanyDAO {
 		this.dao = dao;
 	}
 
-	public ArrayList<Company> lister() {
+	public ArrayList<Company> lister() throws DAOConfigurationException {
 
 		ArrayList<Company> companies = new ArrayList<Company>();
 		PreparedStatement preparedStatement = null;
@@ -36,7 +37,7 @@ public final class CompanyDAO {
 
 		try {
 
-			Connection connexion = dao.getConnection();
+			Connection connexion = DAO.getInstance().getConnection();
 			preparedStatement = connexion.prepareStatement(LISTER);
 			resultat = preparedStatement.executeQuery();
 
@@ -60,7 +61,7 @@ public final class CompanyDAO {
 		return companies;
 	}
 	
-	public ArrayList<Company> lister(int offset, int pas) {
+	public ArrayList<Company> lister(int offset, int pas) throws DAOConfigurationException {
 
 		ArrayList<Company> companies = new ArrayList<Company>();
 		Connection connexion = null;
@@ -68,7 +69,7 @@ public final class CompanyDAO {
 
 		try {
 
-			connexion = dao.getConnection();
+			connexion = DAO.getInstance().getConnection();
 			preparedStatement = connexion.prepareStatement(LISTER_LIMIT);
 			preparedStatement.setInt(1, offset);
 			preparedStatement.setInt(2, pas);

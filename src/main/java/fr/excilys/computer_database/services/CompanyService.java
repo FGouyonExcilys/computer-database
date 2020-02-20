@@ -3,6 +3,7 @@ package fr.excilys.computer_database.services;
 import java.util.ArrayList;
 
 import fr.excilys.computer_database.dao.CompanyDAO;
+import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Company;
 
 public class CompanyService {
@@ -11,7 +12,7 @@ public class CompanyService {
 
 	private static volatile CompanyService INSTANCE = null;
 	
-	private CompanyService(CompanyDAO companyDao) {
+	public CompanyService(CompanyDAO companyDao) {
 		this.companyDao = companyDao;
 	}
 	
@@ -22,9 +23,12 @@ public class CompanyService {
 		return INSTANCE;
 	}
 	
-	public ArrayList<Company> getCompanyList() throws ClassNotFoundException {
+	public ArrayList<Company> getCompanyList() throws ClassNotFoundException, DAOConfigurationException {
 		return companyDao.lister();
 	}
-
+	
+	public ArrayList<Company> getCompanyListPaginer(int offset, int pas) throws ClassNotFoundException, DAOConfigurationException {
+		return companyDao.lister(offset, pas);
+	}
 
 }
