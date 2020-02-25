@@ -3,7 +3,7 @@
 
 <%@ page isELIgnored="false"%>
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
 <html>
@@ -19,13 +19,20 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href="dashboard"> Application - Computer
+				Database </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
+			
+			<c:choose>
+				<c:when test="${request.getParameter(addSuccess) == 1}">
+					<div class="alert alert-success" role="alert">Computer added successfully !</div>
+				</c:when>
+			</c:choose>
+			
 			<h1 id="homeTitle">${ listeOrdi.size() } Computers found</h1>
 			<h4>Page ${ pageIterator }</h4>
 			<div id="actions" class="form-horizontal">
@@ -79,7 +86,8 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer" onclick=""><c:out value="${ computer.getName() }" /></a></td>
+							<td><a href="editComputer" onclick=""><c:out
+										value="${ computer.getName() }" /></a></td>
 							<td><c:out value="${ computer.getIntroduced() }" /></td>
 							<td><c:out value="${ computer.getDiscontinued() }" /></td>
 							<td><c:out value="${ computer.getCompany().getName() }" /></td>
@@ -93,62 +101,95 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-				<li><c:choose>
-    					<c:when test="${ pageIterator >= 2 }">
-    						<a href="dashboard?pageIterator=${ pageIterator - 1 }" aria-label="Previous"> <span
-						aria-hidden="true">&laquo;</span></a>
-						</c:when>
-					</c:choose>
-				</li>
-				
-				<li><a href="dashboard?pageIterator=1"><c:out value="1" /></a></li>
-				
 				<c:choose>
-					<c:when test="${ pageIterator > 4 }">
-						<li><a href="#">...</a></li>
-					</c:when>
-				</c:choose>
-				
-				<c:choose>
-					<c:when test="${ pageIterator <= 3 }">
-						<c:forEach var="i" begin="2" end="5" step="1">
-    						<li><a href="dashboard?pageIterator=${ i }"><c:out value="${ i }" /></a></li>
-						</c:forEach>
-					</c:when>
-					<c:when test="${ pageIterator > 3 && pageIterator < lastPageIndex - 3 }">
-						<c:forEach var="i" begin="${ pageIterator - 2 }" end="${ pageIterator + 2 }" step="1">
-    						<li><a href="dashboard?pageIterator=${ i }"><c:out value="${ i }" /></a></li>
-						</c:forEach>
-					</c:when>
-					<c:when test="${ pageIterator >= lastPageIndex - 3 }">
-						<c:forEach var="i" begin="${ lastPageIndex - 5}" end="${ lastPageIndex -1 }" step="1">
-    						<li><a href="dashboard?pageIterator=${ i }"><c:out value="${ i }" /></a></li>
-						</c:forEach>
-					</c:when>
-				</c:choose>
+					<c:when test="${ lastPageIndex > 6 }">
+						<li><c:choose>
+								<c:when test="${ pageIterator >= 2 }">
+									<a href="dashboard?pageIterator=${ pageIterator - 1 }"
+										aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a>
+								</c:when>
+							</c:choose></li>
 
-				
-				<c:choose>
-					<c:when test="${ pageIterator < lastPageIndex - 3 }">
-						<li><a href="#">...</a></li>
-    				</c:when>
+						<li><a href="dashboard?pageIterator=1"><c:out value="1" /></a></li>
+
+						<c:choose>
+							<c:when test="${ pageIterator > 4 }">
+								<li><a href="#">...</a></li>
+							</c:when>
+						</c:choose>
+
+						<c:choose>
+							<c:when test="${ pageIterator <= 3 }">
+								<c:forEach var="i" begin="2" end="5" step="1">
+									<li><a href="dashboard?pageIterator=${ i }"><c:out
+												value="${ i }" /></a></li>
+								</c:forEach>
+							</c:when>
+							<c:when
+								test="${ pageIterator > 3 && pageIterator < lastPageIndex - 3 }">
+								<c:forEach var="i" begin="${ pageIterator - 2 }"
+									end="${ pageIterator + 2 }" step="1">
+									<li><a href="dashboard?pageIterator=${ i }"><c:out
+												value="${ i }" /></a></li>
+								</c:forEach>
+							</c:when>
+							<c:when test="${ pageIterator >= lastPageIndex - 3 }">
+								<c:forEach var="i" begin="${ lastPageIndex - 5}"
+									end="${ lastPageIndex -1 }" step="1">
+									<li><a href="dashboard?pageIterator=${ i }"><c:out
+												value="${ i }" /></a></li>
+								</c:forEach>
+							</c:when>
+						</c:choose>
+
+
+						<c:choose>
+							<c:when test="${ pageIterator < lastPageIndex - 3 }">
+								<li><a href="#">...</a></li>
+							</c:when>
+						</c:choose>
+
+						<li><a href="dashboard?pageIterator=${ lastPageIndex }"><c:out
+									value="${ lastPageIndex }" /></a></li>
+
+						<li><c:choose>
+								<c:when test="${ pageIterator != lastPageIndex }">
+									<a href="dashboard?pageIterator=${ pageIterator + 1 }"
+										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+								</c:when>
+							</c:choose></li>
+					</c:when>
+					<c:otherwise>
+						<li><c:choose>
+								<c:when test="${ pageIterator >= 2 }">
+									<a href="dashboard?pageIterator=${ pageIterator - 1 }"
+										aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a>
+								</c:when>
+							</c:choose></li>
+						<c:forEach var="i" begin="1" end="${ lastPageIndex }" step="1">
+							<li><a href="dashboard?pageIterator=${ i }"><c:out
+										value="${ i }" /></a></li>
+						</c:forEach>
+						<li><c:choose>
+								<c:when test="${ pageIterator != lastPageIndex }">
+									<a href="dashboard?pageIterator=${ pageIterator + 1 }"
+										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+								</c:when>
+							</c:choose></li>
+					</c:otherwise>
 				</c:choose>
-				
-				<li><a href="dashboard?pageIterator=${ lastPageIndex }"><c:out value="${ lastPageIndex }" /></a></li>
-				
-				<li>
-					<c:choose>
-						<c:when test="${ pageIterator != lastPageIndex }">
-							<a href="dashboard?pageIterator=${ pageIterator + 1 }" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-						</c:when>
-					</c:choose>
-				</li>
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="dashboard?pageIterator=1&step=10"><button type="button" class="btn btn-default" onclick="<c:set var="pageIterator" value="1" />">10</button></a>
-				<a href="dashboard?pageIterator=1&step=50"><button type="button" class="btn btn-default" onclick="<c:set var="pageIterator" value="1" />">50</button></a>
-				<a href="dashboard?pageIterator=1&step=100"><button type="button" class="btn btn-default" onclick="<c:set var="pageIterator" value="1" />">100</button></a>
+				<a href="dashboard?pageIterator=1&step=10"><button type="button"
+						class="btn btn-default"
+						onclick="<c:set var="pageIterator" value="1" />">10</button></a> <a
+					href="dashboard?pageIterator=1&step=50"><button type="button"
+						class="btn btn-default"
+						onclick="<c:set var="pageIterator" value="1" />">50</button></a> <a
+					href="dashboard?pageIterator=1&step=100"><button type="button"
+						class="btn btn-default"
+						onclick="<c:set var="pageIterator" value="1" />">100</button></a>
 			</div>
 		</div>
 	</footer>

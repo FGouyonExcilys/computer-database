@@ -29,6 +29,7 @@ public class Dashboard extends HttpServlet {
         ComputerDAO computerDao;
         
         ArrayList<Computer> computerListPaginerDefault = null;
+        
 		try {
 			computerDao = ComputerDAO.getInstance(DAO.getInstance());
 			

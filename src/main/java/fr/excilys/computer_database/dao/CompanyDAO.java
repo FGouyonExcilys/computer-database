@@ -11,6 +11,7 @@ public class CompanyDAO {
 
 	private final static String LISTER = "SELECT * FROM company;";
 	private final static String LISTER_LIMIT = "SELECT * FROM company LIMIT ?,?;";
+	private final static String DETAILS_COMPANY = "SELECT * FROM company WHERE id = ?;";
 	
 	
 	private static volatile CompanyDAO INSTANCE = null;
@@ -94,6 +95,34 @@ public class CompanyDAO {
 		}
 
 		return companies;
+	}
+	
+	public Company getCompanyById(int id) throws DAOConfigurationException {
+
+		Company company = new Company.CompanyBuilder().build();
+
+		try (Connection connexion = DAO.getInstance().getConnection();
+			PreparedStatement preparedStatement = connexion.prepareStatement(DETAILS_COMPANY);){
+			
+			preparedStatement.setInt(1, id);
+			
+			ResultSet resultat = preparedStatement.executeQuery();
+
+			while (resultat.next()) {
+				
+				int company_id = resultat.getInt("id");
+				String company_name = resultat.getString("name");
+				
+				company = new Company.CompanyBuilder().setId(company_id).setName(company_name).build();
+				
+				
+			}
+
+		} catch (SQLException e) {
+			Loggers.afficherMessageError("Exception SQL CompanyDAO, la méthode getCompanyById n'a pas abouti");
+		}
+
+		return company;
 	}
 
 }
