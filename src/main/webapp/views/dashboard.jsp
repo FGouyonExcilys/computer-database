@@ -26,15 +26,17 @@
 
 	<section id="main">
 		<div class="container">
-			
+		
+			<h1 id="homeTitle">${ listeOrdi.size() } Computers found</h1>
 			<c:choose>
-				<c:when test="${request.getParameter(addSuccess) == 1}">
-					<div class="alert alert-success" role="alert">Computer added successfully !</div>
-				</c:when>
+					<c:when test="${ pageIterator > 0 && pageIterator <= lastPageIndex }">
+						<h4>Page ${ pageIterator }</h4>
+					</c:when>
+					<c:otherwise>
+						<h4>No page found</h4>
+					</c:otherwise>
 			</c:choose>
 			
-			<h1 id="homeTitle">${ listeOrdi.size() } Computers found</h1>
-			<h4>Page ${ pageIterator }</h4>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -136,8 +138,8 @@
 							<c:when test="${ pageIterator >= lastPageIndex - 3 }">
 								<c:forEach var="i" begin="${ lastPageIndex - 5}"
 									end="${ lastPageIndex -1 }" step="1">
-									<li><a href="dashboard?pageIterator=${ i }"><c:out
-												value="${ i }" /></a></li>
+									<li><a href="dashboard?pageIterator=${ i }">
+									<c:out value="${ i }" /></a></li>
 								</c:forEach>
 							</c:when>
 						</c:choose>
@@ -175,7 +177,8 @@
 									<a href="dashboard?pageIterator=${ pageIterator + 1 }"
 										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
 								</c:when>
-							</c:choose></li>
+							</c:choose>
+						</li>
 					</c:otherwise>
 				</c:choose>
 			</ul>

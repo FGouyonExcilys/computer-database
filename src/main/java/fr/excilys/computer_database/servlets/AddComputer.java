@@ -59,7 +59,6 @@ public class AddComputer extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
 		try {
 			ComputerDAO computerDao = ComputerDAO.getInstance(DAO.getInstance());
 			CompanyDAO companyDao = CompanyDAO.getInstance(DAO.getInstance());
@@ -86,9 +85,7 @@ public class AddComputer extends HttpServlet {
 			e.printStackTrace();
 		}
         
-		int addSuccess = 1;
-		request.setAttribute("addSuccess", addSuccess);
-		response.sendRedirect("dashboard?pageIterator=1&addSuccess=1");
+		response.sendRedirect("dashboard?pageIterator=1");
 	}
 
 }

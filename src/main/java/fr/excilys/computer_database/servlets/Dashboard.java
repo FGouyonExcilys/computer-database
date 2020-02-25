@@ -37,12 +37,20 @@ public class Dashboard extends HttpServlet {
 			
 			if (request.getParameter("pageIterator") != null) {
 				String s = request.getParameter("pageIterator");
-				pageIterator = Integer.parseInt(s);
+				try{
+					pageIterator = Integer.parseInt(s);
+			    }catch(NumberFormatException e){
+			    	this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
+			    }
 			}
 			
 			if (request.getParameter("step") != null) {
 				String s = request.getParameter("step");
-				step = Integer.parseInt(s);
+				try{
+					step = Integer.parseInt(s);
+				}catch(NumberFormatException e){
+			    	this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
+			    }
 			}
 			
 			computerListPaginerDefault = ComputerService.getInstance(computerDao).getComputerListPaginer((pageIterator-1)*step,step);
