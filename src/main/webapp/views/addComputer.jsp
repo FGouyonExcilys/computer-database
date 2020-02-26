@@ -15,7 +15,7 @@
 <link href="css/font-awesome.css" rel="stylesheet" media="screen">
 <link href="css/main.css" rel="stylesheet" media="screen">
 </head>
-<body>
+<body onload="initForm()">
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="dashboard"> Application - Computer
@@ -36,7 +36,7 @@
 							</div>
 						</c:when>
 					</c:choose>
-					<form action="addComputer" method="POST" id="addComputerForm">
+					<form action="addComputer" method="POST" id="addComputerForm" onload="">
 						<fieldset>
 							<div class="form-group">
 								<label for="computerName">Computer name</label> <input
@@ -74,6 +74,11 @@
 				</div>
 			</div>
 		</div>
+		
 	</section>
 </body>
+<script>
+function initForm(){
+	document.getElementById("addComputerForm").reset();
+}</script>
 </html>
