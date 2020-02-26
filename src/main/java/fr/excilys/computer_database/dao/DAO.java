@@ -35,6 +35,7 @@ public class DAO {
 		this.password = password;
 	}
 
+	@SuppressWarnings("finally")
 	public static DAO getInstance() throws DAOConfigurationException {
 		if (instanceDAO == null) {
 			Properties properties = new Properties();
@@ -70,6 +71,7 @@ public class DAO {
 
 	}
 
+	@SuppressWarnings("finally")
 	public static DAO getInstanceH2() throws DAOConfigurationException {
 		if (instanceDAO == null) {
 			Properties properties = new Properties();

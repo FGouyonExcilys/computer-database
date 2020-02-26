@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Company;
-import fr.excilys.computer_database.model.Computer;
 
 public class CompanyService {
 	

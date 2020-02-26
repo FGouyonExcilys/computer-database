@@ -52,6 +52,9 @@ public class AddComputer extends HttpServlet {
 		}
 		
 		this.getServletContext().getRequestDispatcher("/views/addComputer.jsp").forward(request, response);
+		
+		String error = "";
+    	request.setAttribute("error", error);
 	}
 
 	/**
@@ -64,19 +67,38 @@ public class AddComputer extends HttpServlet {
 			CompanyDAO companyDao = CompanyDAO.getInstance(DAO.getInstance());
 			
 	        String computerName = request.getParameter("computerName");
-	        String introduced = request.getParameter("introduced");
-	        String discontinued = request.getParameter("discontinued");
+	        LocalDate introduced = request.getParameter("introduced").isEmpty() ? null : LocalDate.parse(request.getParameter("introduced"));
+	        LocalDate discontinued = request.getParameter("discontinued").isEmpty() ? null : LocalDate.parse(request.getParameter("discontinued")) ;
 	        int company_id = Integer.parseInt(request.getParameter("companyId"));
 	        
-	        Company company = CompanyService.getInstance(companyDao).getCompanyById(company_id);
+	        String error = "";
 	        
-			Computer computer = new Computer.ComputerBuilder(computerName)
-					.setIntroduced(LocalDate.parse(introduced))
-					.setDiscontinued(LocalDate.parse(discontinued))
-					.setCompany(company).build();
-			
-			computerDao.ajouter(computer);
-			
+	        if (introduced != null) {
+	        	if(discontinued != null) {
+	        		if(introduced.isAfter(discontinued)){
+	        			
+	        			error = "date";
+			        	request.setAttribute("error", error);
+			        	
+			        	doGet(request, response);
+			        	
+	        		} else {
+	        			
+	        			request.setAttribute("error", error);
+	        			
+	        			Company company = CompanyService.getInstance(companyDao).getCompanyById(company_id);
+	        			Computer computer = new Computer.ComputerBuilder(computerName)
+	        					.setIntroduced(introduced)
+	        					.setDiscontinued(discontinued)
+	        					.setCompany(company).build();
+	        			
+	        			computerDao.ajouter(computer);
+	        			
+	        			request.setAttribute("addSuccess", 1);
+	        		}
+	        	}
+	        }
+	        
 		} catch (ClassNotFoundException | DAOConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,8 +106,11 @@ public class AddComputer extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-		response.sendRedirect("dashboard?pageIterator=1");
+		
+		request.setAttribute("addSuccess", 1);
+		
+		response.sendRedirect("dashboard?addSuccess=1");
+		
 	}
 
 }

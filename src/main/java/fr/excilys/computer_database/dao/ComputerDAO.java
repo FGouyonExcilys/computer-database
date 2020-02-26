@@ -59,6 +59,7 @@ public class ComputerDAO {
 		return INSTANCE;
 	}
 
+	@SuppressWarnings("unused")
 	private DAO dao;
 
 	private ComputerDAO(DAO dao) {

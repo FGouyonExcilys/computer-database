@@ -5,16 +5,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-import javax.swing.tree.RowMapper;
-import javax.swing.tree.TreePath;
-
 import fr.excilys.computer_database.dto.CompanyDTO;
 import fr.excilys.computer_database.dto.ComputerDTO;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 
 
-public class ComputerMapper implements RowMapper {
+public class ComputerMapper {
 	
 	public Computer mapRow(ResultSet resultat, int i) throws SQLException {
 
@@ -28,9 +25,11 @@ public class ComputerMapper implements RowMapper {
 		}
 		LocalDate discontinued = null;
 		computer.setIntroduced(introduced);
+		
 		if (disco != null) {
 			discontinued = disco.toLocalDate();
 		}
+		
 		computer.setIntroduced(introduced);
 		computer.setDiscontinued(discontinued);
 		Company company = new Company.CompanyBuilder().setId(resultat.getInt("company_id"))
@@ -72,9 +71,4 @@ public class ComputerMapper implements RowMapper {
 		return compDTO;
 	}
 
-	@Override
-	public int[] getRowsForPaths(TreePath[] path) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
