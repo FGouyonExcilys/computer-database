@@ -1,6 +1,5 @@
 package fr.excilys.computer_database.services;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import fr.excilys.computer_database.dao.ComputerDAO;
@@ -24,23 +23,23 @@ public class ComputerService {
 		return INSTANCE;
 	}
 
-	public ArrayList<Computer> getComputerList() throws ClassNotFoundException, SQLException, DAOConfigurationException {
+	public ArrayList<Computer> getComputerList() throws ClassNotFoundException, DAOConfigurationException {
 		return computerDao.lister();
 	}
 
-	public ArrayList<Computer> getComputerListPaginer(int offset, int pas) throws ClassNotFoundException, SQLException, DAOConfigurationException {
+	public ArrayList<Computer> getComputerListPaginer(int offset, int pas) throws ClassNotFoundException, DAOConfigurationException {
 		return computerDao.lister(offset, pas);
 	}
 	
-	public int addComputer(Computer computer) throws ClassNotFoundException, SQLException, DAOConfigurationException {
+	public int addComputer(Computer computer) throws ClassNotFoundException, DAOConfigurationException {
 		return computerDao.ajouter(computer);
 	}
 
-	public int editComputer(Computer computer) throws ClassNotFoundException, SQLException, DAOConfigurationException {
+	public int editComputer(Computer computer) throws ClassNotFoundException, DAOConfigurationException {
 		return computerDao.modifier(computer);
 	}
 	
-	public int deleteComputer(int id) throws ClassNotFoundException, SQLException, DAOConfigurationException {
+	public int deleteComputer(int id) throws ClassNotFoundException, DAOConfigurationException {
 		return computerDao.supprimer(id);
 	}
 

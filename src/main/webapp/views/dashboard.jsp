@@ -4,6 +4,7 @@
 <%@ page isELIgnored="false"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <!DOCTYPE html>
 <html>
@@ -30,6 +31,18 @@
 				<c:when test="${ addSuccess == '1'}">
 					<div class="alert alert-success" role="alert">
 						<b><i class="fa fa-check fa-lg"></i>&nbsp;&nbsp;Computer added
+							successfully !</b>
+					</div>
+				</c:when>
+				<c:when test="${ editSuccess == '1'}">
+					<div class="alert alert-success" role="alert">
+						<b><i class="fa fa-check fa-lg"></i>&nbsp;&nbsp;Computer modified
+							successfully !</b>
+					</div>
+				</c:when>
+				<c:when test="${ deleteSuccess == '1'}">
+					<div class="alert alert-success" role="alert">
+						<b><i class="fa fa-check fa-lg"></i>&nbsp;&nbsp;Computer(s) deleted
 							successfully !</b>
 					</div>
 				</c:when>
@@ -76,7 +89,7 @@
 
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="editComputer"
+							style="vertical-align: top;"> - <a href="dashboard"
 								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
@@ -96,7 +109,7 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer" onclick=""><c:out
+							<td><a href="editComputer?id=${ computer.getId() } " onclick=""><c:out
 										value="${ computer.getName() }" /></a></td>
 							<td><c:out value="${ computer.getIntroduced() }" /></td>
 							<td><c:out value="${ computer.getDiscontinued() }" /></td>
@@ -151,8 +164,7 @@
 								</c:forEach>
 							</c:when>
 						</c:choose>
-
-
+						
 						<c:choose>
 							<c:when test="${ pageIterator < lastPageIndex - 3 }">
 								<li><a href="#">...</a></li>
@@ -191,15 +203,9 @@
 			</ul>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href="dashboard?pageIterator=1&step=10"><button type="button"
-						class="btn btn-default"
-						onclick="<c:set var="pageIterator" value="1" />">10</button></a> <a
-					href="dashboard?pageIterator=1&step=50"><button type="button"
-						class="btn btn-default"
-						onclick="<c:set var="pageIterator" value="1" />">50</button></a> <a
-					href="dashboard?pageIterator=1&step=100"><button type="button"
-						class="btn btn-default"
-						onclick="<c:set var="pageIterator" value="1" />">100</button></a>
+				<a href="dashboard?pageIterator=1&step=10"><button type="button" class="btn btn-default" onclick="<c:set var="pageIterator" value="1" />">10</button></a>
+				<a href="dashboard?pageIterator=1&step=50"><button type="button" class="btn btn-default" onclick="<c:set var="pageIterator" value="1" />">50</button></a>
+				<a href="dashboard?pageIterator=1&step=100"><button type="button" class="btn btn-default" onclick="<c:set var="pageIterator" value="1" />">100</button></a>
 			</div>
 		</div>
 	</footer>

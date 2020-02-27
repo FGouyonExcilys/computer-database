@@ -26,7 +26,9 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
+				
 					<h1>Add Computer</h1>
+					
 					<c:choose>
 						<c:when test="${ error == 'date' }">
 							<div class="alert alert-warning" role="alert">
@@ -36,6 +38,7 @@
 							</div>
 						</c:when>
 					</c:choose>
+					
 					<form action="addComputer" method="POST" id="addComputerForm" onload="">
 						<fieldset>
 							<div class="form-group">

@@ -2,13 +2,10 @@ package fr.excilys.computer_database.daoTest;
 
 import static org.junit.Assert.*;
 
-import java.sql.SQLException;
-
 import org.junit.*;
 
 import fr.excilys.computer_database.dao.*;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
-import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 
@@ -21,7 +18,7 @@ public class ComputerDAOTest {
 	public void setUp() throws Exception 
 	{
 		daoTest = DAO.getInstanceH2();
-		computerDAO=ComputerDAO.getInstance(daoTest);
+		computerDAO=ComputerDAO.getInstance();
 	}
 	
 	@After
@@ -41,13 +38,10 @@ public class ComputerDAOTest {
 						   			  	  .setName("Apple Inc.").build())
 				   .build();
 		
-		try {
-			int i = computerDAO.ajouter(computer);
-			assertEquals(i, 1);
+		int i = computerDAO.ajouter(computer);
+		assertEquals(i, 1);
 			
-		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL testAjouter()");
-		}
+		
 		
 		
 		
@@ -65,43 +59,33 @@ public class ComputerDAOTest {
 				   .build();
 		computer.setId(20);
 		
-		try {
-			int i = computerDAO.modifier(computer);
-			assertEquals(i, 1);
+		int i = computerDAO.modifier(computer);
+		assertEquals(i, 1);
 			
-		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL testModifier()");
-		}
+		
 	}
 
 	@Test
 	public void testSupprimer() throws DAOConfigurationException {
 		
-		try {
-			int i = computerDAO.supprimer(20);
-			assertEquals(i, 1);
+		int i = computerDAO.supprimer(20);
+		assertEquals(i, 1);
 			
-		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL testSupprimer()");
-		}
+		
 	}
 
 	@Test
 	public void testLister() throws DAOConfigurationException {
-		try {
-			assertTrue(computerDAO.lister().size()==20);
-		} catch (SQLException e) {
-			Loggers.afficherMessageWarn("Erreur Test testLister()");
-		}
+		
+		assertTrue(computerDAO.lister().size()==20);
+		
 	}
 
 	@Test
 	public void testListerInt() throws DAOConfigurationException {
-		try {
-			assertTrue(computerDAO.lister(0,20).size()==20);
-		} catch (SQLException e) {
-			Loggers.afficherMessageWarn("Erreur Test testListerInt()");
-		}
+		
+		assertTrue(computerDAO.lister(0,20).size()==20);
+		
 	}
 
 	@Test

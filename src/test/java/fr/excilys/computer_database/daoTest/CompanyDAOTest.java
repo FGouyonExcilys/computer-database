@@ -17,7 +17,7 @@ public class CompanyDAOTest {
 	public void setUp() throws Exception 
 	{
 		daoTest = DAO.getInstanceH2();
-		companyDAO=CompanyDAO.getInstance(daoTest);
+		companyDAO=CompanyDAO.getInstance();
 	}
 	
 	@After

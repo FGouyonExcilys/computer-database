@@ -18,7 +18,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		
+
 		<mysql.version>8.0.18</mysql.version>
 		<h2.version>1.4.199</h2.version>
 		<junit.version>4.12</junit.version>
@@ -26,7 +26,8 @@
 		<slf4j.version>1.8.0-alpha2</slf4j.version>
 		<servlet-api.version>4.0.0</servlet-api.version>
 		<jstl.version>1.2</jstl.version>
-		
+		<hikari.version>3.4.1</hikari.version>
+
 	</properties>
 
 	<dependencies>
@@ -62,12 +63,16 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>${servlet-api.version}</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>${hikari.version}</version>
 		</dependency>
 	</dependencies>
 

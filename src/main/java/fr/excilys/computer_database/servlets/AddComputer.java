@@ -1,7 +1,6 @@
 package fr.excilys.computer_database.servlets;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -13,11 +12,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.dao.ComputerDAO;
-import fr.excilys.computer_database.dao.DAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.services.CompanyService;
+import fr.excilys.computer_database.services.ComputerService;
 
 /**
  * Servlet implementation class AddComputer
@@ -27,18 +26,20 @@ import fr.excilys.computer_database.services.CompanyService;
 public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	ComputerDAO computerDao = ComputerDAO.getInstance();
+	CompanyDAO companyDao = CompanyDAO.getInstance();
+	
+	ComputerService computerServ= ComputerService.getInstance(computerDao);
+	CompanyService companyServ = CompanyService.getInstance(companyDao);
+	
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		CompanyDAO companyDao;
         
-        try {
-        	
-			companyDao = CompanyDAO.getInstance(DAO.getInstance());
+        try { 
 			
-			ArrayList<Company> companyList = CompanyService.getInstance(companyDao).getCompanyList();
+			ArrayList<Company> companyList = companyServ.getCompanyList();
 			
 			request.setAttribute("listeCompany", companyList);
 			
@@ -63,8 +64,9 @@ public class AddComputer extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		try {
-			ComputerDAO computerDao = ComputerDAO.getInstance(DAO.getInstance());
-			CompanyDAO companyDao = CompanyDAO.getInstance(DAO.getInstance());
+			
+			ComputerService computerServ = ComputerService.getInstance(computerDao);
+			CompanyService companyServ = CompanyService.getInstance(companyDao);
 			
 	        String computerName = request.getParameter("computerName");
 	        LocalDate introduced = request.getParameter("introduced").isEmpty() ? null : LocalDate.parse(request.getParameter("introduced"));
@@ -86,13 +88,13 @@ public class AddComputer extends HttpServlet {
 	        			
 	        			request.setAttribute("error", error);
 	        			
-	        			Company company = CompanyService.getInstance(companyDao).getCompanyById(company_id);
+	        			Company company = companyServ.getCompanyById(company_id);
 	        			Computer computer = new Computer.ComputerBuilder(computerName)
 	        					.setIntroduced(introduced)
 	        					.setDiscontinued(discontinued)
 	        					.setCompany(company).build();
 	        			
-	        			computerDao.ajouter(computer);
+	        			computerServ.addComputer(computer);
 	        			
 	        			request.setAttribute("addSuccess", 1);
 	        		}
@@ -100,9 +102,6 @@ public class AddComputer extends HttpServlet {
 	        }
 	        
 		} catch (ClassNotFoundException | DAOConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

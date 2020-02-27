@@ -1,6 +1,10 @@
 package fr.excilys.computer_database.dao;
 
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
@@ -17,30 +21,24 @@ public class CompanyDAO {
 	private static volatile CompanyDAO INSTANCE = null;
 
 	/** Point d'accès pour l'instance unique du singleton */
-	public final static CompanyDAO getInstance(DAO dao) {
+	public final static CompanyDAO getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new CompanyDAO(dao);
+			INSTANCE = new CompanyDAO();
 		}
 		return INSTANCE;
 	}
 
-	private DAO dao;
-
-	public CompanyDAO(DAO dao) {
-		this.dao = dao;
+	public CompanyDAO() {
 	}
 
 	public ArrayList<Company> lister() throws DAOConfigurationException {
 
 		ArrayList<Company> companies = new ArrayList<Company>();
-		PreparedStatement preparedStatement = null;
-		ResultSet resultat = null;
 
-		try {
-
-			Connection connexion = DAO.getInstance().getConnection();
-			preparedStatement = connexion.prepareStatement(LISTER);
-			resultat = preparedStatement.executeQuery();
+		try (Connection connexion = DAOHikari.getInstance().getConnection();
+				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER);){
+			
+			ResultSet resultat = preparedStatement.executeQuery();
 
 			while (resultat.next()) {
 				int id = resultat.getInt("id");
@@ -51,8 +49,6 @@ public class CompanyDAO {
 				companies.add(company);
 				
 			}
-			
-			dao.closeConnection(connexion);
 
 		} catch (SQLException e) {
 			Loggers.afficherMessageError("Exception SQL CompanyDAO, la méthode lister n'a pas abouti");
@@ -65,13 +61,10 @@ public class CompanyDAO {
 	public ArrayList<Company> lister(int offset, int pas) throws DAOConfigurationException {
 
 		ArrayList<Company> companies = new ArrayList<Company>();
-		Connection connexion = null;
-		PreparedStatement preparedStatement = null;
 
-		try {
+		try (Connection connexion = DAOHikari.getInstance().getConnection();
+				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER_LIMIT);){
 
-			connexion = DAO.getInstance().getConnection();
-			preparedStatement = connexion.prepareStatement(LISTER_LIMIT);
 			preparedStatement.setInt(1, offset);
 			preparedStatement.setInt(2, pas);
 
@@ -87,8 +80,6 @@ public class CompanyDAO {
 
 				
 			}
-			
-			dao.closeConnection(connexion);
 
 		} catch (SQLException e) {
 			Loggers.afficherMessageError("Exception SQL CompanyDAO, la méthode lister avec limit n'a pas abouti");

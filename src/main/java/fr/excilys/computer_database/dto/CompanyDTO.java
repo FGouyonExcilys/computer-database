@@ -9,8 +9,8 @@ public class CompanyDTO {
 
 	}
 
-	public CompanyDTO(String id) {
-		this.id = Integer.parseInt(id);
+	public CompanyDTO(int id) {
+		this.id = id;
 	}
 
 	public CompanyDTO(int id, String name) {

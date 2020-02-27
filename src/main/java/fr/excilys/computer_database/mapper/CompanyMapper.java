@@ -1,6 +1,7 @@
 package fr.excilys.computer_database.mapper;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import fr.excilys.computer_database.dto.CompanyDTO;
 import fr.excilys.computer_database.model.Company;

@@ -54,6 +54,7 @@ public class DAO {
 				driver = properties.getProperty(DRIVER);
 				nomUtilisateur = properties.getProperty(USERNAME);
 				motDePasse = properties.getProperty(PASSWORD);
+				
 				try {
 					Class.forName(driver);
 					instanceDAO = new DAO(url, nomUtilisateur, motDePasse);

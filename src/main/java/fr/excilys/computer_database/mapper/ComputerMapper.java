@@ -1,9 +1,11 @@
 package fr.excilys.computer_database.mapper;
 
-import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import fr.excilys.computer_database.dto.CompanyDTO;
 import fr.excilys.computer_database.dto.ComputerDTO;
@@ -13,30 +15,43 @@ import fr.excilys.computer_database.model.Computer;
 
 public class ComputerMapper {
 	
-	public Computer mapRow(ResultSet resultat, int i) throws SQLException {
+	public static Computer mapComputer(ResultSet resultat) throws SQLException {
 
-		Computer computer = new Computer.ComputerBuilder(resultat.getString("computer_name")).build();
-		computer.setId(resultat.getInt("computer_id"));
-		Date intro = resultat.getDate("introduced");
-		Date disco = resultat.getDate("discontinued");
-		LocalDate introduced = null;
-		if (intro != null) {
-			introduced = intro.toLocalDate();
-		}
-		LocalDate discontinued = null;
-		computer.setIntroduced(introduced);
+		int id = resultat.getInt("computer.id");
+		String name = resultat.getString("computer.name");
+		LocalDate introduced = resultat.getTimestamp("introduced")!=null?resultat.getTimestamp("introduced").toLocalDateTime().toLocalDate():null;
+		LocalDate discontinued = resultat.getTimestamp("discontinued")!=null?resultat.getTimestamp("discontinued").toLocalDateTime().toLocalDate():null;
+		int company_id = resultat.getInt("company.id");
+		String company_name = resultat.getString("company.name");
 		
-		if (disco != null) {
-			discontinued = disco.toLocalDate();
-		}
+		Company company = new Company.CompanyBuilder().setId(company_id).setName(company_name).build();
+
+		Computer computer = new Computer.ComputerBuilder(name)
+										.setIntroduced(introduced)
+										.setDiscontinued(discontinued)
+										.setCompany(company).build();
+		computer.setId(id);
 		
-		computer.setIntroduced(introduced);
-		computer.setDiscontinued(discontinued);
-		Company company = new Company.CompanyBuilder().setId(resultat.getInt("company_id"))
-													.setName(resultat.getString("company_name"))
-													.build();
-		computer.setCompany(company);
 		return computer;
+	}
+	
+	public static int mapPreparedStatement(PreparedStatement preparedStatement, Computer computer) {
+		
+		try {
+			preparedStatement.setString(1, computer.getName());
+			preparedStatement.setTimestamp(2, computer.getIntroduced()!=null?Timestamp.valueOf(computer.getIntroduced().atTime(LocalTime.MIDNIGHT)):null);
+			preparedStatement.setTimestamp(3, computer.getDiscontinued()!=null?Timestamp.valueOf(computer.getDiscontinued().atTime(LocalTime.MIDNIGHT)):null);
+			preparedStatement.setInt(4, computer.getCompany().getId());
+			
+			return preparedStatement.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return 0;
+		
 	}
 
 	public static Computer convertComputerDTOtoComputer(ComputerDTO computerDTO) {

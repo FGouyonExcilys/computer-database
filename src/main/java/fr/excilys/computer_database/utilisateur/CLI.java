@@ -1,14 +1,12 @@
 package fr.excilys.computer_database.utilisateur;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
 import fr.excilys.computer_database.utilisateur.Action;
 import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.dao.ComputerDAO;
-import fr.excilys.computer_database.dao.DAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
@@ -20,10 +18,8 @@ public class CLI {
 
 		try {
 
-			DAO dao = DAO.getInstance();
-
-			ComputerDAO computerDao = ComputerDAO.getInstance(dao);
-			CompanyDAO companyDao = CompanyDAO.getInstance(dao);
+			ComputerDAO computerDao = ComputerDAO.getInstance();
+			CompanyDAO companyDao = CompanyDAO.getInstance();
 
 			int menu = 0;
 
@@ -154,8 +150,6 @@ public class CLI {
 				computerDao.lister(i, pasComputer).stream().forEach(listePCDetails->System.out.println(listePCDetails));
 				System.in.read();
 			}
-		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL CLI, la méthode listerComputer n'a pas abouti");
 		} catch (IOException e){
 			Loggers.afficherMessageError("Exception IO CLI, la méthode listerComputer n'a pas abouti");
 		}
