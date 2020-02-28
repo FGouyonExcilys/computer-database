@@ -61,6 +61,7 @@
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
 									class="form-control" id="companyId" name="companyId">
+									<option value="none" selected>-- Remove Company assignment --</option>
 									<c:forEach items="${ listeCompany }" var="company">
 										<c:choose>
 											<c:when test="${ currentCompany == company.getId() }">

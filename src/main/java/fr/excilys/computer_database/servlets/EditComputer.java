@@ -57,7 +57,7 @@ public class EditComputer extends HttpServlet {
 
 			ArrayList<Company> companyList = companyServ.getCompanyList();
 
-			testIdNotNull(request, response);
+			testIdComputerToEditNotNull(request, response);
 
 			request.setAttribute("listeCompany", companyList);
 
@@ -81,20 +81,20 @@ public class EditComputer extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		int companyId = 0;
+		String error = "";
 
 		try {
 
-			testIdNotNull(request, response);
+			testIdComputerToEditNotNull(request, response);
 
 			String computerName = request.getParameter("computerName");
 			LocalDate introduced = request.getParameter("introduced").isEmpty() ? null
 					: LocalDate.parse(request.getParameter("introduced"));
 			LocalDate discontinued = request.getParameter("discontinued").isEmpty() ? null
 					: LocalDate.parse(request.getParameter("discontinued"));
-			int company_id = Integer.parseInt(request.getParameter("companyId"));
-
-			String error = "";
-
+			
 			if (introduced != null) {
 				if (discontinued != null) {
 					if (introduced.isAfter(discontinued)) {
@@ -106,19 +106,31 @@ public class EditComputer extends HttpServlet {
 
 					} else {
 						request.setAttribute("error", error);
-
-						Company company = companyServ.getCompanyById(company_id);
-
+						
+						Company company = null;
+						
+						boolean removeCompanyId = (request.getParameter("companyId").equals("none"));
+						
+						if(!removeCompanyId){
+							
+							companyId = Integer.parseInt(request.getParameter("companyId"));
+							company = companyServ.getCompanyById(companyId);
+						}
+						
+						
 						Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
 								.setDiscontinued(discontinued).setCompany(company).build();
 						computer.setId(idComputer);
-
+						
 						computerServ.editComputer(computer);
 
 						request.setAttribute("editSuccess", 1);
 					}
 				}
 			}
+			
+
+			
 
 		} catch (ClassNotFoundException | DAOConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -130,7 +142,7 @@ public class EditComputer extends HttpServlet {
 		response.sendRedirect("dashboard?editSuccess=1");
 	}
 
-	private void testIdNotNull(HttpServletRequest request, HttpServletResponse response) {
+	private void testIdComputerToEditNotNull(HttpServletRequest request, HttpServletResponse response) {
 		if (request.getParameter("id") != null) {
 			try {
 				idComputer = Integer.parseInt(request.getParameter("id"));

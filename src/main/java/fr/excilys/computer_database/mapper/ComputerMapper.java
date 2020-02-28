@@ -41,9 +41,16 @@ public class ComputerMapper {
 			preparedStatement.setString(1, computer.getName());
 			preparedStatement.setTimestamp(2, computer.getIntroduced()!=null?Timestamp.valueOf(computer.getIntroduced().atTime(LocalTime.MIDNIGHT)):null);
 			preparedStatement.setTimestamp(3, computer.getDiscontinued()!=null?Timestamp.valueOf(computer.getDiscontinued().atTime(LocalTime.MIDNIGHT)):null);
-			preparedStatement.setInt(4, computer.getCompany().getId());
+			
+			if(computer.getCompany() != null) {
+				preparedStatement.setInt(4, computer.getCompany().getId());
+			}
+			else {
+				preparedStatement.setNull(4, java.sql.Types.BIGINT);
+			}
 			
 			return preparedStatement.executeUpdate();
+			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

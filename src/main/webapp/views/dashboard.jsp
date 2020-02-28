@@ -77,7 +77,7 @@
 		</div>
 
 		<form id="deleteForm" action="#" method="POST">
-			<input type="hidden" name="selection" value="">
+			<input type="hidden" name="selection" id="selection" value="">
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -108,7 +108,7 @@
 					<c:forEach items="${ listeOrdiPaginer }" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
+								class="cb" value="${ computer.getId() }"></td>
 							<td><a href="editComputer?id=${ computer.getId() } " onclick=""><c:out
 										value="${ computer.getName() }" /></a></td>
 							<td><c:out value="${ computer.getIntroduced() }" /></td>

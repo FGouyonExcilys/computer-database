@@ -25,25 +25,26 @@ import fr.excilys.computer_database.services.ComputerService;
 @WebServlet("/addComputer")
 public class AddComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	
+
 	ComputerDAO computerDao = ComputerDAO.getInstance();
 	CompanyDAO companyDao = CompanyDAO.getInstance();
-	
-	ComputerService computerServ= ComputerService.getInstance(computerDao);
+
+	ComputerService computerServ = ComputerService.getInstance(computerDao);
 	CompanyService companyServ = CompanyService.getInstance(companyDao);
-	
+
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-        try { 
-			
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		try {
+
 			ArrayList<Company> companyList = companyServ.getCompanyList();
-			
+
 			request.setAttribute("listeCompany", companyList);
-			
-			
+
 		} catch (DAOConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -51,65 +52,77 @@ public class AddComputer extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		this.getServletContext().getRequestDispatcher("/views/addComputer.jsp").forward(request, response);
-		
+
 		String error = "";
-    	request.setAttribute("error", error);
+		request.setAttribute("error", error);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		int companyId = 0;
 		
 		try {
-			
+
 			ComputerService computerServ = ComputerService.getInstance(computerDao);
 			CompanyService companyServ = CompanyService.getInstance(companyDao);
-			
-	        String computerName = request.getParameter("computerName");
-	        LocalDate introduced = request.getParameter("introduced").isEmpty() ? null : LocalDate.parse(request.getParameter("introduced"));
-	        LocalDate discontinued = request.getParameter("discontinued").isEmpty() ? null : LocalDate.parse(request.getParameter("discontinued")) ;
-	        int company_id = Integer.parseInt(request.getParameter("companyId"));
-	        
-	        String error = "";
-	        
-	        if (introduced != null) {
-	        	if(discontinued != null) {
-	        		if(introduced.isAfter(discontinued)){
-	        			
-	        			error = "date";
-			        	request.setAttribute("error", error);
-			        	
-			        	doGet(request, response);
-			        	
-	        		} else {
-	        			
-	        			request.setAttribute("error", error);
-	        			
-	        			Company company = companyServ.getCompanyById(company_id);
-	        			Computer computer = new Computer.ComputerBuilder(computerName)
-	        					.setIntroduced(introduced)
-	        					.setDiscontinued(discontinued)
-	        					.setCompany(company).build();
-	        			
-	        			computerServ.addComputer(computer);
-	        			
-	        			request.setAttribute("addSuccess", 1);
-	        		}
-	        	}
-	        }
-	        
+
+			String computerName = request.getParameter("computerName");
+			LocalDate introduced = request.getParameter("introduced").isEmpty() ? null
+					: LocalDate.parse(request.getParameter("introduced"));
+			LocalDate discontinued = request.getParameter("discontinued").isEmpty() ? null
+					: LocalDate.parse(request.getParameter("discontinued"));
+
+			String error = "";
+
+			if (introduced != null) {
+				if (discontinued != null) {
+					if (introduced.isAfter(discontinued)) {
+
+						error = "date";
+						request.setAttribute("error", error);
+
+						doGet(request, response);
+
+					} else {
+
+						request.setAttribute("error", error);
+						
+						Company company = null;
+
+						boolean removeCompanyId = (request.getParameter("companyId").equals("0"));
+						
+						if (!removeCompanyId) {
+
+							companyId = Integer.parseInt(request.getParameter("companyId"));
+							company = companyServ.getCompanyById(companyId);
+						}
+						
+						Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
+								.setDiscontinued(discontinued).setCompany(company).build();
+
+						computerServ.addComputer(computer);
+
+						request.setAttribute("addSuccess", 1);
+					}
+				}
+			}
+
 		} catch (ClassNotFoundException | DAOConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		request.setAttribute("addSuccess", 1);
-		
+
 		response.sendRedirect("dashboard?addSuccess=1");
-		
+
 	}
 
 }

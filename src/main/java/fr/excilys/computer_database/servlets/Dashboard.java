@@ -2,6 +2,8 @@ package fr.excilys.computer_database.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,15 +11,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.dao.ComputerDAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Computer;
+import fr.excilys.computer_database.services.CompanyService;
 import fr.excilys.computer_database.services.ComputerService;
 
 
 @WebServlet("/dashboard")
 public class Dashboard extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    
+    ComputerDAO computerDao = ComputerDAO.getInstance();
+	CompanyDAO companyDao = CompanyDAO.getInstance();
+
+	ComputerService computerServ = ComputerService.getInstance(computerDao);
+	CompanyService companyServ = CompanyService.getInstance(companyDao);
 
     private int pageIterator = 1;
     private int step = 10;
@@ -77,8 +87,24 @@ public class Dashboard extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-    	String listeDeletions = request.getParameter("selection");
+    	String listDeletions = request.getParameter("selection");
     	
+    	List<String> deleteSelectionArray = Arrays.asList(listDeletions.split("\\s,\\s"));
+    	
+    	for(String s : deleteSelectionArray) {
+    		try {
+				computerServ.deleteComputer(Integer.parseInt(s));
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (DAOConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     	
     	doGet(request, response);
     }

@@ -3,19 +3,22 @@ package fr.excilys.computer_database.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import fr.excilys.computer_database.logging.Loggers;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import fr.excilys.computer_database.logging.Loggers;
-
 public class DAOHikari {
 
-	private static HikariConfig config = new HikariConfig("hikari.properties");
-	private static HikariDataSource ds = new HikariDataSource(config);
+	private static HikariConfig config ;
+	private static HikariDataSource ds;
 	
 	private static Connection connect;
 	private static DAOHikari instance;
 
+	static {
+		config = new HikariConfig("/hikari.properties");
+		ds = new HikariDataSource(config);
+	}
 	private DAOHikari() {
 	}
 
