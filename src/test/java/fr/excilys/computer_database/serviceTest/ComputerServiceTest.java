@@ -75,11 +75,11 @@ public class ComputerServiceTest {
 	@Test
 	public void testGetComputerListPaginer() throws ClassNotFoundException, SQLException, DAOConfigurationException {
 		ArrayList<Computer> computers = new ArrayList<>();
-		Mockito.when(computerDao.lister(0, 20)).thenReturn(computers);
+		Mockito.when(computerDao.lister(null,0, 20)).thenReturn(computers);
 
 		ComputerService compServ = new ComputerService(computerDao);
 
-		assertEquals(compServ.getComputerListPaginer(0, 20), computers);
+		assertEquals(compServ.getComputerListPaginer(null,0, 20), computers);
 	}
 
 	/**

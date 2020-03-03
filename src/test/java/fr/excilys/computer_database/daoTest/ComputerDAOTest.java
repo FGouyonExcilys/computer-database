@@ -84,7 +84,7 @@ public class ComputerDAOTest {
 	@Test
 	public void testListerInt() throws DAOConfigurationException {
 		
-		assertTrue(computerDAO.lister(0,20).size()==20);
+		assertTrue(computerDAO.lister(null,0,20).size()==20);
 		
 	}
 

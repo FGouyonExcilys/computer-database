@@ -81,9 +81,10 @@ public class EditComputer extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+
 		int companyId = 0;
 		String error = "";
+		String cheatingError = "";
 
 		try {
 
@@ -94,7 +95,7 @@ public class EditComputer extends HttpServlet {
 					: LocalDate.parse(request.getParameter("introduced"));
 			LocalDate discontinued = request.getParameter("discontinued").isEmpty() ? null
 					: LocalDate.parse(request.getParameter("discontinued"));
-			
+
 			if (introduced != null) {
 				if (discontinued != null) {
 					if (introduced.isAfter(discontinued)) {
@@ -106,31 +107,42 @@ public class EditComputer extends HttpServlet {
 
 					} else {
 						request.setAttribute("error", error);
-						
+
 						Company company = null;
 						
-						boolean removeCompanyId = (request.getParameter("companyId").equals("none"));
-						
-						if(!removeCompanyId){
-							
-							companyId = Integer.parseInt(request.getParameter("companyId"));
-							company = companyServ.getCompanyById(companyId);
-						}
-						
-						
-						Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
-								.setDiscontinued(discontinued).setCompany(company).build();
-						computer.setId(idComputer);
-						
-						computerServ.editComputer(computer);
+						if (isInteger(request.getParameter("companyId"))) {
 
-						request.setAttribute("editSuccess", 1);
+							companyId = Integer.parseInt(request.getParameter("companyId"));
+
+							if (companyId < 0) {
+								cheatingError = "cheat";
+								request.setAttribute("cheatingError", cheatingError);
+								doGet(request, response);
+							}
+							
+							boolean removeCompanyId = (request.getParameter("companyId").equals("none"));
+
+							if (!removeCompanyId) {
+
+								company = companyServ.getCompanyById(companyId);
+							}
+
+							Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
+									.setDiscontinued(discontinued).setCompany(company).build();
+							computer.setId(idComputer);
+
+							computerServ.editComputer(computer);
+
+							request.setAttribute("editSuccess", 1);
+							
+						} else {
+							cheatingError = "cheat";
+							request.setAttribute("cheatingError", cheatingError);
+							doGet(request,response);
+						}
 					}
 				}
 			}
-			
-
-			
 
 		} catch (ClassNotFoundException | DAOConfigurationException e) {
 			// TODO Auto-generated catch block
@@ -163,5 +175,29 @@ public class EditComputer extends HttpServlet {
 		request.setAttribute("introduced", computer.getIntroduced());
 		request.setAttribute("discontinued", computer.getDiscontinued());
 		request.setAttribute("currentCompany", computer.getCompany().getId());
+	}
+	
+	public static boolean isInteger(String str) {
+	    if (str == null) {
+	        return false;
+	    }
+	    int length = str.length();
+	    if (length == 0) {
+	        return false;
+	    }
+	    int i = 0;
+	    if (str.charAt(0) == '-') {
+	        if (length == 1) {
+	            return false;
+	        }
+	        i = 1;
+	    }
+	    for (; i < length; i++) {
+	        char c = str.charAt(i);
+	        if (c < '0' || c > '9') {
+	            return false;
+	        }
+	    }
+	    return true;
 	}
 }

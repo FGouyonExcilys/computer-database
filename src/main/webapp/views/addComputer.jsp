@@ -37,6 +37,12 @@
 									date</b>
 							</div>
 						</c:when>
+						<c:when test="${ cheatingError == 'cheat' }">
+							<div class="alert alert-warning" role="alert">
+								<div style="font-size: 30px; display: inline">&#x1F620;</div>
+								<b>&nbsp;&nbsp;You've tried cheating on the database, don't you? Too bad! Try again.</b>
+							</div>
+						</c:when>
 					</c:choose>
 					
 					<form action="addComputer" method="POST" id="addComputerForm" onload="">

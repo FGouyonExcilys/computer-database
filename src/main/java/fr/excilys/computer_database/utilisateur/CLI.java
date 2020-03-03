@@ -147,7 +147,7 @@ public class CLI {
 
 		try {
 			for (int i = 0; i < computerDao.lister().size(); i += pasComputer) {
-				computerDao.lister(i, pasComputer).stream().forEach(listePCDetails->System.out.println(listePCDetails));
+				computerDao.lister(null, i, pasComputer).stream().forEach(listePCDetails->System.out.println(listePCDetails));
 				System.in.read();
 			}
 		} catch (IOException e){

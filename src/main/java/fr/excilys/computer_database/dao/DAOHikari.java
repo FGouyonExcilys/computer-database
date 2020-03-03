@@ -19,6 +19,7 @@ public class DAOHikari {
 		config = new HikariConfig("/hikari.properties");
 		ds = new HikariDataSource(config);
 	}
+	
 	private DAOHikari() {
 	}
 

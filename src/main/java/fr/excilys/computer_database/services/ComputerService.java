@@ -27,8 +27,16 @@ public class ComputerService {
 		return computerDao.lister();
 	}
 
-	public ArrayList<Computer> getComputerListPaginer(int offset, int pas) throws ClassNotFoundException, DAOConfigurationException {
-		return computerDao.lister(offset, pas);
+	public ArrayList<Computer> getComputerListPaginer(String orderBy, int offset, int pas) throws ClassNotFoundException, DAOConfigurationException {
+		return computerDao.lister(orderBy,offset, pas);
+	}
+	
+	public ArrayList<Computer> getComputerListSearched(String search) throws ClassNotFoundException, DAOConfigurationException {
+		return computerDao.listSearch(search);
+	}
+	
+	public ArrayList<Computer> getComputerListSearchedPaginer(String orderBy, String search, int offset, int pas) throws ClassNotFoundException, DAOConfigurationException {
+		return computerDao.listSearch(orderBy, search, offset, pas);
 	}
 	
 	public int addComputer(Computer computer) throws ClassNotFoundException, DAOConfigurationException {

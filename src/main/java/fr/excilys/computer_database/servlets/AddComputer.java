@@ -80,6 +80,7 @@ public class AddComputer extends HttpServlet {
 					: LocalDate.parse(request.getParameter("discontinued"));
 
 			String error = "";
+			String cheatingError = "";
 
 			if (introduced != null) {
 				if (discontinued != null) {
@@ -95,21 +96,36 @@ public class AddComputer extends HttpServlet {
 						request.setAttribute("error", error);
 						
 						Company company = null;
-
-						boolean removeCompanyId = (request.getParameter("companyId").equals("0"));
 						
-						if (!removeCompanyId) {
-
+						if (isInteger(request.getParameter("companyId"))) {
+							
 							companyId = Integer.parseInt(request.getParameter("companyId"));
-							company = companyServ.getCompanyById(companyId);
+							
+							if(companyId < 0){
+								cheatingError = "cheat";
+								request.setAttribute("cheatingError", cheatingError);
+								doGet(request,response);
+							}
+							
+							boolean notSettingCompanyId = (companyId == 0);
+							
+							if (!notSettingCompanyId) {
+
+								company = companyServ.getCompanyById(companyId);
+							}
+							
+							Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
+									.setDiscontinued(discontinued).setCompany(company).build();
+
+							computerServ.addComputer(computer);
+
+							request.setAttribute("addSuccess", 1);
+							
+						} else {
+							cheatingError = "cheat";
+							request.setAttribute("cheatingError", cheatingError);
+							doGet(request,response);
 						}
-						
-						Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
-								.setDiscontinued(discontinued).setCompany(company).build();
-
-						computerServ.addComputer(computer);
-
-						request.setAttribute("addSuccess", 1);
 					}
 				}
 			}
@@ -119,10 +135,32 @@ public class AddComputer extends HttpServlet {
 			e.printStackTrace();
 		}
 
-		request.setAttribute("addSuccess", 1);
-
 		response.sendRedirect("dashboard?addSuccess=1");
 
+	}
+	
+	public static boolean isInteger(String str) {
+	    if (str == null) {
+	        return false;
+	    }
+	    int length = str.length();
+	    if (length == 0) {
+	        return false;
+	    }
+	    int i = 0;
+	    if (str.charAt(0) == '-') {
+	        if (length == 1) {
+	            return false;
+	        }
+	        i = 1;
+	    }
+	    for (; i < length; i++) {
+	        char c = str.charAt(i);
+	        if (c < '0' || c > '9') {
+	            return false;
+	        }
+	    }
+	    return true;
 	}
 
 }

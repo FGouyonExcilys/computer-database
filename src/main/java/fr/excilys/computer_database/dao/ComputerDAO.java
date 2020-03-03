@@ -22,10 +22,37 @@ public class ComputerDAO {
 	private final static String SUPPRIMER = "DELETE FROM computer WHERE id = ?;";
 
 	private final static String LISTER = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
-			+ "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id;";
+			+ "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id";
 
-	private final static String LISTER_LIMIT = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
-			+ "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id " + "LIMIT ?, ?;";
+	private final static String LIMIT = " LIMIT ?, ?;";
+
+	private final static String ORDER_BY_ASC = " ORDER BY computer.name ASC";
+
+	private final static String ORDER_BY_DESC = " ORDER BY computer.name DESC";
+
+	private final static String LISTER_SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
+			+ "FROM computer "
+			+ "LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
+
+	// private final static String LISTER = "SELECT computer.id, computer.name,
+	// introduced, discontinued, company.id, company.name "
+	// + "FROM computer " + "LEFT JOIN company ON computer.company_id =
+	// company.id;";
+
+	// private final static String LISTER_LIMIT = "SELECT computer.id,
+	// computer.name, introduced, discontinued, company.id, company.name "
+	// + "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id
+	// LIMIT ?, ?;";
+
+	// private final static String LISTER_SEARCH = "SELECT computer.id,
+	// computer.name, introduced, discontinued, company.id, company.name "
+	// + "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id
+	// WHERE computer.name LIKE ? OR company.name LIKE ?;";
+
+	// private final static String LISTER_LIMIT_SEARCH = "SELECT computer.id,
+	// computer.name, introduced, discontinued, company.id, company.name "
+	// + "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id
+	// WHERE computer.name LIKE ? OR company.name LIKE ? LIMIT ?, ? ;";
 
 	private final static String DETAILS_ORDI = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
 			+ "FROM computer " + "LEFT JOIN company ON company_id = company.id " + "WHERE computer.id = ?;";
@@ -89,8 +116,8 @@ public class ComputerDAO {
 		int executePS = 0;
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(MODIFIER);){
-			
+				PreparedStatement preparedStatement = connexion.prepareStatement(MODIFIER);) {
+
 			preparedStatement.setInt(5, computer.getId());
 			executePS = ComputerMapper.mapPreparedStatement(preparedStatement, computer);
 
@@ -125,7 +152,7 @@ public class ComputerDAO {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER);
+				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER + ";");
 				ResultSet resultat = preparedStatement.executeQuery();) {
 
 			while (resultat.next()) {
@@ -140,11 +167,21 @@ public class ComputerDAO {
 		return computers;
 	}
 
-	public ArrayList<Computer> lister(int offset, int pas) throws DAOConfigurationException {
+	public ArrayList<Computer> lister(String orderBy, int offset, int pas) throws DAOConfigurationException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
+		
+		int i = testOrderBy(orderBy);
+
+		String requete = LISTER + LIMIT;
+
+		if (i == 1) {
+			requete = LISTER + ORDER_BY_ASC + LIMIT;
+		} else if (i == -1) {
+			requete = LISTER + ORDER_BY_DESC + LIMIT;
+		}
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER_LIMIT);) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(requete);) {
 
 			preparedStatement.setInt(1, offset);
 			preparedStatement.setInt(2, pas);
@@ -159,6 +196,68 @@ public class ComputerDAO {
 		} catch (SQLException e) {
 			Loggers.afficherMessageError(
 					"Exception SQL ComputerDAO, la méthode lister avec limit n'a pas abouti\n" + e.getMessage());
+		}
+
+		return computers;
+	}
+
+	public ArrayList<Computer> listSearch(String search) throws DAOConfigurationException {
+		ArrayList<Computer> computers = new ArrayList<Computer>();
+
+		try (Connection connexion = DAOHikari.getInstance().getConnection();
+				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER_SEARCH +";");) {
+
+			preparedStatement.setString(1, '%' + search + '%');
+			preparedStatement.setString(2, '%' + search + '%');
+
+			ResultSet resultat = preparedStatement.executeQuery();
+
+			while (resultat.next()) {
+				computers.add(ComputerMapper.mapComputer(resultat));
+
+			}
+
+		} catch (SQLException e) {
+			Loggers.afficherMessageError(
+					"Exception SQL ComputerDAO, la méthode liste recherchée n'a pas abouti\n" + e.getMessage());
+		}
+
+		return computers;
+	}
+
+	public ArrayList<Computer> listSearch(String orderBy, String search, int offset, int pas)
+			throws DAOConfigurationException {
+		ArrayList<Computer> computers = new ArrayList<Computer>();
+
+		int i = testOrderBy(orderBy);
+
+		String requete = LISTER_SEARCH + LIMIT;
+
+		if (i == 1) {
+			requete = LISTER_SEARCH + ORDER_BY_ASC + LIMIT;
+		} else if (i == -1) {
+			requete = LISTER_SEARCH + ORDER_BY_DESC + LIMIT;
+		}
+
+		try (Connection connexion = DAOHikari.getInstance().getConnection();
+				PreparedStatement preparedStatement = connexion.prepareStatement(requete);) {
+
+			preparedStatement.setString(1, '%' + search + '%');
+			preparedStatement.setString(2, '%' + search + '%');
+			preparedStatement.setInt(3, offset);
+			preparedStatement.setInt(4, pas);
+
+			ResultSet resultat = preparedStatement.executeQuery();
+
+			while (resultat.next()) {
+				computers.add(ComputerMapper.mapComputer(resultat));
+
+			}
+
+		} catch (SQLException e) {
+			Loggers.afficherMessageError(
+					"Exception SQL ComputerDAO, la méthode liste recherchée avec limit n'a pas abouti\n"
+							+ e.getMessage());
 		}
 
 		return computers;
@@ -184,6 +283,20 @@ public class ComputerDAO {
 		}
 
 		return computer;
+	}
+
+	private int testOrderBy(String orderBy) {
+		
+		if(orderBy == null) {
+			return 0;
+		}
+		if (orderBy.equals("asc")) {
+			return 1;
+		} else if (orderBy.equals("desc")) {
+			return -1;
+		} else {
+			return 0;
+		}
 	}
 
 }

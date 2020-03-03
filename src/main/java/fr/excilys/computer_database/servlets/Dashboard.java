@@ -18,62 +18,91 @@ import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.services.CompanyService;
 import fr.excilys.computer_database.services.ComputerService;
 
-
 @WebServlet("/dashboard")
 public class Dashboard extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-    
-    ComputerDAO computerDao = ComputerDAO.getInstance();
+	private static final long serialVersionUID = 1L;
+
+	ComputerDAO computerDao = ComputerDAO.getInstance();
 	CompanyDAO companyDao = CompanyDAO.getInstance();
 
 	ComputerService computerServ = ComputerService.getInstance(computerDao);
 	CompanyService companyServ = CompanyService.getInstance(companyDao);
 
-    private int pageIterator = 1;
-    private int step = 10;
-    
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	
-        ComputerDAO computerDao;
-        
-        ArrayList<Computer> computerListPaginerDefault = null;
-        
+	private int pageIterator = 1;
+	private int step = 10;
+	private String search = null;
+	private int lastPageIndex = 1;
+	private String orderBy = null;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		ArrayList<Computer> computerList = null;
+		ArrayList<Computer> computerListPaginer = null;
+
+		ArrayList<Computer> computerListSearch = null;
+		ArrayList<Computer> computerListSearchPaginer = null;
+
 		try {
-			computerDao = ComputerDAO.getInstance();
-			
-			ArrayList<Computer> computerList = ComputerService.getInstance(computerDao).getComputerList();
-			
 			if (request.getParameter("pageIterator") != null) {
-				try{
+				try {
 					pageIterator = Integer.parseInt(request.getParameter("pageIterator"));
-			    }catch(NumberFormatException e){
-			    	this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
-			    }
+				} catch (NumberFormatException e) {
+					this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
+				}
 			}
-			
+
 			if (request.getParameter("step") != null) {
-				try{
+				try {
 					step = Integer.parseInt(request.getParameter("step"));
-				}catch(NumberFormatException e){
-			    	this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
-			    }
+				} catch (NumberFormatException e) {
+					this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
+				}
 			}
 			
-			computerListPaginerDefault = ComputerService.getInstance(computerDao).getComputerListPaginer((pageIterator-1)*step,step);
-			
-			int lastPageIndex = (int) Math.ceil((double)computerList.size()/step);
-			
+			orderBy = request.getParameter("orderBy");
+
+			if (request.getParameter("search") != null) {
+
+				search = request.getParameter("search");
+
+				computerListSearch = computerServ.getComputerListSearched(search);
+
+				lastPageIndex = (int) Math.ceil((double) computerListSearch.size() / step);
+				
+				if(pageIterator > lastPageIndex) {
+					pageIterator = 1;
+				}
+				
+				computerListSearchPaginer = computerServ.getComputerListSearchedPaginer(orderBy, search, (pageIterator - 1) * step, step);
+				
+				request.setAttribute("listeOrdiSearched", computerListSearch);
+				request.setAttribute("listeOrdiSearchedPaginer", computerListSearchPaginer);
+
+			} else {
+
+				search = null;
+				
+				computerList = computerServ.getComputerList();
+				computerListPaginer = computerServ.getComputerListPaginer(orderBy, (pageIterator - 1) * step, step);
+
+				lastPageIndex = (int) Math.ceil((double) computerList.size() / step);
+
+				request.setAttribute("listeOrdi", computerList);
+				request.setAttribute("listeOrdiPaginer", computerListPaginer);
+			}
+
 			request.setAttribute("addSuccess", request.getParameter("addSuccess"));
 			request.setAttribute("editSuccess", request.getParameter("editSuccess"));
-			
+
+			request.setAttribute("search", search);
+			request.setAttribute("orderBy", orderBy);
 			request.setAttribute("pageIterator", pageIterator);
 			request.setAttribute("step", step);
 			request.setAttribute("lastPageIndex", lastPageIndex);
-			request.setAttribute("listeOrdi", computerList);
-			request.setAttribute("listeOrdiPaginer", computerListPaginerDefault);
-			
+
 			this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
-			
+
 		} catch (DAOConfigurationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -81,18 +110,20 @@ public class Dashboard extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-    }
 
+	}
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
-    	String listDeletions = request.getParameter("selection");
-    	
-    	List<String> deleteSelectionArray = Arrays.asList(listDeletions.split("\\s,\\s"));
-    	
-    	for(String s : deleteSelectionArray) {
-    		try {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		// -- Section Suppression d'ordinateurs --
+
+		String listDeletions = request.getParameter("selection");
+
+		List<String> deleteSelectionArray = Arrays.asList(listDeletions.split("\\s,\\s"));
+
+		for (String s : deleteSelectionArray) {
+			try {
 				computerServ.deleteComputer(Integer.parseInt(s));
 			} catch (NumberFormatException e) {
 				// TODO Auto-generated catch block
@@ -104,9 +135,9 @@ public class Dashboard extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-    	}
-    	
-    	doGet(request, response);
-    }
+		}
+
+		doGet(request, response);
+	}
 
 }
