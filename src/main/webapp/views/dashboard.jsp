@@ -105,28 +105,76 @@
 						</span></th>
 
 						<th><c:choose>
-								<c:when test="${ orderBy == 'asc' }">
-									<a href="dashboard?orderBy=desc<c:if test="${ search != null }">&search=${ search }</c:if>"
+								<c:when test="${ orderBy == 'asc' && columnName.equals('computerName') }">
+									<a href="dashboard?columnName=computerName&orderBy=desc<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
 										class="alert-link">Computer name</a> &#x25bc;
-							</c:when>
-								<c:when test="${ orderBy == 'desc' }">
-									<a href="dashboard?orderBy=asc<c:if test="${ search != null }">&search=${ search }</c:if>"
+								</c:when>
+								<c:when test="${ orderBy == 'desc' && columnName.equals('computerName') }">
+									<a href="dashboard?columnName=computerName&orderBy=asc<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
 										class="alert-link">Computer name</a> &#x25b2;
-							</c:when>
+								</c:when>
 								<c:otherwise>
-									<a href="dashboard?orderBy=asc<c:if test="${ search != null }">&search=${ search }</c:if>"
+									<a href="dashboard?columnName=computerName&orderBy=asc<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Computer name</a> &#x25bc;
+										class="alert-link">Computer name</a>
 								</c:otherwise>
 							</c:choose></th>
 
-						<th>Introduced date</th>
+						<th><c:choose>
+								<c:when test="${ orderBy == 'asc' && columnName.equals('introduced') }">
+									<a href="dashboard?columnName=introduced&orderBy=desc<c:if test="${ search != null }">&search=${ search }</c:if>"
+										id="orderByComputerName"
+										class="alert-link">Introduced date</a> &#x25bc;
+								</c:when>
+								<c:when test="${ orderBy == 'desc' && columnName.equals('introduced') }">
+									<a href="dashboard?columnName=introduced&orderBy=asc<c:if test="${ search != null }">&search=${ search }</c:if>"
+										id="orderByComputerName"
+										class="alert-link">Introduced date</a> &#x25b2;
+								</c:when>
+								<c:otherwise>
+									<a href="dashboard?columnName=introduced&orderBy=asc<c:if test="${ search != null }">&search=${ search }</c:if>"
+										id="orderByComputerName"
+										class="alert-link">Introduced date</a>
+								</c:otherwise>
+							</c:choose></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><c:choose>
+								<c:when test="${ orderBy == 'asc' && columnName.equals('discontinued') }">
+									<a href="dashboard?columnName=discontinued&orderBy=desc<c:if test="${ search != null }">&search=${ search }</c:if>"
+										id="orderByComputerName"
+										class="alert-link">Discontinued date</a> &#x25bc;
+								</c:when>
+								<c:when test="${ orderBy == 'desc' && columnName.equals('discontinued') }">
+									<a href="dashboard?columnName=discontinued&orderBy=asc<c:if test="${ search != null }">&search=${ search }</c:if>"
+										id="orderByComputerName"
+										class="alert-link">Discontinued date</a> &#x25b2;
+								</c:when>
+								<c:otherwise>
+									<a href="dashboard?columnName=discontinued&orderBy=asc<c:if test="${ search != null }">&search=${ search }</c:if>"
+										id="orderByComputerName"
+										class="alert-link">Discontinued date</a>
+								</c:otherwise>
+							</c:choose></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><c:choose>
+								<c:when test="${ orderBy == 'asc' && columnName.equals('companyName') }">
+									<a href="dashboard?columnName=companyName&orderBy=desc<c:if test="${ search != null }">&search=${ search }</c:if>"
+										id="orderByComputerName"
+										class="alert-link">Company</a> &#x25bc;
+								</c:when>
+								<c:when test="${ orderBy == 'desc' && columnName.equals('companyName') }">
+									<a href="dashboard?columnName=companyName&orderBy=asc<c:if test="${ search != null }">&search=${ search }</c:if>"
+										id="orderByComputerName"
+										class="alert-link">Company</a> &#x25b2;
+								</c:when>
+								<c:otherwise>
+									<a href="dashboard?columnName=companyName&orderBy=asc<c:if test="${ search != null }">&search=${ search }</c:if>"
+										id="orderByComputerName"
+										class="alert-link">Company</a>
+								</c:otherwise>
+							</c:choose></th>
 
 					</tr>
 				</thead>
@@ -173,7 +221,7 @@
 					<c:when test="${ lastPageIndex > 6 }">
 						<li><c:choose>
 								<c:when test="${ pageIterator >= 2 }">
-									<a
+									<a 
 										href="dashboard?pageIterator=${ pageIterator - 1 }
 										<c:if test="${ search != null }">&search=${ search }</c:if>
 										<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>"

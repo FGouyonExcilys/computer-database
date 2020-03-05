@@ -154,6 +154,8 @@ public class EditComputer extends HttpServlet {
 		response.sendRedirect("dashboard?editSuccess=1");
 	}
 
+	
+	
 	private void testIdComputerToEditNotNull(HttpServletRequest request, HttpServletResponse response) {
 		if (request.getParameter("id") != null) {
 			try {

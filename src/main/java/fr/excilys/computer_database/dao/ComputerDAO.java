@@ -26,50 +26,20 @@ public class ComputerDAO {
 
 	private final static String LIMIT = " LIMIT ?, ?;";
 
-	private final static String ORDER_BY_ASC = " ORDER BY computer.name ASC";
+	private final static String ORDER_BY_COMPUTER_NAME = " ORDER BY computer.name";
 
-	private final static String ORDER_BY_DESC = " ORDER BY computer.name DESC";
+	private final static String DESC = " DESC";
 
 	private final static String LISTER_SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
 			+ "FROM computer "
 			+ "LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 
-	// private final static String LISTER = "SELECT computer.id, computer.name,
-	// introduced, discontinued, company.id, company.name "
-	// + "FROM computer " + "LEFT JOIN company ON computer.company_id =
-	// company.id;";
-
-	// private final static String LISTER_LIMIT = "SELECT computer.id,
-	// computer.name, introduced, discontinued, company.id, company.name "
-	// + "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id
-	// LIMIT ?, ?;";
-
-	// private final static String LISTER_SEARCH = "SELECT computer.id,
-	// computer.name, introduced, discontinued, company.id, company.name "
-	// + "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id
-	// WHERE computer.name LIKE ? OR company.name LIKE ?;";
-
-	// private final static String LISTER_LIMIT_SEARCH = "SELECT computer.id,
-	// computer.name, introduced, discontinued, company.id, company.name "
-	// + "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id
-	// WHERE computer.name LIKE ? OR company.name LIKE ? LIMIT ?, ? ;";
-
 	private final static String DETAILS_ORDI = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
 			+ "FROM computer " + "LEFT JOIN company ON company_id = company.id " + "WHERE computer.id = ?;";
-	/*
-	 * private final static String TROUVERID =
-	 * "SELECT computer.id as computer_id, computer.name as computer_name, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE computer.id=:id"
-	 * ; private final static String TROUVERNOM =
-	 * "SELECT  computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id WHERE LOWER(computer.name) LIKE :recherche OR LOWER(company.name) LIKE :recherche OR introduced LIKE :recherche OR discontinued LIKE :recherche;"
-	 * ; private final static String EFFACER =
-	 * "DELETE FROM computer WHERE id = :id"; private final static String
-	 * EFFACERPARCOMPA = "DELETE FROM computer WHERE company_id = :id"; private
-	 * final static String SELECTION =
-	 * "SELECT computer.name as computer_name, computer.id as computer_id, computer.introduced, computer.discontinued, computer.company_id, company.name as company_name FROM computer LEFT JOIN company on company.id=computer.company_id"
-	 * ; private final static String ASCENDANT = " ASC"; private final static String
-	 * DESCENDANT = " DESC"; private final static String ORDER = " ORDER BY ";
-	 */
-
+	
+	private final static String DELETECOMPANY = "DELETE FROM computer WHERE company_id = ?;";
+	
+	
 	private static volatile ComputerDAO INSTANCE = null;
 
 	/**
@@ -175,9 +145,9 @@ public class ComputerDAO {
 		String requete = LISTER + LIMIT;
 
 		if (i == 1) {
-			requete = LISTER + ORDER_BY_ASC + LIMIT;
+			requete = LISTER + ORDER_BY_COMPUTER_NAME + LIMIT;
 		} else if (i == -1) {
-			requete = LISTER + ORDER_BY_DESC + LIMIT;
+			requete = LISTER + ORDER_BY_COMPUTER_NAME + DESC + LIMIT;
 		}
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
@@ -234,9 +204,9 @@ public class ComputerDAO {
 		String requete = LISTER_SEARCH + LIMIT;
 
 		if (i == 1) {
-			requete = LISTER_SEARCH + ORDER_BY_ASC + LIMIT;
+			requete = LISTER_SEARCH + ORDER_BY_COMPUTER_NAME + LIMIT;
 		} else if (i == -1) {
-			requete = LISTER_SEARCH + ORDER_BY_DESC + LIMIT;
+			requete = LISTER_SEARCH + ORDER_BY_COMPUTER_NAME + DESC + LIMIT;
 		}
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
@@ -297,6 +267,23 @@ public class ComputerDAO {
 		} else {
 			return 0;
 		}
+	}
+	
+	private int columnIndexOrderBy(String columnName) {
+		
+		switch(columnName) {
+			case "cpName":
+				return 1;
+			case "introduced":
+				return 2;
+			case "discontinued":
+				return 3;
+			case "companyName":
+				return 4;
+			default:
+				return 0;
+		}
+		
 	}
 
 }

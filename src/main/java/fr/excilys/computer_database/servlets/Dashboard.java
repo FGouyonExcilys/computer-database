@@ -33,6 +33,7 @@ public class Dashboard extends HttpServlet {
 	private String search = null;
 	private int lastPageIndex = 1;
 	private String orderBy = null;
+	private String columnName = null;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -61,6 +62,7 @@ public class Dashboard extends HttpServlet {
 			}
 			
 			orderBy = request.getParameter("orderBy");
+			columnName = request.getParameter("columnName");
 
 			if (request.getParameter("search") != null) {
 

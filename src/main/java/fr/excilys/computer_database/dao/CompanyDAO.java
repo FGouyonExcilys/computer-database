@@ -31,6 +31,31 @@ public class CompanyDAO {
 	public CompanyDAO() {
 	}
 
+	
+	public int deleteCompany(int idCompany) throws DAOConfigurationException{
+		Connection connection = null; 
+		try{ 
+		   connection = DAOHikari.getInstance().getConnection();;  
+		   connection.setAutoCommit(false); 
+		  
+		   //traitement des différentes instructions composant la transaction 
+		  
+		   if(idCompany != 0){ 
+		      connection.commit();// c'est ici que l'on valide la transaction 
+		      connection.setAutoCommit(true); 
+		   }else{ 
+		      connection.rollback(); 
+		   } 
+		}catch(SQLException sqle){ 
+		   try{connection.rollback();}catch(Exception e){} 
+		}catch(Exception e){ 
+		   try{connection.rollback();}catch(Exception e1){} 
+		}finally{ 
+		   try{connection.close();}catch(Exception e){} 
+		}
+		return idCompany;
+	}
+	
 	public ArrayList<Company> lister() throws DAOConfigurationException {
 
 		ArrayList<Company> companies = new ArrayList<Company>();
