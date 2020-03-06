@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.dao.ComputerDAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
+import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.services.CompanyService;
@@ -46,11 +47,7 @@ public class AddComputer extends HttpServlet {
 			request.setAttribute("listeCompany", companyList);
 
 		} catch (DAOConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Loggers.afficherMessageError("DAOConfigurationException in Dashboard Servlet" + e.getMessage());
 		}
 
 		this.getServletContext().getRequestDispatcher("/views/addComputer.jsp").forward(request, response);
@@ -130,9 +127,9 @@ public class AddComputer extends HttpServlet {
 				}
 			}
 
-		} catch (ClassNotFoundException | DAOConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (DAOConfigurationException e) {
+			Loggers.afficherMessageError("DAOConfigurationException in Dashboard Servlet" + e.getMessage());
+
 		}
 
 		response.sendRedirect("dashboard?addSuccess=1");

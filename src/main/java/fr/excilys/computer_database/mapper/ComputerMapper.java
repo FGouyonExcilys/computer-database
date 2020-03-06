@@ -143,44 +143,44 @@ public class ComputerMapper {
 		if(search == "search") {
 			switch(type) {
 			case 1:
-				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.LIMIT.getMessage();
 			case 2:
-				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.LIMIT.getMessage();
 			case 3:
-				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.LIMIT.getMessage();
 			case 4:
-				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.LIMIT.getMessage();
 			case -1:
-				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
 			case -2:
-				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
 			case -3:
-				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
 			case -4:
-				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
 			default:
-				return Requete.LISTER_SEARCH.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_SEARCH.getMessage() + Requete.LIMIT.getMessage();
 			}
 		}else {
 			switch(type) {
 			case 1:
-				return Requete.LISTER.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.LIMIT.getMessage();
 			case 2:
-				return Requete.LISTER.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.LIMIT.getMessage();
 			case 3:
-				return Requete.LISTER.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.LIMIT.getMessage();
 			case 4:
-				return Requete.LISTER.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.LIMIT.getMessage();
 			case -1:
-				return Requete.LISTER.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
 			case -2:
-				return Requete.LISTER.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
 			case -3:
-				return Requete.LISTER.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
 			case -4:
-				return Requete.LISTER.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
 			default:
-				return Requete.LISTER.getMessage() + Requete.LIMIT.getMessage();
+				return Requete.LIST_COMPUTER.getMessage() + Requete.LIMIT.getMessage();
 			}
 		}
 		

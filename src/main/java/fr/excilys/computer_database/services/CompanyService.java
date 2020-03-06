@@ -23,15 +23,15 @@ public class CompanyService {
 		return INSTANCE;
 	}
 	
-	public ArrayList<Company> getCompanyList() throws ClassNotFoundException, DAOConfigurationException {
+	public ArrayList<Company> getCompanyList() throws DAOConfigurationException {
 		return companyDao.lister();
 	}
 	
-	public ArrayList<Company> getCompanyListPaginer(int offset, int pas) throws ClassNotFoundException, DAOConfigurationException {
+	public ArrayList<Company> getCompanyListPaginer(int offset, int pas) throws DAOConfigurationException {
 		return companyDao.lister(offset, pas);
 	}
 	
-	public Company getCompanyById(int id) throws ClassNotFoundException, DAOConfigurationException {
+	public Company getCompanyById(int id) throws DAOConfigurationException {
 		return companyDao.getCompanyById(id);
 	}
 

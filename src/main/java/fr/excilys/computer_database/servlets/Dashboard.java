@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.dao.ComputerDAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
+import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.model.Paginer;
 import fr.excilys.computer_database.services.CompanyService;
@@ -50,6 +51,7 @@ public class Dashboard extends HttpServlet {
 				try {
 					pageIterator = Integer.parseInt(request.getParameter("pageIterator"));
 				} catch (NumberFormatException e) {
+					Loggers.afficherMessageError("NumberFormatException in Dashboard Servlet" + e.getMessage());
 					this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 				}
 			}
@@ -58,6 +60,7 @@ public class Dashboard extends HttpServlet {
 				try {
 					step = Integer.parseInt(request.getParameter("step"));
 				} catch (NumberFormatException e) {
+					Loggers.afficherMessageError("NumberFormatException in Dashboard Servlet" + e.getMessage());
 					this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 				}
 			}
@@ -118,12 +121,8 @@ public class Dashboard extends HttpServlet {
 
 			this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 
-		} catch (DAOConfigurationException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (DAOConfigurationException e) {
+			Loggers.afficherMessageError("DAOConfigurationException in Dashboard Servlet" + e.getMessage());
 		}
 
 	}
@@ -141,14 +140,9 @@ public class Dashboard extends HttpServlet {
 			try {
 				computerServ.deleteComputer(Integer.parseInt(s));
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Loggers.afficherMessageError("NumberFormatException in Dashboard Servlet" + e.getMessage());
 			} catch (DAOConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Loggers.afficherMessageError("DAOConfigurationException in Dashboard Servlet" + e.getMessage());
 			}
 		}
 

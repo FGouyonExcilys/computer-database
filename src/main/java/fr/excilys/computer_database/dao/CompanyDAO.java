@@ -10,14 +10,9 @@ import java.util.ArrayList;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
+import fr.excilys.computer_database.utilisateur.Requete;
 
 public class CompanyDAO {
-
-	private final static String LISTER = "SELECT * FROM company;";
-	private final static String LISTER_LIMIT = "SELECT * FROM company LIMIT ?,?;";
-	private final static String DETAILS_COMPANY = "SELECT * FROM company WHERE id = ?;";
-	private final static String DELETE_COMPANY = "DELETE FROM company WHERE id = ?;";
-	
 	
 	private static volatile CompanyDAO INSTANCE = null;
 
@@ -62,7 +57,7 @@ public class CompanyDAO {
 		ArrayList<Company> companies = new ArrayList<Company>();
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER);){
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.LIST_COMPANY.getMessage() + ";");){
 			
 			ResultSet resultat = preparedStatement.executeQuery();
 
@@ -89,7 +84,7 @@ public class CompanyDAO {
 		ArrayList<Company> companies = new ArrayList<Company>();
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER_LIMIT);){
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.LIST_COMPANY.getMessage() + Requete.LIMIT.getMessage());){
 
 			preparedStatement.setInt(1, offset);
 			preparedStatement.setInt(2, pas);
@@ -119,7 +114,7 @@ public class CompanyDAO {
 		Company company = new Company.CompanyBuilder().build();
 
 		try (Connection connexion = DAO.getInstance().getConnection();
-			PreparedStatement preparedStatement = connexion.prepareStatement(DETAILS_COMPANY);){
+			PreparedStatement preparedStatement = connexion.prepareStatement(Requete.DETAILS_COMPANY.getMessage());){
 			
 			preparedStatement.setInt(1, id);
 			

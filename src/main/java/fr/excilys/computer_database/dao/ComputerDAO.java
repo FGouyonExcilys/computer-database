@@ -39,7 +39,7 @@ public class ComputerDAO {
 		int executePS = 0;
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.AJOUTER.getMessage().toUpperCase());) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.ADD_COMPUTER.getMessage());) {
 
 			executePS = ComputerMapper.mapPreparedStatement(preparedStatement, computer);
 
@@ -62,7 +62,7 @@ public class ComputerDAO {
 		int executePS = 0;
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.MODIFIER.getMessage().toUpperCase());) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.EDIT_COMPUTER.getMessage());) {
 
 			preparedStatement.setInt(5, computer.getId());
 			executePS = ComputerMapper.mapPreparedStatement(preparedStatement, computer);
@@ -81,7 +81,7 @@ public class ComputerDAO {
 		int executePS = 0;
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.SUPPRIMER.getMessage().toUpperCase());) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.DELETE_COMPUTER.getMessage());) {
 
 			preparedStatement.setInt(1, id);
 			executePS = preparedStatement.executeUpdate();
@@ -98,7 +98,7 @@ public class ComputerDAO {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.LISTER.getMessage().toUpperCase() + ";");
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.LIST_COMPUTER.getMessage() + ";");
 				ResultSet resultat = preparedStatement.executeQuery();) {
 
 			while (resultat.next()) {
@@ -121,7 +121,7 @@ public class ComputerDAO {
 		String requete = ComputerMapper.requestMapper(testOrderBy, "noSearch");
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(requete.toUpperCase());) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(requete);) {
 
 			preparedStatement.setInt(1, paginer.getOffset());
 			preparedStatement.setInt(2, paginer.getStep());
@@ -145,7 +145,7 @@ public class ComputerDAO {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.LISTER_SEARCH.getMessage().toUpperCase() + ";");) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.LIST_SEARCH.getMessage() + ";");) {
 
 			preparedStatement.setString(1, '%' + search + '%');
 			preparedStatement.setString(2, '%' + search + '%');
@@ -173,10 +173,10 @@ public class ComputerDAO {
 		String requete = ComputerMapper.requestMapper(testOrderBy, "search");
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(requete.toUpperCase());) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(requete);) {
 
-			preparedStatement.setString(1, '%' + paginer.getSearch() + '%');
-			preparedStatement.setString(2, '%' + paginer.getSearch() + '%');
+			preparedStatement.setString(1, '%' + paginer.getSearch().toUpperCase() + '%');
+			preparedStatement.setString(2, '%' + paginer.getSearch().toUpperCase() + '%');
 			preparedStatement.setInt(3, paginer.getOffset());
 			preparedStatement.setInt(4, paginer.getStep());
 
@@ -201,7 +201,7 @@ public class ComputerDAO {
 		Computer computer = new Computer.ComputerBuilder("nom_build").build();
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.DETAILS_ORDI.getMessage().toUpperCase());) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.DETAILS_ORDI.getMessage());) {
 
 			preparedStatement.setInt(1, id);
 			ResultSet resultat = preparedStatement.executeQuery();

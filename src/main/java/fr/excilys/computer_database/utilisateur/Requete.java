@@ -2,16 +2,16 @@ package fr.excilys.computer_database.utilisateur;
 
 public enum Requete {
 	
-	AJOUTER ("INSERT INTO computer(name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?);"),
+	ADD_COMPUTER ("INSERT INTO computer(name, introduced, discontinued, company_id) VALUES(?, ?, ?, ?);"),
 	
-	MODIFIER ("UPDATE computer SET name= ?, introduced= ?, discontinued= ?, company_id= ? WHERE id = ?;"),
+	EDIT_COMPUTER ("UPDATE computer SET name= ?, introduced= ?, discontinued= ?, company_id= ? WHERE id = ?;"),
 	
-	SUPPRIMER ("DELETE FROM computer WHERE id = ?;"),
+	DELETE_COMPUTER ("DELETE FROM computer WHERE id = ?;"),
 	
-	LISTER ("SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
+	LIST_COMPUTER ("SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
 			+ "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id"),
 	
-	LISTER_SEARCH ("SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
+	LIST_SEARCH ("SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
 			+ "FROM computer LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?"),
 	
 	LIMIT (" LIMIT ?, ?;"),
@@ -25,6 +25,10 @@ public enum Requete {
 	
 	DETAILS_ORDI ("SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
 			+ "FROM computer " + "LEFT JOIN company ON company_id = company.id " + "WHERE computer.id = ?;"),
+	
+	LIST_COMPANY ("SELECT * FROM company"),
+	
+	DETAILS_COMPANY ("SELECT * FROM company WHERE id = ?;"),
 	
 	DELETE_COMPANY ("DELETE FROM computer WHERE company_id = ?;");
 

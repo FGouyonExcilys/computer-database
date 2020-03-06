@@ -24,35 +24,35 @@ public class ComputerService {
 		return INSTANCE;
 	}
 
-	public ArrayList<Computer> getComputerList() throws ClassNotFoundException, DAOConfigurationException {
+	public ArrayList<Computer> getComputerList() throws DAOConfigurationException {
 		return computerDao.lister();
 	}
 
-	public ArrayList<Computer> getComputerListPaginer(Paginer paginer) throws ClassNotFoundException, DAOConfigurationException {
+	public ArrayList<Computer> getComputerListPaginer(Paginer paginer) throws DAOConfigurationException {
 		return computerDao.lister(paginer);
 	}
 	
-	public ArrayList<Computer> getComputerListSearched(String search) throws ClassNotFoundException, DAOConfigurationException {
+	public ArrayList<Computer> getComputerListSearched(String search) throws DAOConfigurationException {
 		return computerDao.listSearch(search);
 	}
 	
-	public ArrayList<Computer> getComputerListSearchedPaginer(Paginer paginer) throws ClassNotFoundException, DAOConfigurationException {
+	public ArrayList<Computer> getComputerListSearchedPaginer(Paginer paginer) throws DAOConfigurationException {
 		return computerDao.listSearch(paginer);
 	}
 	
-	public int addComputer(Computer computer) throws ClassNotFoundException, DAOConfigurationException {
+	public int addComputer(Computer computer) throws DAOConfigurationException {
 		return computerDao.ajouter(computer);
 	}
 
-	public int editComputer(Computer computer) throws ClassNotFoundException, DAOConfigurationException {
+	public int editComputer(Computer computer) throws DAOConfigurationException {
 		return computerDao.modifier(computer);
 	}
 	
-	public int deleteComputer(int id) throws ClassNotFoundException, DAOConfigurationException {
+	public int deleteComputer(int id) throws DAOConfigurationException {
 		return computerDao.supprimer(id);
 	}
 
-	public Computer getComputerById(int id) throws ClassNotFoundException, DAOConfigurationException {
+	public Computer getComputerById(int id) throws DAOConfigurationException {
 		return computerDao.getComputerById(id);
 	}
 

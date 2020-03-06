@@ -65,11 +65,8 @@ public class EditComputer extends HttpServlet {
 
 			setAttributesComputer(request, computer);
 
-		} catch (DAOConfigurationException e1) {
-			Loggers.afficherMessageError("Problème DAOConfig \n" + e1);
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (DAOConfigurationException e) {
+			Loggers.afficherMessageError("DAOConfigurationException in EditComputer Servlet" + e.getMessage());
 		}
 
 		this.getServletContext().getRequestDispatcher("/views/editComputer.jsp").forward(request, response);
@@ -144,9 +141,8 @@ public class EditComputer extends HttpServlet {
 				}
 			}
 
-		} catch (ClassNotFoundException | DAOConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (DAOConfigurationException e) {
+			Loggers.afficherMessageError("DAOConfigurationException in EditComputer Servlet" + e.getMessage());
 		}
 
 		request.setAttribute("editSuccess", 1);
@@ -161,10 +157,12 @@ public class EditComputer extends HttpServlet {
 			try {
 				idComputer = Integer.parseInt(request.getParameter("id"));
 			} catch (NumberFormatException e) {
+				Loggers.afficherMessageError("NumberFormatException in Dashboard Servlet" + e.getMessage());
 				try {
 					response.sendRedirect("dashboard?pageIterator=1");
 				} catch (IOException e1) {
-					e1.printStackTrace();
+
+					Loggers.afficherMessageError("IOException in Dashboard Servlet" + e1.getMessage());
 				}
 			}
 		}
