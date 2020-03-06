@@ -8,6 +8,7 @@ import fr.excilys.computer_database.dao.*;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
+import fr.excilys.computer_database.model.Paginer;
 
 public class ComputerDAOTest {
 
@@ -84,7 +85,9 @@ public class ComputerDAOTest {
 	@Test
 	public void testListerInt() throws DAOConfigurationException {
 		
-		assertTrue(computerDAO.lister(null,0,20).size()==20);
+		Paginer p = new Paginer.PaginerBuilder().setOffset(0).setStep(20).build();
+		
+		assertTrue(computerDAO.lister(p).size()==20);
 		
 	}
 

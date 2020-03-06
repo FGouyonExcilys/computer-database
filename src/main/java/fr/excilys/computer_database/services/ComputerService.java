@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import fr.excilys.computer_database.dao.ComputerDAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Computer;
+import fr.excilys.computer_database.model.Paginer;
 
 public class ComputerService {
 	
@@ -27,16 +28,16 @@ public class ComputerService {
 		return computerDao.lister();
 	}
 
-	public ArrayList<Computer> getComputerListPaginer(String orderBy, int offset, int pas) throws ClassNotFoundException, DAOConfigurationException {
-		return computerDao.lister(orderBy,offset, pas);
+	public ArrayList<Computer> getComputerListPaginer(Paginer paginer) throws ClassNotFoundException, DAOConfigurationException {
+		return computerDao.lister(paginer);
 	}
 	
 	public ArrayList<Computer> getComputerListSearched(String search) throws ClassNotFoundException, DAOConfigurationException {
 		return computerDao.listSearch(search);
 	}
 	
-	public ArrayList<Computer> getComputerListSearchedPaginer(String orderBy, String search, int offset, int pas) throws ClassNotFoundException, DAOConfigurationException {
-		return computerDao.listSearch(orderBy, search, offset, pas);
+	public ArrayList<Computer> getComputerListSearchedPaginer(Paginer paginer) throws ClassNotFoundException, DAOConfigurationException {
+		return computerDao.listSearch(paginer);
 	}
 	
 	public int addComputer(Computer computer) throws ClassNotFoundException, DAOConfigurationException {

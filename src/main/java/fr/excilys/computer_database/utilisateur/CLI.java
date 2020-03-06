@@ -11,6 +11,7 @@ import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
+import fr.excilys.computer_database.model.Paginer;
 
 public class CLI {
 
@@ -147,7 +148,12 @@ public class CLI {
 
 		try {
 			for (int i = 0; i < computerDao.lister().size(); i += pasComputer) {
-				computerDao.lister(null, i, pasComputer).stream().forEach(listePCDetails->System.out.println(listePCDetails));
+				
+				Paginer paginer = new Paginer.PaginerBuilder().setOffset(i)
+															  .setStep(pasComputer)
+															  .build();
+				
+				computerDao.lister(paginer).stream().forEach(listePCDetails->System.out.println(listePCDetails));
 				System.in.read();
 			}
 		} catch (IOException e){

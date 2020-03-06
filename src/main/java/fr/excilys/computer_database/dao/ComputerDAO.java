@@ -10,36 +10,12 @@ import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.mapper.ComputerMapper;
 import fr.excilys.computer_database.model.Computer;
+import fr.excilys.computer_database.model.Paginer;
+import fr.excilys.computer_database.utilisateur.Requete;
 
 public class ComputerDAO {
 
-	private final static String AJOUTER = "INSERT INTO computer(name, introduced, discontinued, company_id) "
-			+ "VALUES(?, ?, ?, ?);";
 
-	private final static String MODIFIER = "UPDATE computer "
-			+ "SET name= ?, introduced= ?, discontinued= ?, company_id= ? " + "WHERE id = ?;";
-
-	private final static String SUPPRIMER = "DELETE FROM computer WHERE id = ?;";
-
-	private final static String LISTER = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
-			+ "FROM computer " + "LEFT JOIN company ON computer.company_id = company.id";
-
-	private final static String LIMIT = " LIMIT ?, ?;";
-
-	private final static String ORDER_BY_COMPUTER_NAME = " ORDER BY computer.name";
-
-	private final static String DESC = " DESC";
-
-	private final static String LISTER_SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
-			+ "FROM computer "
-			+ "LEFT JOIN company ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
-
-	private final static String DETAILS_ORDI = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name "
-			+ "FROM computer " + "LEFT JOIN company ON company_id = company.id " + "WHERE computer.id = ?;";
-	
-	private final static String DELETECOMPANY = "DELETE FROM computer WHERE company_id = ?;";
-	
-	
 	private static volatile ComputerDAO INSTANCE = null;
 
 	/**
@@ -63,7 +39,7 @@ public class ComputerDAO {
 		int executePS = 0;
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(AJOUTER);) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.AJOUTER.getMessage().toUpperCase());) {
 
 			executePS = ComputerMapper.mapPreparedStatement(preparedStatement, computer);
 
@@ -86,7 +62,7 @@ public class ComputerDAO {
 		int executePS = 0;
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(MODIFIER);) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.MODIFIER.getMessage().toUpperCase());) {
 
 			preparedStatement.setInt(5, computer.getId());
 			executePS = ComputerMapper.mapPreparedStatement(preparedStatement, computer);
@@ -105,7 +81,7 @@ public class ComputerDAO {
 		int executePS = 0;
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(SUPPRIMER);) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.SUPPRIMER.getMessage().toUpperCase());) {
 
 			preparedStatement.setInt(1, id);
 			executePS = preparedStatement.executeUpdate();
@@ -122,7 +98,7 @@ public class ComputerDAO {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER + ";");
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.LISTER.getMessage().toUpperCase() + ";");
 				ResultSet resultat = preparedStatement.executeQuery();) {
 
 			while (resultat.next()) {
@@ -137,24 +113,18 @@ public class ComputerDAO {
 		return computers;
 	}
 
-	public ArrayList<Computer> lister(String orderBy, int offset, int pas) throws DAOConfigurationException {
+	public ArrayList<Computer> lister(Paginer paginer) throws DAOConfigurationException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
-		
-		int i = testOrderBy(orderBy);
 
-		String requete = LISTER + LIMIT;
+		int testOrderBy = ComputerMapper.orderByMapper(paginer.getOrderBy(), paginer.getColumnName());
 
-		if (i == 1) {
-			requete = LISTER + ORDER_BY_COMPUTER_NAME + LIMIT;
-		} else if (i == -1) {
-			requete = LISTER + ORDER_BY_COMPUTER_NAME + DESC + LIMIT;
-		}
+		String requete = ComputerMapper.requestMapper(testOrderBy, "noSearch");
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(requete);) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(requete.toUpperCase());) {
 
-			preparedStatement.setInt(1, offset);
-			preparedStatement.setInt(2, pas);
+			preparedStatement.setInt(1, paginer.getOffset());
+			preparedStatement.setInt(2, paginer.getStep());
 
 			ResultSet resultat = preparedStatement.executeQuery();
 
@@ -175,7 +145,7 @@ public class ComputerDAO {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(LISTER_SEARCH +";");) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.LISTER_SEARCH.getMessage().toUpperCase() + ";");) {
 
 			preparedStatement.setString(1, '%' + search + '%');
 			preparedStatement.setString(2, '%' + search + '%');
@@ -195,27 +165,20 @@ public class ComputerDAO {
 		return computers;
 	}
 
-	public ArrayList<Computer> listSearch(String orderBy, String search, int offset, int pas)
-			throws DAOConfigurationException {
+	public ArrayList<Computer> listSearch(Paginer paginer) throws DAOConfigurationException {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 
-		int i = testOrderBy(orderBy);
+		int testOrderBy = ComputerMapper.orderByMapper(paginer.getOrderBy(), paginer.getColumnName());
 
-		String requete = LISTER_SEARCH + LIMIT;
-
-		if (i == 1) {
-			requete = LISTER_SEARCH + ORDER_BY_COMPUTER_NAME + LIMIT;
-		} else if (i == -1) {
-			requete = LISTER_SEARCH + ORDER_BY_COMPUTER_NAME + DESC + LIMIT;
-		}
+		String requete = ComputerMapper.requestMapper(testOrderBy, "search");
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(requete);) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(requete.toUpperCase());) {
 
-			preparedStatement.setString(1, '%' + search + '%');
-			preparedStatement.setString(2, '%' + search + '%');
-			preparedStatement.setInt(3, offset);
-			preparedStatement.setInt(4, pas);
+			preparedStatement.setString(1, '%' + paginer.getSearch() + '%');
+			preparedStatement.setString(2, '%' + paginer.getSearch() + '%');
+			preparedStatement.setInt(3, paginer.getOffset());
+			preparedStatement.setInt(4, paginer.getStep());
 
 			ResultSet resultat = preparedStatement.executeQuery();
 
@@ -238,7 +201,7 @@ public class ComputerDAO {
 		Computer computer = new Computer.ComputerBuilder("nom_build").build();
 
 		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(DETAILS_ORDI);) {
+				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.DETAILS_ORDI.getMessage().toUpperCase());) {
 
 			preparedStatement.setInt(1, id);
 			ResultSet resultat = preparedStatement.executeQuery();
@@ -253,37 +216,6 @@ public class ComputerDAO {
 		}
 
 		return computer;
-	}
-
-	private int testOrderBy(String orderBy) {
-		
-		if(orderBy == null) {
-			return 0;
-		}
-		if (orderBy.equals("asc")) {
-			return 1;
-		} else if (orderBy.equals("desc")) {
-			return -1;
-		} else {
-			return 0;
-		}
-	}
-	
-	private int columnIndexOrderBy(String columnName) {
-		
-		switch(columnName) {
-			case "cpName":
-				return 1;
-			case "introduced":
-				return 2;
-			case "discontinued":
-				return 3;
-			case "companyName":
-				return 4;
-			default:
-				return 0;
-		}
-		
 	}
 
 }

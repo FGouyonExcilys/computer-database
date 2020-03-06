@@ -15,6 +15,7 @@ import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.dao.ComputerDAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Computer;
+import fr.excilys.computer_database.model.Paginer;
 import fr.excilys.computer_database.services.CompanyService;
 import fr.excilys.computer_database.services.ComputerService;
 
@@ -76,7 +77,13 @@ public class Dashboard extends HttpServlet {
 					pageIterator = 1;
 				}
 				
-				computerListSearchPaginer = computerServ.getComputerListSearchedPaginer(orderBy, search, (pageIterator - 1) * step, step);
+				Paginer paginer = new Paginer.PaginerBuilder().setOrderBy(orderBy)
+															  .setColumnName(columnName)
+															  .setSearch(search)
+															  .setOffset((pageIterator - 1) * step)
+															  .setStep(step).build();
+				
+				computerListSearchPaginer = computerServ.getComputerListSearchedPaginer(paginer);
 				
 				request.setAttribute("listeOrdiSearched", computerListSearch);
 				request.setAttribute("listeOrdiSearchedPaginer", computerListSearchPaginer);
@@ -85,8 +92,13 @@ public class Dashboard extends HttpServlet {
 
 				search = null;
 				
+				Paginer paginer = new Paginer.PaginerBuilder().setOrderBy(orderBy)
+						  									  .setColumnName(columnName)
+															  .setOffset((pageIterator - 1) * step)
+															  .setStep(step).build();
+				
 				computerList = computerServ.getComputerList();
-				computerListPaginer = computerServ.getComputerListPaginer(orderBy, (pageIterator - 1) * step, step);
+				computerListPaginer = computerServ.getComputerListPaginer(paginer);
 
 				lastPageIndex = (int) Math.ceil((double) computerList.size() / step);
 
@@ -102,6 +114,7 @@ public class Dashboard extends HttpServlet {
 			request.setAttribute("pageIterator", pageIterator);
 			request.setAttribute("step", step);
 			request.setAttribute("lastPageIndex", lastPageIndex);
+			request.setAttribute("columnName", columnName);
 
 			this.getServletContext().getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 

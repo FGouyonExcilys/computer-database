@@ -10,7 +10,7 @@ public enum Action {
 	SUPPR ("6"), 
 	QUITTER ("7");
 
-	private String nombre = "";
+	private String nombre;
 
 	// Constructeur
 	Action(String nombre) {
@@ -38,6 +38,10 @@ public enum Action {
 			return null;
 		}
 		
+	}
+
+	public String getNombre() {
+		return nombre;
 	}
 
 }

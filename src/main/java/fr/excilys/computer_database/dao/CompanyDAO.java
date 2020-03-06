@@ -16,6 +16,7 @@ public class CompanyDAO {
 	private final static String LISTER = "SELECT * FROM company;";
 	private final static String LISTER_LIMIT = "SELECT * FROM company LIMIT ?,?;";
 	private final static String DETAILS_COMPANY = "SELECT * FROM company WHERE id = ?;";
+	private final static String DELETE_COMPANY = "DELETE FROM company WHERE id = ?;";
 	
 	
 	private static volatile CompanyDAO INSTANCE = null;

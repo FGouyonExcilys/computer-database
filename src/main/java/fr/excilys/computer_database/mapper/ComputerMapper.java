@@ -11,6 +11,7 @@ import fr.excilys.computer_database.dto.CompanyDTO;
 import fr.excilys.computer_database.dto.ComputerDTO;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
+import fr.excilys.computer_database.utilisateur.Requete;
 
 
 public class ComputerMapper {
@@ -92,5 +93,98 @@ public class ComputerMapper {
 		compDTO.setId(id);
 		return compDTO;
 	}
+	
+
+	public static int orderByMapper(String orderBy, String columnName) {
+
+		if (orderBy == null || columnName == null) {
+			return 0;
+		}
+
+		if (orderBy.equals("asc")) {
+			
+			switch (columnName) {
+
+			case "computerName":
+				return 1;
+			case "introduced":
+				return 2;
+			case "discontinued":
+				return 3;
+			case "companyName":
+				return 4;
+			default:
+				return 0;
+			}
+
+		} else if (orderBy.equals("desc")) {
+			
+			switch (columnName) {
+
+			case "computerName":
+				return -1;
+			case "introduced":
+				return -2;
+			case "discontinued":
+				return -3;
+			case "companyName":
+				return -4;
+			default:
+				return 0;
+			}
+
+		} else {
+			return 0;
+		}
+	}
+	
+	public static String requestMapper(int type, String search) {
+		
+		if(search == "search") {
+			switch(type) {
+			case 1:
+				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.LIMIT.getMessage();
+			case 2:
+				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.LIMIT.getMessage();
+			case 3:
+				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.LIMIT.getMessage();
+			case 4:
+				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.LIMIT.getMessage();
+			case -1:
+				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+			case -2:
+				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+			case -3:
+				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+			case -4:
+				return Requete.LISTER_SEARCH.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+			default:
+				return Requete.LISTER_SEARCH.getMessage() + Requete.LIMIT.getMessage();
+			}
+		}else {
+			switch(type) {
+			case 1:
+				return Requete.LISTER.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.LIMIT.getMessage();
+			case 2:
+				return Requete.LISTER.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.LIMIT.getMessage();
+			case 3:
+				return Requete.LISTER.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.LIMIT.getMessage();
+			case 4:
+				return Requete.LISTER.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.LIMIT.getMessage();
+			case -1:
+				return Requete.LISTER.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+			case -2:
+				return Requete.LISTER.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+			case -3:
+				return Requete.LISTER.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+			case -4:
+				return Requete.LISTER.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
+			default:
+				return Requete.LISTER.getMessage() + Requete.LIMIT.getMessage();
+			}
+		}
+		
+	}
+	
 
 }

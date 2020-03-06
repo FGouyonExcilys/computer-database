@@ -19,6 +19,7 @@ import fr.excilys.computer_database.dao.ComputerDAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
+import fr.excilys.computer_database.model.Paginer;
 import fr.excilys.computer_database.services.ComputerService;
 
 /**
@@ -74,12 +75,16 @@ public class ComputerServiceTest {
 	 */
 	@Test
 	public void testGetComputerListPaginer() throws ClassNotFoundException, SQLException, DAOConfigurationException {
+		
 		ArrayList<Computer> computers = new ArrayList<>();
-		Mockito.when(computerDao.lister(null,0, 20)).thenReturn(computers);
+
+		Paginer p = new Paginer.PaginerBuilder().setOffset(0).setStep(20).build();
+		
+		Mockito.when(computerDao.lister(p)).thenReturn(computers);
 
 		ComputerService compServ = new ComputerService(computerDao);
 
-		assertEquals(compServ.getComputerListPaginer(null,0, 20), computers);
+		assertEquals(compServ.getComputerListPaginer(p), computers);
 	}
 
 	/**
