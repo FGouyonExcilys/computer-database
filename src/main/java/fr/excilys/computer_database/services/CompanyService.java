@@ -23,6 +23,10 @@ public class CompanyService {
 		return INSTANCE;
 	}
 	
+	public void deleteCompany() {
+		
+	}
+	
 	public ArrayList<Company> getCompanyList() throws DAOConfigurationException {
 		return companyDao.lister();
 	}

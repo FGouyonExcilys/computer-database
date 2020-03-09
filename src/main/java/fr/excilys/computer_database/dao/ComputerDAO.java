@@ -43,8 +43,8 @@ public class ComputerDAO {
 
 			executePS = ComputerMapper.mapPreparedStatement(preparedStatement, computer);
 
-		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode ajouter n'a pas abouti");
+		} catch (SQLException eSQL) {
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode ajouter n'a pas abouti \n" + eSQL.getMessage());
 		}
 
 		return executePS;
@@ -67,9 +67,9 @@ public class ComputerDAO {
 			preparedStatement.setInt(5, computer.getId());
 			executePS = ComputerMapper.mapPreparedStatement(preparedStatement, computer);
 
-		} catch (SQLException e) {
+		} catch (SQLException eSQL) {
 			Loggers.afficherMessageError(
-					"Exception SQL ComputerDAO, la méthode modifier n'a pas abouti \n" + e.getMessage());
+					"Exception SQL ComputerDAO, la méthode modifier n'a pas abouti \n" + eSQL.getMessage());
 		}
 
 		return executePS;
@@ -86,9 +86,9 @@ public class ComputerDAO {
 			preparedStatement.setInt(1, id);
 			executePS = preparedStatement.executeUpdate();
 
-		} catch (SQLException e) {
+		} catch (SQLException eSQL) {
 			Loggers.afficherMessageError(
-					"Exception SQL ComputerDAO, la méthode supprimer n'a pas abouti\n" + e.getMessage());
+					"Exception SQL ComputerDAO, la méthode supprimer n'a pas abouti\n" + eSQL.getMessage());
 		}
 
 		return executePS;
@@ -105,9 +105,9 @@ public class ComputerDAO {
 				computers.add(ComputerMapper.mapComputer(resultat));
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException eSQL) {
 			Loggers.afficherMessageError(
-					"Exception SQL ComputerDAO, la méthode lister n'a pas abouti\n" + e.getMessage());
+					"Exception SQL ComputerDAO, la méthode lister n'a pas abouti\n" + eSQL.getMessage());
 		}
 
 		return computers;
@@ -133,9 +133,9 @@ public class ComputerDAO {
 
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException eSQL) {
 			Loggers.afficherMessageError(
-					"Exception SQL ComputerDAO, la méthode lister avec limit n'a pas abouti\n" + e.getMessage());
+					"Exception SQL ComputerDAO, la méthode lister avec limit n'a pas abouti\n" + eSQL.getMessage());
 		}
 
 		return computers;
@@ -157,9 +157,9 @@ public class ComputerDAO {
 
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException eSQL) {
 			Loggers.afficherMessageError(
-					"Exception SQL ComputerDAO, la méthode liste recherchée n'a pas abouti\n" + e.getMessage());
+					"Exception SQL ComputerDAO, la méthode liste recherchée n'a pas abouti\n" + eSQL.getMessage());
 		}
 
 		return computers;
@@ -187,10 +187,10 @@ public class ComputerDAO {
 
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException eSQL) {
 			Loggers.afficherMessageError(
 					"Exception SQL ComputerDAO, la méthode liste recherchée avec limit n'a pas abouti\n"
-							+ e.getMessage());
+							+ eSQL.getMessage());
 		}
 
 		return computers;
@@ -211,8 +211,8 @@ public class ComputerDAO {
 
 			}
 
-		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode afficherInfoComputer n'a pas abouti");
+		} catch (SQLException eSQL) {
+			Loggers.afficherMessageError("Exception SQL ComputerDAO, la méthode afficherInfoComputer n'a pas abouti\n" + eSQL.getMessage());
 		}
 
 		return computer;

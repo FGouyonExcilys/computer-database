@@ -28,28 +28,38 @@ public class CompanyDAO {
 	}
 
 	
-	public int deleteCompany(int idCompany) throws DAOConfigurationException{
-		Connection connection = null; 
-		try{ 
-		   connection = DAOHikari.getInstance().getConnection();;  
-		   connection.setAutoCommit(false); 
-		  
-		   //traitement des différentes instructions composant la transaction 
-		  
-		   if(idCompany != 0){ 
-		      connection.commit();// c'est ici que l'on valide la transaction 
-		      connection.setAutoCommit(true); 
-		   }else{ 
-		      connection.rollback(); 
-		   } 
-		}catch(SQLException sqle){ 
-		   try{connection.rollback();}catch(Exception e){} 
-		}catch(Exception e){ 
-		   try{connection.rollback();}catch(Exception e1){} 
-		}finally{ 
-		   try{connection.close();}catch(Exception e){} 
+
+	public void deleteCompany(int companyId) {
+		
+		Connection connection = DAOHikari.getInstance().getConnection();
+		
+		try (PreparedStatement statementComputerListByCompanyId = connection.prepareStatement(Requete.COMPUTER_LIST_BY_COMPANY_ID.getMessage());
+			 PreparedStatement statementDeleteCompany = connection.prepareStatement(Requete.DELETE_COMPANY.getMessage());
+			 PreparedStatement statementDeleteComputer = connection.prepareStatement(Requete.DELETE_COMPUTER_FOR_DELETE_COMPANY.getMessage())) {
+			
+			connection.setAutoCommit(false);
+			
+			statementComputerListByCompanyId.setInt(1, companyId);
+			
+			if(statementComputerListByCompanyId.executeQuery().next()) {
+				statementDeleteComputer.setInt(1, companyId);
+				statementDeleteComputer.executeUpdate();
+			} 
+			
+			statementDeleteCompany.setInt(1, companyId);
+			statementDeleteCompany.executeUpdate();
+			
+			connection.commit();
+			connection.setAutoCommit(true);
+			
+		} catch (SQLException eSQL) {
+			try {
+				connection.rollback();
+			} catch (SQLException eSQL1) {
+				Loggers.afficherMessageError("In connection " + eSQL1.getMessage());
+			}
+			Loggers.afficherMessageError("Error SQL - "+ eSQL.getMessage());
 		}
-		return idCompany;
 	}
 	
 	public ArrayList<Company> lister() throws DAOConfigurationException {
@@ -136,5 +146,6 @@ public class CompanyDAO {
 
 		return company;
 	}
+	
 
 }

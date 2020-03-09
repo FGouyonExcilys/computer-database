@@ -30,7 +30,11 @@ public enum Requete {
 	
 	DETAILS_COMPANY ("SELECT * FROM company WHERE id = ?;"),
 	
-	DELETE_COMPANY ("DELETE FROM computer WHERE company_id = ?;");
+	COMPUTER_LIST_BY_COMPANY_ID("SELECT * FROM computer WHERE company_id = ?;"),
+	
+	DELETE_COMPUTER_FOR_DELETE_COMPANY ("DELETE FROM computer WHERE company_id = ?;"),
+	
+	DELETE_COMPANY ("DELETE FROM company WHERE id = ?;");
 
 	private String message;
 
