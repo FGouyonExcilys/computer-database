@@ -17,7 +17,7 @@ public class CompanyDAOTest {
 	public void setUp() throws Exception 
 	{
 		daoTest = DAO.getInstanceH2();
-		companyDAO=CompanyDAO.getInstance();
+		companyDAO=new CompanyDAO();
 	}
 	
 	@After
@@ -28,6 +28,8 @@ public class CompanyDAOTest {
 	
 	@Test
 	public void testLister() throws DAOConfigurationException {
+		System.out.println(companyDAO.lister().size());
+		
 		assertTrue(companyDAO.lister().size()==20);
 	}
 

@@ -3,10 +3,12 @@ package fr.excilys.computer_database.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.springframework.stereotype.Component;
+
 import fr.excilys.computer_database.logging.Loggers;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-
+@Component
 public class DAOHikari {
 
 	private static HikariConfig config ;

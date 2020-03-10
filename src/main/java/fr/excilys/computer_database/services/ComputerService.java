@@ -2,26 +2,22 @@ package fr.excilys.computer_database.services;
 
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import fr.excilys.computer_database.dao.ComputerDAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.model.Paginer;
 
+@Service
 public class ComputerService {
 	
 	private ComputerDAO computerDao;
-
-	private static volatile ComputerService INSTANCE = null;
 	
+	@Autowired
 	public ComputerService(ComputerDAO computerDao) {
 		this.computerDao = computerDao;
-	}
-	
-	public final static ComputerService getInstance(ComputerDAO computerDao) {
-		if (INSTANCE == null) {
-			INSTANCE = new ComputerService(computerDao);
-		}
-		return INSTANCE;
 	}
 
 	public ArrayList<Computer> getComputerList() throws DAOConfigurationException {

@@ -19,8 +19,8 @@ public class CLI {
 
 		try {
 
-			ComputerDAO computerDao = ComputerDAO.getInstance();
-			CompanyDAO companyDao = CompanyDAO.getInstance();
+			ComputerDAO computerDao = new ComputerDAO();
+			CompanyDAO companyDao = new CompanyDAO();
 
 			int menu = 0;
 

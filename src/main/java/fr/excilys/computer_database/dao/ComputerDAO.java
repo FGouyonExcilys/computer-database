@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Repository;
+
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.mapper.ComputerMapper;
@@ -13,25 +15,26 @@ import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.model.Paginer;
 import fr.excilys.computer_database.utilisateur.Requete;
 
+@Repository
 public class ComputerDAO {
-
-
-	private static volatile ComputerDAO INSTANCE = null;
 
 	/**
 	 * Point d'accès pour l'instance unique du singleton
 	 * 
 	 * 
 	 */
-
-	public final static ComputerDAO getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new ComputerDAO();
-		}
-		return INSTANCE;
-	}
-
-	private ComputerDAO() {
+	
+//	private static volatile ComputerDAO INSTANCE = null;
+//	
+//	public final static ComputerDAO getInstance() {
+//		if (INSTANCE == null) {
+//			INSTANCE = new ComputerDAO();
+//		}
+//		return INSTANCE;
+//	}
+	
+	public ComputerDAO() {
+		super();
 	}
 
 	public int ajouter(Computer computer) throws DAOConfigurationException {

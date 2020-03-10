@@ -19,7 +19,7 @@ public class ComputerDAOTest {
 	public void setUp() throws Exception 
 	{
 		daoTest = DAO.getInstanceH2();
-		computerDAO=ComputerDAO.getInstance();
+		computerDAO=new ComputerDAO();
 	}
 	
 	@After

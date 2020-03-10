@@ -5,14 +5,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.excilys.computer_database.dao.CompanyDAO;
-import fr.excilys.computer_database.dao.ComputerDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Computer;
@@ -21,14 +24,14 @@ import fr.excilys.computer_database.services.CompanyService;
 import fr.excilys.computer_database.services.ComputerService;
 
 @WebServlet("/dashboard")
+@Controller
 public class Dashboard extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	ComputerDAO computerDao = ComputerDAO.getInstance();
-	CompanyDAO companyDao = CompanyDAO.getInstance();
-
-	ComputerService computerServ = ComputerService.getInstance(computerDao);
-	CompanyService companyServ = CompanyService.getInstance(companyDao);
+	@Autowired
+	ComputerService computerServ;
+	@Autowired
+	CompanyService companyServ;
 
 	private int pageIterator = 1;
 	private int step = 10;
@@ -36,6 +39,11 @@ public class Dashboard extends HttpServlet {
 	private int lastPageIndex = 1;
 	private String orderBy = null;
 	private String columnName = null;
+	
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+	    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {

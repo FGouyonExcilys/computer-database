@@ -4,14 +4,17 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.excilys.computer_database.dao.CompanyDAO;
-import fr.excilys.computer_database.dao.ComputerDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
@@ -23,27 +26,23 @@ import fr.excilys.computer_database.services.ComputerService;
  * Servlet implementation class EditComputer
  */
 @WebServlet("/editComputer")
+@Controller
 public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
+	@Autowired
+	ComputerService computerServ;
+	@Autowired
+	CompanyService companyServ;
+	
 	private int idComputer = 0;
 
-	ComputerDAO computerDao;
-	CompanyDAO companyDao;
-
-	ComputerService computerServ;
-	CompanyService companyServ;
-
 	@Override
-	public void init() throws ServletException {
+	public void init(ServletConfig config) throws ServletException {
 
-		computerDao = ComputerDAO.getInstance();
-		companyDao = CompanyDAO.getInstance();
-
-		computerServ = ComputerService.getInstance(computerDao);
-		companyServ = CompanyService.getInstance(companyDao);
-
-		super.init();
+		super.init(config);
+	    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+		
 	}
 
 	/**

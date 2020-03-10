@@ -7,24 +7,28 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import org.springframework.stereotype.Repository;
+
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.utilisateur.Requete;
 
+@Repository
 public class CompanyDAO {
 	
-	private static volatile CompanyDAO INSTANCE = null;
-
-	/** Point d'accès pour l'instance unique du singleton */
-	public final static CompanyDAO getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new CompanyDAO();
-		}
-		return INSTANCE;
-	}
+//	private static volatile CompanyDAO INSTANCE = null;
+//
+//	/** Point d'accès pour l'instance unique du singleton */
+//	public final static CompanyDAO getInstance() {
+//		if (INSTANCE == null) {
+//			INSTANCE = new CompanyDAO();
+//		}
+//		return INSTANCE;
+//	}
 
 	public CompanyDAO() {
+		super();
 	}
 
 	
