@@ -79,6 +79,9 @@ public class AddComputer extends HttpServlet {
 		int companyId = 0;
 		
 		try {
+			
+			Company company = null;
+			Computer computer = null;
 
 			String computerName = request.getParameter("computerName");
 			LocalDate introduced = request.getParameter("introduced").isEmpty() ? null
@@ -92,54 +95,42 @@ public class AddComputer extends HttpServlet {
 			if (introduced != null) {
 				if (discontinued != null) {
 					if (introduced.isAfter(discontinued)) {
-
 						error = "date";
 						request.setAttribute("error", error);
 
 						doGet(request, response);
-
-					} else {
-
-						request.setAttribute("error", error);
-						
-						Company company = null;
-						
-						if (isInteger(request.getParameter("companyId"))) {
-							
-							companyId = Integer.parseInt(request.getParameter("companyId"));
-							
-							if(companyId < 0){
-								cheatingError = "cheat";
-								request.setAttribute("cheatingError", cheatingError);
-								doGet(request,response);
-							}
-							
-							boolean notSettingCompanyId = (companyId == 0);
-							
-							if (!notSettingCompanyId) {
-
-								company = companyServ.getCompanyById(companyId);
-							}
-							
-							Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
-									.setDiscontinued(discontinued).setCompany(company).build();
-
-							computerServ.addComputer(computer);
-
-							request.setAttribute("addSuccess", 1);
-							
-						} else {
-							cheatingError = "cheat";
-							request.setAttribute("cheatingError", cheatingError);
-							doGet(request,response);
-						}
-					}
+					} 
 				}
 			}
+			
+			request.setAttribute("error", error);
+			if (isInteger(request.getParameter("companyId"))) {
+				companyId = Integer.parseInt(request.getParameter("companyId"));
+				
+				if(companyId < 0){
+					cheatingError = "cheat";
+					request.setAttribute("cheatingError", cheatingError);
+					doGet(request,response);
+				}
+				
+				boolean settingCompanyId = (companyId != 0);
+				computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
+						.setDiscontinued(discontinued).build();
+				
+				if (settingCompanyId) {
+					company = companyServ.getCompanyById(companyId);
+					computer.setCompany(company);
+				}
+				computerServ.addComputer(computer);
 
+				request.setAttribute("addSuccess", 1);
+			} else {
+				cheatingError = "cheat";
+				request.setAttribute("cheatingError", cheatingError);
+				doGet(request,response);
+			}
 		} catch (DAOConfigurationException e) {
 			Loggers.afficherMessageError("DAOConfigurationException in Dashboard Servlet" + e.getMessage());
-
 		}
 
 		response.sendRedirect("dashboard?addSuccess=1");

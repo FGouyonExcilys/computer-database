@@ -104,43 +104,44 @@ public class EditComputer extends HttpServlet {
 
 						doGet(request, response);
 
-					} else {
-						request.setAttribute("error", error);
-
-						Company company = null;
-						
-						if (isInteger(request.getParameter("companyId"))) {
-
-							companyId = Integer.parseInt(request.getParameter("companyId"));
-
-							if (companyId < 0) {
-								cheatingError = "cheat";
-								request.setAttribute("cheatingError", cheatingError);
-								doGet(request, response);
-							}
-							
-							boolean removeCompanyId = (request.getParameter("companyId").equals("none"));
-
-							if (!removeCompanyId) {
-
-								company = companyServ.getCompanyById(companyId);
-							}
-
-							Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
-									.setDiscontinued(discontinued).setCompany(company).build();
-							computer.setId(idComputer);
-
-							computerServ.editComputer(computer);
-
-							request.setAttribute("editSuccess", 1);
-							
-						} else {
-							cheatingError = "cheat";
-							request.setAttribute("cheatingError", cheatingError);
-							doGet(request,response);
-						}
-					}
+					} 
+					
 				}
+			}
+			
+			request.setAttribute("error", error);
+
+			Company company = null;
+			
+			if (isInteger(request.getParameter("companyId"))) {
+
+				companyId = Integer.parseInt(request.getParameter("companyId"));
+
+				if (companyId < 0) {
+					cheatingError = "cheat";
+					request.setAttribute("cheatingError", cheatingError);
+					doGet(request, response);
+				}
+				
+				boolean removeCompanyId = (request.getParameter("companyId").equals("none"));
+
+				if (!removeCompanyId) {
+
+					company = companyServ.getCompanyById(companyId);
+				}
+
+				Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
+						.setDiscontinued(discontinued).setCompany(company).build();
+				computer.setId(idComputer);
+
+				computerServ.editComputer(computer);
+
+				request.setAttribute("editSuccess", 1);
+				
+			} else {
+				cheatingError = "cheat";
+				request.setAttribute("cheatingError", cheatingError);
+				doGet(request,response);
 			}
 
 		} catch (DAOConfigurationException e) {

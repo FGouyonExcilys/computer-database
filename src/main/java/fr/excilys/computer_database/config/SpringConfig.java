@@ -11,12 +11,19 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.web.context.AbstractContextLoaderInitializer;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
+@EnableWebMvc
 @ComponentScan(basePackages = {"fr.excilys.computer_database.dao","fr.excilys.computer_database.service",
 							   "fr.excilys.computer_database.mapper", "fr.excilys.computer_database.servlets" })
 @PropertySource("classpath:datasource.properties")
-public class SpringConfig extends AbstractContextLoaderInitializer {
+public class SpringConfig extends AbstractContextLoaderInitializer implements WebMvcConfigurer {
 	
 	@Override
 	protected WebApplicationContext createRootApplicationContext() {
@@ -40,5 +47,20 @@ public class SpringConfig extends AbstractContextLoaderInitializer {
 		driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		return driverManagerDataSource;
 	}
+	
+	public void addViewControllers(ViewControllerRegistry registry) {
+	    registry.addViewController("/index");
+	}
+	
+	@Bean
+	public ViewResolver viewResolver() {
+	    InternalResourceViewResolver bean = new InternalResourceViewResolver();
+
+	    bean.setViewClass(JstlView.class);
+	    bean.setPrefix("/views/");
+	    bean.setSuffix(".jsp");
+
+	      return bean;
+	   }
 
 }

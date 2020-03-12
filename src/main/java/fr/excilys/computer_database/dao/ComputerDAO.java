@@ -35,7 +35,8 @@ public class ComputerDAO {
 				.addValue("name",computer.getName())
 				.addValue("introduced",computer.getIntroduced())
 				.addValue("discontinued",computer.getDiscontinued())
-				.addValue("company.id", computer.getCompany().getId());
+				.addValue("company.id", 
+							(computer.getCompany() != null) ? computer.getCompany().getId() : null );
 		
 		return namedParameterJdbcTemplate.update(Requete.ADD_COMPUTER.getMessage(), namedParameters);
 	}
@@ -46,13 +47,17 @@ public class ComputerDAO {
 	 * @throws DAOConfigurationException
 	 */
 	public int modifier(Computer computer) throws DAOConfigurationException {
-
+		
+		Object introduced = computer.getIntroduced() != null ? computer.getIntroduced() : null;
+		Object discontinued = computer.getDiscontinued() != null ? computer.getDiscontinued() : null;
+		Object companyId = (computer.getCompany() != null) ? computer.getCompany().getId() : null;
+		
 		SqlParameterSource namedParameters  = new MapSqlParameterSource()
 				.addValue("computer.id", computer.getId())
 				.addValue("name",computer.getName())
-				.addValue("introduced",computer.getIntroduced())
-				.addValue("discontinued",computer.getDiscontinued())
-				.addValue("company.id", computer.getCompany().getId());
+				.addValue("introduced", introduced)
+				.addValue("discontinued", discontinued)
+				.addValue("company.id", companyId );
 		
 		return namedParameterJdbcTemplate.update(Requete.EDIT_COMPUTER.getMessage(), namedParameters);
 
