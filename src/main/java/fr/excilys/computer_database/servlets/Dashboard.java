@@ -14,20 +14,22 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.model.Paginer;
-import fr.excilys.computer_database.services.CompanyService;
-import fr.excilys.computer_database.services.ComputerService;
+import fr.excilys.computer_database.service.CompanyService;
+import fr.excilys.computer_database.service.ComputerService;
 
 @WebServlet("/dashboard")
 @Controller
 public class Dashboard extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Autowired
 	ComputerService computerServ;
 	@Autowired
@@ -44,7 +46,12 @@ public class Dashboard extends HttpServlet {
 		super.init(config);
 	    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
-
+	
+	public Dashboard() {
+		super();
+	}
+	
+	@GetMapping
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -135,6 +142,7 @@ public class Dashboard extends HttpServlet {
 
 	}
 
+	@PostMapping
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 

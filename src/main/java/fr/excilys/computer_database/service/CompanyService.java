@@ -1,8 +1,7 @@
-package fr.excilys.computer_database.services;
+package fr.excilys.computer_database.service;
 
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.excilys.computer_database.dao.CompanyDAO;
@@ -14,7 +13,6 @@ public class CompanyService {
 	
 	private CompanyDAO companyDao;
 	
-	@Autowired
 	public CompanyService(CompanyDAO companyDao) {
 		this.companyDao = companyDao;
 	}

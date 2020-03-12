@@ -19,8 +19,8 @@ import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
-import fr.excilys.computer_database.services.CompanyService;
-import fr.excilys.computer_database.services.ComputerService;
+import fr.excilys.computer_database.service.CompanyService;
+import fr.excilys.computer_database.service.ComputerService;
 
 /**
  * Servlet implementation class AddComputer
@@ -40,6 +40,10 @@ public class AddComputer extends HttpServlet {
 
 		super.init(config);
 	    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
+	
+	public AddComputer() {
+		super();
 	}
 
 	/**

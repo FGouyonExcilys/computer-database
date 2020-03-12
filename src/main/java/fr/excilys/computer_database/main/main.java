@@ -1,11 +1,11 @@
 package fr.excilys.computer_database.main;
 
-import fr.excilys.computer_database.utilisateur.CLI;
+import fr.excilys.computer_database.service.ComputerService;
 
 public class main {
 
 	public static void main(String[] args) {
+		
 
-		CLI.affichage();
 	}
 }
