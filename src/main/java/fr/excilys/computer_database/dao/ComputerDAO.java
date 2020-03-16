@@ -18,10 +18,14 @@ import fr.excilys.computer_database.utilisateur.Requete;
 @Repository
 public class ComputerDAO {
 	
+	private DataSource dataSource;
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	ComputerMapper computerMapper;
 	
-	public ComputerDAO(DataSource dataSource) {
-		namedParameterJdbcTemplate=new NamedParameterJdbcTemplate(dataSource);
+	public ComputerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate, DataSource dataSource) {
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+		this.dataSource=dataSource;
+		computerMapper=new ComputerMapper();
 	}
 
 	/**

@@ -1,36 +1,32 @@
 package fr.excilys.computer_database.config;
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.web.context.AbstractContextLoaderInitializer;
-import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
+
 
 @Configuration
-@EnableWebMvc
 @ComponentScan(basePackages = {"fr.excilys.computer_database.dao","fr.excilys.computer_database.service",
-							   "fr.excilys.computer_database.mapper", "fr.excilys.computer_database.servlets" })
+							   "fr.excilys.computer_database.mapper", "fr.excilys.computer_database.controllers" })
 @PropertySource("classpath:datasource.properties")
-public class SpringConfig extends AbstractContextLoaderInitializer implements WebMvcConfigurer {
+public class SpringConfig implements WebMvcConfigurer, WebApplicationInitializer {
 	
-	@Override
-	protected WebApplicationContext createRootApplicationContext() {
-		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-		rootContext.register(SpringConfig.class);
-		return rootContext;
-	}
+	@Autowired
+	private Environment environment;
 	
 	@Bean
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate(DataSource dataSource) {
@@ -39,28 +35,23 @@ public class SpringConfig extends AbstractContextLoaderInitializer implements We
 	}
 	
 	@Bean
-	DataSource dataSource() {
-		DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-		driverManagerDataSource.setUrl("jdbc:mysql://localhost:3306/computer-database-db?useSSL=false");
-		driverManagerDataSource.setUsername("admincdb");
-		driverManagerDataSource.setPassword("qwerty1234");
-		driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-		return driverManagerDataSource;
-	}
+    public DataSource dataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(environment.getRequiredProperty("dataSource.jdbc.driver"));
+        dataSource.setUrl(environment.getRequiredProperty("dataSource.jdbc.url"));
+        dataSource.setUsername(environment.getRequiredProperty("dataSource.jdbc.username"));
+        dataSource.setPassword(environment.getRequiredProperty("dataSource.jdbc.password"));
+        return dataSource;
+    }
 	
-	public void addViewControllers(ViewControllerRegistry registry) {
-	    registry.addViewController("/index");
+	@Override
+	public void onStartup(ServletContext servletContext) throws ServletException {
+		AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
+		webContext.register(SpringConfig.class,SpringMvcConfig.class);
+		webContext.setServletContext(servletContext);
+		ServletRegistration.Dynamic servlet = servletContext.addServlet("dynamicServlet", new DispatcherServlet(webContext));
+		servlet.setLoadOnStartup(1);
+		servlet.addMapping("/");
 	}
-	
-	@Bean
-	public ViewResolver viewResolver() {
-	    InternalResourceViewResolver bean = new InternalResourceViewResolver();
-
-	    bean.setViewClass(JstlView.class);
-	    bean.setPrefix("/views/");
-	    bean.setSuffix(".jsp");
-
-	      return bean;
-	   }
 
 }

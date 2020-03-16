@@ -18,12 +18,17 @@ import fr.excilys.computer_database.utilisateur.Requete;
 @Repository
 public class CompanyDAO {
 	
-	private ComputerDAO computerDao;
+	ComputerDAO computerDao;
+	CompanyMapper companyMapper;
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-	public CompanyDAO(DataSource dataSource,ComputerDAO computerDao) {
-		namedParameterJdbcTemplate=new NamedParameterJdbcTemplate(dataSource);
-		this.computerDao=computerDao;
+	private DataSource dataSource;
+	
+	private CompanyDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate, DataSource dataSource) {
+		super();
+		computerDao = new ComputerDAO(namedParameterJdbcTemplate, dataSource);
+		this.dataSource= dataSource;
+		this.namedParameterJdbcTemplate=namedParameterJdbcTemplate;
+		companyMapper=new CompanyMapper();
 	}
 
 	
