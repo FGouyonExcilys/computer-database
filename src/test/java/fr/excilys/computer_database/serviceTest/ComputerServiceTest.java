@@ -20,7 +20,7 @@ import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.model.Paginer;
-import fr.excilys.computer_database.services.ComputerService;
+import fr.excilys.computer_database.service.ComputerService;
 
 /**
  * @author excilys
@@ -49,7 +49,7 @@ public class ComputerServiceTest {
 
 	/**
 	 * Test method for
-	 * {@link fr.excilys.computer_database.services.ComputerService#getComputerList()}.
+	 * {@link fr.excilys.computer_database.service.ComputerService#getComputerList()}.
 	 * 
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
@@ -67,7 +67,7 @@ public class ComputerServiceTest {
 
 	/**
 	 * Test method for
-	 * {@link fr.excilys.computer_database.services.ComputerService#getComputerListPaginer(int, int)}.
+	 * {@link fr.excilys.computer_database.service.ComputerService#getComputerListPaginer(int, int)}.
 	 * 
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
@@ -89,7 +89,7 @@ public class ComputerServiceTest {
 
 	/**
 	 * Test method for
-	 * {@link fr.excilys.computer_database.services.ComputerService#deleteComputer(int)}.
+	 * {@link fr.excilys.computer_database.service.ComputerService#deleteComputer(int)}.
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 * @throws DAOConfigurationException 
@@ -114,7 +114,7 @@ public class ComputerServiceTest {
 
 	/**
 	 * Test method for
-	 * {@link fr.excilys.computer_database.services.ComputerService#editComputer(fr.excilys.computer_database.model.Computer)}.
+	 * {@link fr.excilys.computer_database.service.ComputerService#editComputer(fr.excilys.computer_database.model.Computer)}.
 	 * 
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
@@ -140,7 +140,7 @@ public class ComputerServiceTest {
 
 	/**
 	 * Test method for
-	 * {@link fr.excilys.computer_database.services.ComputerService#deleteComputer(int)}.
+	 * {@link fr.excilys.computer_database.service.ComputerService#deleteComputer(int)}.
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 * @throws DAOConfigurationException 
@@ -159,7 +159,7 @@ public class ComputerServiceTest {
 
 	/**
 	 * Test method for
-	 * {@link fr.excilys.computer_database.services.ComputerService#getComputerById(int)}.
+	 * {@link fr.excilys.computer_database.service.ComputerService#getComputerById(int)}.
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 * @throws DAOConfigurationException 

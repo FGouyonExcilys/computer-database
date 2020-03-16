@@ -1,26 +1,24 @@
-package fr.excilys.computer_database.services;
+package fr.excilys.computer_database.service;
 
 import java.util.ArrayList;
+
+import org.springframework.stereotype.Service;
 
 import fr.excilys.computer_database.dao.CompanyDAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.model.Company;
 
+@Service
 public class CompanyService {
 	
 	private CompanyDAO companyDao;
-
-	private static volatile CompanyService INSTANCE = null;
 	
 	public CompanyService(CompanyDAO companyDao) {
 		this.companyDao = companyDao;
 	}
 	
-	public final static CompanyService getInstance(CompanyDAO companyDao) {
-		if (INSTANCE == null) {
-			INSTANCE = new CompanyService(companyDao);
-		}
-		return INSTANCE;
+	public void deleteCompany() {
+		
 	}
 	
 	public ArrayList<Company> getCompanyList() throws DAOConfigurationException {

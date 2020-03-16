@@ -1,140 +1,70 @@
 package fr.excilys.computer_database.dao;
 
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javax.sql.DataSource;
+
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
-import fr.excilys.computer_database.logging.Loggers;
+import fr.excilys.computer_database.mapper.CompanyMapper;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.utilisateur.Requete;
 
+@Repository
 public class CompanyDAO {
 	
-	private static volatile CompanyDAO INSTANCE = null;
-
-	/** Point d'accès pour l'instance unique du singleton */
-	public final static CompanyDAO getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new CompanyDAO();
-		}
-		return INSTANCE;
-	}
-
-	public CompanyDAO() {
+	ComputerDAO computerDao;
+	CompanyMapper companyMapper;
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	private DataSource dataSource;
+	
+	private CompanyDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate, DataSource dataSource) {
+		super();
+		computerDao = new ComputerDAO(namedParameterJdbcTemplate, dataSource);
+		this.dataSource= dataSource;
+		this.namedParameterJdbcTemplate=namedParameterJdbcTemplate;
+		companyMapper=new CompanyMapper();
 	}
 
 	
-	public int deleteCompany(int idCompany) throws DAOConfigurationException{
-		Connection connection = null; 
-		try{ 
-		   connection = DAOHikari.getInstance().getConnection();;  
-		   connection.setAutoCommit(false); 
-		  
-		   //traitement des différentes instructions composant la transaction 
-		  
-		   if(idCompany != 0){ 
-		      connection.commit();// c'est ici que l'on valide la transaction 
-		      connection.setAutoCommit(true); 
-		   }else{ 
-		      connection.rollback(); 
-		   } 
-		}catch(SQLException sqle){ 
-		   try{connection.rollback();}catch(Exception e){} 
-		}catch(Exception e){ 
-		   try{connection.rollback();}catch(Exception e1){} 
-		}finally{ 
-		   try{connection.close();}catch(Exception e){} 
-		}
-		return idCompany;
+	@Transactional
+	public int deleteCompany(int companyId) throws DAOConfigurationException {
+		
+		computerDao.deleteComputerByCompany(companyId);
+		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("id",companyId);
+		return namedParameterJdbcTemplate.update(Requete.DELETE_COMPANY.getMessage(),namedParameters);
+		
 	}
 	
 	public ArrayList<Company> lister() throws DAOConfigurationException {
 
-		ArrayList<Company> companies = new ArrayList<Company>();
+		return (ArrayList<Company>) namedParameterJdbcTemplate.query(Requete.LIST_COMPANY.getMessage()+";",new CompanyMapper());
 
-		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.LIST_COMPANY.getMessage() + ";");){
-			
-			ResultSet resultat = preparedStatement.executeQuery();
-
-			while (resultat.next()) {
-				int id = resultat.getInt("id");
-				String name = resultat.getString("name");
-
-				Company company = new Company.CompanyBuilder().setId(id).setName(name).build();
-
-				companies.add(company);
-				
-			}
-
-		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL CompanyDAO, la méthode lister n'a pas abouti");
-		}
-		
-		
-		return companies;
 	}
 	
-	public ArrayList<Company> lister(int offset, int pas) throws DAOConfigurationException {
+	public ArrayList<Company> lister(int offset, int step) throws DAOConfigurationException {
 
-		ArrayList<Company> companies = new ArrayList<Company>();
+		SqlParameterSource namedParameters  = new MapSqlParameterSource()
+				.addValue("offset",offset)
+				.addValue("step",step);
 
-		try (Connection connexion = DAOHikari.getInstance().getConnection();
-				PreparedStatement preparedStatement = connexion.prepareStatement(Requete.LIST_COMPANY.getMessage() + Requete.LIMIT.getMessage());){
+		return (ArrayList<Company>)
+				namedParameterJdbcTemplate.query(Requete.LIST_COMPANY.getMessage()+Requete.LIMIT.getMessage(),
+						namedParameters, new CompanyMapper());
 
-			preparedStatement.setInt(1, offset);
-			preparedStatement.setInt(2, pas);
-
-			ResultSet resultat = preparedStatement.executeQuery();
-
-			while (resultat.next()) {
-				int id = resultat.getInt("id");
-				String name = resultat.getString("name");
-				
-				Company company = new Company.CompanyBuilder().setId(id).setName(name).build();
-
-				companies.add(company);
-
-				
-			}
-
-		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL CompanyDAO, la méthode lister avec limit n'a pas abouti");
-		}
-
-		return companies;
 	}
 	
 	public Company getCompanyById(int id) throws DAOConfigurationException {
 
-		Company company = new Company.CompanyBuilder().build();
-
-		try (Connection connexion = DAO.getInstance().getConnection();
-			PreparedStatement preparedStatement = connexion.prepareStatement(Requete.DETAILS_COMPANY.getMessage());){
-			
-			preparedStatement.setInt(1, id);
-			
-			ResultSet resultat = preparedStatement.executeQuery();
-
-			while (resultat.next()) {
-				
-				int company_id = resultat.getInt("id");
-				String company_name = resultat.getString("name");
-				
-				company = new Company.CompanyBuilder().setId(company_id).setName(company_name).build();
-				
-				
-			}
-
-		} catch (SQLException e) {
-			Loggers.afficherMessageError("Exception SQL CompanyDAO, la méthode getCompanyById n'a pas abouti");
-		}
-
-		return company;
+		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("id",id);
+		return namedParameterJdbcTemplate.queryForObject(Requete.GET_COMPANY_BY_ID.getMessage(), namedParameters, new CompanyMapper());
+	
 	}
+	
 
 }

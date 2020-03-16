@@ -7,16 +7,19 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+
 import fr.excilys.computer_database.dto.CompanyDTO;
 import fr.excilys.computer_database.dto.ComputerDTO;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.utilisateur.Requete;
 
-
-public class ComputerMapper {
+@Component
+public class ComputerMapper implements RowMapper<Computer> {
 	
-	public static Computer mapComputer(ResultSet resultat) throws SQLException {
+	public Computer mapRow(ResultSet resultat, int i) throws SQLException {
 
 		int id = resultat.getInt("computer.id");
 		String name = resultat.getString("computer.name");

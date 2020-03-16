@@ -4,48 +4,50 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import fr.excilys.computer_database.dao.CompanyDAO;
-import fr.excilys.computer_database.dao.ComputerDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
-import fr.excilys.computer_database.services.CompanyService;
-import fr.excilys.computer_database.services.ComputerService;
+import fr.excilys.computer_database.service.CompanyService;
+import fr.excilys.computer_database.service.ComputerService;
 
 /**
  * Servlet implementation class EditComputer
  */
 @WebServlet("/editComputer")
+@Controller
 public class EditComputer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	
+	@Autowired
+	ComputerService computerServ;
+	@Autowired
+	CompanyService companyServ;
+	
 	private int idComputer = 0;
 
-	ComputerDAO computerDao;
-	CompanyDAO companyDao;
-
-	ComputerService computerServ;
-	CompanyService companyServ;
-
 	@Override
-	public void init() throws ServletException {
+	public void init(ServletConfig config) throws ServletException {
 
-		computerDao = ComputerDAO.getInstance();
-		companyDao = CompanyDAO.getInstance();
-
-		computerServ = ComputerService.getInstance(computerDao);
-		companyServ = CompanyService.getInstance(companyDao);
-
-		super.init();
+		super.init(config);
+	    SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+		
 	}
-
+	
+	public EditComputer() {
+		super();
+	}
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
@@ -102,43 +104,44 @@ public class EditComputer extends HttpServlet {
 
 						doGet(request, response);
 
-					} else {
-						request.setAttribute("error", error);
-
-						Company company = null;
-						
-						if (isInteger(request.getParameter("companyId"))) {
-
-							companyId = Integer.parseInt(request.getParameter("companyId"));
-
-							if (companyId < 0) {
-								cheatingError = "cheat";
-								request.setAttribute("cheatingError", cheatingError);
-								doGet(request, response);
-							}
-							
-							boolean removeCompanyId = (request.getParameter("companyId").equals("none"));
-
-							if (!removeCompanyId) {
-
-								company = companyServ.getCompanyById(companyId);
-							}
-
-							Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
-									.setDiscontinued(discontinued).setCompany(company).build();
-							computer.setId(idComputer);
-
-							computerServ.editComputer(computer);
-
-							request.setAttribute("editSuccess", 1);
-							
-						} else {
-							cheatingError = "cheat";
-							request.setAttribute("cheatingError", cheatingError);
-							doGet(request,response);
-						}
-					}
+					} 
+					
 				}
+			}
+			
+			request.setAttribute("error", error);
+
+			Company company = null;
+			
+			if (isInteger(request.getParameter("companyId"))) {
+
+				companyId = Integer.parseInt(request.getParameter("companyId"));
+
+				if (companyId < 0) {
+					cheatingError = "cheat";
+					request.setAttribute("cheatingError", cheatingError);
+					doGet(request, response);
+				}
+				
+				boolean removeCompanyId = (request.getParameter("companyId").equals("none"));
+
+				if (!removeCompanyId) {
+
+					company = companyServ.getCompanyById(companyId);
+				}
+
+				Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
+						.setDiscontinued(discontinued).setCompany(company).build();
+				computer.setId(idComputer);
+
+				computerServ.editComputer(computer);
+
+				request.setAttribute("editSuccess", 1);
+				
+			} else {
+				cheatingError = "cheat";
+				request.setAttribute("cheatingError", cheatingError);
+				doGet(request,response);
 			}
 
 		} catch (DAOConfigurationException e) {
