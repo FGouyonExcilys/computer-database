@@ -18,7 +18,6 @@
 <spring:url value="resources/css/bootstrap.min.css" var="bootstrapCSS" />
 <spring:url value="resources/css/font-awesome.css" var="fontAwesomeCSS" />
 <spring:url value="resources/css/main.css" var="mainCSS" />
-
 <link href="${bootstrapCSS}" rel="stylesheet" media="screen">
 <link href="${fontAwesomeCSS}" rel="stylesheet" media="screen">
 <link href="${mainCSS}" rel="stylesheet" media="screen">

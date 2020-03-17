@@ -43,7 +43,6 @@ public class AddComputerController {
 		return "addComputer";
 		
 	}
-	
 
 	@PostMapping("/addComputer")
 	public String postDashboard(@RequestParam(value="computerName", required = false) String computerName,
