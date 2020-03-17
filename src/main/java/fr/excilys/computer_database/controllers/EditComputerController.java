@@ -128,8 +128,6 @@ public class EditComputerController {
 	}
 	
 	
-	
-	
 	private String testIdComputerToEditNotNull(String id) {
 		if (id != null) {
 			try {
