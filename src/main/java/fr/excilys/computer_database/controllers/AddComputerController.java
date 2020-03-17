@@ -28,7 +28,7 @@ public class AddComputerController {
 	}
 	
 	@GetMapping("/addComputer")
-	public String getAddComputer(@RequestParam(value="error", defaultValue="", required = false) int error, 
+	public String getAddComputer(@RequestParam(value="error", defaultValue="", required = false) String error, 
 								 ModelMap modelMap){
 		
 		ArrayList<Company> companyList;
@@ -43,7 +43,6 @@ public class AddComputerController {
 		return "addComputer";
 		
 	}
-	
 
 	@PostMapping("/addComputer")
 	public String postDashboard(@RequestParam(value="computerName", required = false) String computerName,

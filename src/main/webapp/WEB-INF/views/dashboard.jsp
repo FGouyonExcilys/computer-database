@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="label.title"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -18,16 +18,20 @@
 <spring:url value="resources/css/bootstrap.min.css" var="bootstrapCSS" />
 <spring:url value="resources/css/font-awesome.css" var="fontAwesomeCSS" />
 <spring:url value="resources/css/main.css" var="mainCSS" />
+<spring:url value="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css" var="flagCSS" />
 
 <link href="${bootstrapCSS}" rel="stylesheet" media="screen">
 <link href="${fontAwesomeCSS}" rel="stylesheet" media="screen">
 <link href="${mainCSS}" rel="stylesheet" media="screen">
+<link href="${flagCSS}" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard?pageIterator=1"> Application - Computer
-				Database</a>
+			<a class="dropdown-item" href="?lang=<spring:message code="label.urlswitch"/>">
+			<span class="flag-icon flag-icon-<spring:message code="label.flag" /> navbar-brand" style="width:1%; "></span></a>
+			<a class="navbar-brand" href="dashboard">&nbsp;&nbsp;&nbsp;Application - 
+				<spring:message code="label.title"/> </a>
 		</div>
 	</header>
 
@@ -36,31 +40,36 @@
 			<c:choose>
 				<c:when test="${ addSuccess == '1'}">
 					<div class="alert alert-success" role="alert">
-						<b><i class="fa fa-check fa-lg"></i>&nbsp;&nbsp;Computer added
-							successfully !</b>
+						<b><i class="fa fa-check fa-lg"></i>&nbsp;&nbsp;<spring:message code="label.computerAddedSuccessfully" /></b>
 					</div>
 				</c:when>
 				<c:when test="${ editSuccess == '1'}">
 					<div class="alert alert-success" role="alert">
-						<b><i class="fa fa-check fa-lg"></i>&nbsp;&nbsp;Computer
-							modified successfully !</b>
+						<b><i class="fa fa-check fa-lg"></i>&nbsp;&nbsp;<spring:message code="label.computerModifiedSuccessfully" /></b>
 					</div>
 				</c:when>
 				<c:when test="${ deleteSuccess == '1'}">
 					<div class="alert alert-success" role="alert">
-						<b><i class="fa fa-check fa-lg"></i>&nbsp;&nbsp;Computer(s)
-							deleted successfully !</b>
+						<b><i class="fa fa-check fa-lg"></i>&nbsp;&nbsp;<spring:message code="label.computerDeletedSuccessfully" /></b>
 					</div>
 				</c:when>
 			</c:choose>
 			<c:choose>
 				<c:when test="${ search != null }">
-					<h1 id="homeTitle">${ listeOrdiSearched.size() } Computers
-						found for ${ search } </h1>
+					<c:if test="${ listeOrdiSearched.size() != 1 }">
+						<h1 id="homeTitle">${ listeOrdiSearched.size() } <spring:message code="label.computersFound"/> ${ search } </h1>
+					</c:if>
+					<c:if test="${ listeOrdiSearched.size() == 1 }">
+						<h1 id="homeTitle">${ listeOrdiSearched.size() } <spring:message code="label.computerFound"/> ${ search } </h1>
+					</c:if>
 				</c:when>
 				<c:otherwise>
-					<h1 id="homeTitle">${ listeOrdi.size() } Computers
-						found</h1>
+					<c:if test="${ listeOrdi.size() != 1 }">
+						<h1 id="homeTitle">${ listeOrdi.size() } <spring:message code="label.computersFound"/></h1>
+					</c:if>
+					<c:if test="${ listeOrdi.size() == 1 }">
+						<h1 id="homeTitle">${ listeOrdi.size() } <spring:message code="label.computerFound"/></h1>
+					</c:if>
 				</c:otherwise>
 			</c:choose>
 
@@ -70,7 +79,7 @@
 					<h4>Page ${ pageIterator }</h4>
 				</c:when>
 				<c:otherwise>
-					<h4>No page found</h4>
+					<h4><spring:message code="label.noPageFound"/></h4>
 				</c:otherwise>
 			</c:choose>
 
@@ -78,15 +87,16 @@
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline" >
 						<input type="search" id="search" name="search"
-							class="form-control" placeholder="Search name" />
+							class="form-control" placeholder="<spring:message code="label.searchName"/>" />
 						<input type="submit" id="searchsubmit" name="searchsubmit"
-							value="Filter by name" class="btn btn-primary" />
+							value="<spring:message code="label.filterByName"/>" class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer">
+						<spring:message code="label.addComputer" /></a> 
+					<a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();"><spring:message code="label.edit" /></a>
 				</div>
 			</div>
 		</div>
@@ -115,19 +125,19 @@
 									<a href="dashboard?columnName=computerName&orderBy=desc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Computer name</a> &#x25bc;
+										class="alert-link"><spring:message code="label.computerName" /></a> &#x25bc;
 								</c:when>
 								<c:when test="${ orderBy == 'desc' && columnName.equals('computerName') }">
 									<a href="dashboard?columnName=computerName&orderBy=asc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Computer name</a> &#x25b2;
+										class="alert-link"><spring:message code="label.computerName" /></a> &#x25b2;
 								</c:when>
 								<c:otherwise>
 									<a href="dashboard?columnName=computerName&orderBy=asc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Computer name</a>
+										class="alert-link"><spring:message code="label.computerName" /></a>
 								</c:otherwise>
 							</c:choose></th>
 
@@ -136,19 +146,19 @@
 									<a href="dashboard?columnName=introduced&orderBy=desc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Introduced date</a> &#x25bc;
+										class="alert-link"><spring:message code="label.dateIntro" /></a> &#x25bc;
 								</c:when>
 								<c:when test="${ orderBy == 'desc' && columnName.equals('introduced') }">
 									<a href="dashboard?columnName=introduced&orderBy=asc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Introduced date</a> &#x25b2;
+										class="alert-link"><spring:message code="label.dateIntro" /></a> &#x25b2;
 								</c:when>
 								<c:otherwise>
 									<a href="dashboard?columnName=introduced&orderBy=asc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Introduced date</a>
+										class="alert-link"><spring:message code="label.dateIntro" /></a>
 								</c:otherwise>
 							</c:choose></th>
 						<!-- Table header for Discontinued Date -->
@@ -157,19 +167,19 @@
 									<a href="dashboard?columnName=discontinued&orderBy=desc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Discontinued date</a> &#x25bc;
+										class="alert-link"><spring:message code="label.dateDisc" /></a> &#x25bc;
 								</c:when>
 								<c:when test="${ orderBy == 'desc' && columnName.equals('discontinued') }">
 									<a href="dashboard?columnName=discontinued&orderBy=asc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Discontinued date</a> &#x25b2;
+										class="alert-link"><spring:message code="label.dateDisc" /></a> &#x25b2;
 								</c:when>
 								<c:otherwise>
 									<a href="dashboard?columnName=discontinued&orderBy=asc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Discontinued date</a>
+										class="alert-link"><spring:message code="label.dateDisc" /></a>
 								</c:otherwise>
 							</c:choose></th>
 						<!-- Table header for Company -->
@@ -178,19 +188,19 @@
 									<a href="dashboard?columnName=companyName&orderBy=desc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Company</a> &#x25bc;
+										class="alert-link"><spring:message code="label.company" /></a> &#x25bc;
 								</c:when>
 								<c:when test="${ orderBy == 'desc' && columnName.equals('companyName') }">
 									<a href="dashboard?columnName=companyName&orderBy=asc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Company</a> &#x25b2;
+										class="alert-link"><spring:message code="label.company" /></a> &#x25b2;
 								</c:when>
 								<c:otherwise>
 									<a href="dashboard?columnName=companyName&orderBy=asc
 													<c:if test="${ search != null }">&search=${ search }</c:if>"
 										id="orderByComputerName"
-										class="alert-link">Company</a>
+										class="alert-link"><spring:message code="label.company" /></a>
 								</c:otherwise>
 							</c:choose></th>
 
