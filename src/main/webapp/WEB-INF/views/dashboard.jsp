@@ -28,7 +28,10 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="dropdown-item" href="?lang=<spring:message code="label.urlswitch"/>">
+			<a class="dropdown-item" href="?lang=<spring:message code="label.urlswitch"/>
+							<c:if test="${ search != null }">&search=${ search }</c:if>
+							<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
+							<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
 			<span class="flag-icon flag-icon-<spring:message code="label.flag" /> navbar-brand" style="width:1%; "></span></a>
 			<a class="navbar-brand" href="dashboard">&nbsp;&nbsp;&nbsp;Application - 
 				<spring:message code="label.title"/> </a>
