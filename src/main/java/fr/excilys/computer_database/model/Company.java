@@ -1,8 +1,18 @@
 package fr.excilys.computer_database.model;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+@Embeddable
 public class Company {
 
+	@Id
 	private int id;
+	
+	@Column(name="name")
 	private String name;
 
 	private Company(CompanyBuilder builder) {

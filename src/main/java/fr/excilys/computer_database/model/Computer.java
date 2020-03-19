@@ -2,12 +2,29 @@ package fr.excilys.computer_database.model;
 
 import java.time.LocalDate;
 
-public class Computer {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
+@Entity
+public class Computer{
+
+	@Id
 	private int id;
+
+	@Column(name="name")
 	private String name;
+
+	@Column(name="introduced")
 	private LocalDate introduced;
+
+	@Column(name="discontinued")
 	private LocalDate discontinued;
+
+	@JoinColumn(name="company_id")
+	@ManyToOne
 	private Company company;
 
 	private Computer(ComputerBuilder builder) {

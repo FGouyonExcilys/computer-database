@@ -95,11 +95,8 @@ public class EditComputerController {
 					modelMap.put("cheatingError", cheatingError);
 					return "redirect:/editComputer";
 				}
-				
-				boolean removeCompanyId = (companyId != 0);
 
-				if (!removeCompanyId) {
-
+				if (companyId != 0) {
 					company = companyServ.getCompanyById(companyId);
 				}
 
