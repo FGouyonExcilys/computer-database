@@ -101,7 +101,7 @@ public class DashboardController {
 	}
 
 	@PostMapping("/dashboard")
-	public String postDashboard(@RequestParam(value="search", required = false) String selection){
+	public String postDashboard(@RequestParam(value="selection", required = false) String selection){
 
 		List<String> deleteSelectionArray = Arrays.asList(selection.split("\\s,\\s"));
 
