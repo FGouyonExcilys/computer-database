@@ -47,6 +47,7 @@ public class DashboardController {
 							  @RequestParam(value="step", defaultValue="10", required = false) int step,
 							  @RequestParam(value="addSuccess", defaultValue="0", required = false) int addSuccess,
 							  @RequestParam(value="editSuccess", defaultValue="0", required = false) int editSuccess,
+							  @RequestParam(value="deleteSuccess", defaultValue="0", required = false) int deleteSuccess,
 							  ModelMap modelMap)
 									  throws ServletException, IOException, DAOConfigurationException {
 		
@@ -89,6 +90,7 @@ public class DashboardController {
 
 		modelMap.put("addSuccess", addSuccess);
 		modelMap.put("editSuccess", editSuccess);
+		modelMap.put("deleteSuccess", deleteSuccess);
 
 		modelMap.put("search", search);
 		modelMap.put("orderBy", orderBy);
@@ -103,8 +105,8 @@ public class DashboardController {
 	@PostMapping("/dashboard")
 	public String postDashboard(@RequestParam(value="selection", required = false) String selection){
 
-		List<String> deleteSelectionArray = Arrays.asList(selection.split("\\s,\\s"));
-
+		List<String> deleteSelectionArray = Arrays.asList(selection.split(","));
+		
 		for (String s : deleteSelectionArray) {
 			try {
 				computerServ.deleteComputer(Integer.parseInt(s));
@@ -115,7 +117,7 @@ public class DashboardController {
 			}
 		}
 
-		return "redirect:/dashboard";
+		return "redirect:/dashboard?deleteSuccess=1";
 		
 	}
 
