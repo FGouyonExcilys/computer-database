@@ -1,7 +1,6 @@
 package fr.excilys.computer_database.controllers;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -9,8 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import fr.excilys.computer_database.dto.CompanyDTO;
+import fr.excilys.computer_database.dto.ComputerDTO;
+import fr.excilys.computer_database.exceptions.ComputerValidator;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
+import fr.excilys.computer_database.exceptions.DateException;
+import fr.excilys.computer_database.exceptions.NameException;
 import fr.excilys.computer_database.logging.Loggers;
+import fr.excilys.computer_database.mapper.ComputerMapper;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.service.CompanyService;
@@ -35,7 +40,7 @@ public class EditComputerController {
 		
 		try {
 
-			ArrayList<Company> companyList = companyServ.getCompanyList();
+			List<Company> companyList = companyServ.getCompanyList();
 
 			testIdComputerToEditNotNull(id);
 
@@ -60,81 +65,51 @@ public class EditComputerController {
 								   @RequestParam(value="discontinued", required = false) String discontinuedStr,
 								   @RequestParam(value="companyId", required = false) String companyIdStr,
 								   ModelMap modelMap) {
-		int companyId = 0;
-		String error = "";
-		String cheatingError = "";
 
 		try {
 
 			testIdComputerToEditNotNull(id);
 
-			LocalDate introduced = introducedStr.isEmpty() ? null
-														   : LocalDate.parse(introducedStr);
-			LocalDate discontinued = discontinuedStr.isEmpty() ? null
-														   : LocalDate.parse(discontinuedStr);
-
-			if (introduced != null) {
-				if (discontinued != null) {
-					if (introduced.isAfter(discontinued)) {
-						modelMap.put("error", "date");
-						return "redirect:/editComputer";
-					} 
-				}
-			}
+			CompanyDTO companyDTO = new CompanyDTO(Integer.parseInt(companyIdStr));
+			ComputerDTO computerDTO = new ComputerDTO(computerName, introducedStr, discontinuedStr, companyDTO);
 			
-			modelMap.put("error", error);
-
-			Company company = null;
+			Computer computer = ComputerMapper.convertComputerDTOtoComputer(computerDTO);
 			
-			if (isInteger(companyIdStr)) {
+			ComputerValidator.validateComputer(computer);
 
-				companyId = Integer.parseInt(companyIdStr);
+			computerServ.editComputer(computer);
 
-				if (companyId < 0) {
-					cheatingError = "cheat";
-					modelMap.put("cheatingError", cheatingError);
-					return "redirect:/editComputer";
-				}
+			modelMap.put("editSuccess", 1);
 
-				if (companyId != 0) {
-					company = companyServ.getCompanyById(companyId);
-				}
-
-				Computer computer = new Computer.ComputerBuilder(computerName).setIntroduced(introduced)
-						.setDiscontinued(discontinued).setCompany(company).build();
-				computer.setId(idComputer);
-
-				computerServ.editComputer(computer);
-
-				modelMap.put("editSuccess", 1);
-				
-			} else {
-				cheatingError = "cheat";
-				modelMap.put("cheatingError", cheatingError);
-				return "redirect:/editComputer";
-			}
+			return "redirect:/dashboard?editSuccess=1";
+			
 
 		} catch (DAOConfigurationException e) {
 			Loggers.afficherMessageError("DAOConfigurationException in EditComputer Servlet" + e.getMessage());
+			return "redirect:/editComputer";
+		} catch (DateException e) {
+			modelMap.put("error", "incorrectDate");
+			return "redirect:/editComputer";
+		} catch (NameException e) {
+			modelMap.put("error", "incorrectName");
+			return "redirect:/editComputer";
+		} catch (NumberFormatException e) {
+			modelMap.put("error", "cheat");
+			return "redirect:/editComputer";
 		}
-
-		modelMap.put("editSuccess", 1);
-
-		return "redirect:/dashboard?editSuccess=1";
 		
 	}
 	
 	
 	private String testIdComputerToEditNotNull(String id) {
-		if (id != null) {
-			try {
-				idComputer = Integer.parseInt(id);
-			} catch (NumberFormatException eNumFormat) {
-				Loggers.afficherMessageError("NumberFormatException in EditComputer Controller" + eNumFormat.getMessage());
-				return "redirect:/dashboard?pageIterator=1";
-			}
+		try {
+			idComputer = Integer.parseInt(id);
+			return null;
+		} catch (NumberFormatException eNumFormat) {
+			Loggers.afficherMessageError("NumberFormatException in EditComputer Controller" + eNumFormat.getMessage());
+			return "redirect:/dashboard?pageIterator=1";
 		}
-		return null;
+		
 	}
 
 	private void setAttributesComputer(ModelMap modelMap, Computer computer) {
@@ -144,29 +119,5 @@ public class EditComputerController {
 		modelMap.put("introduced", computer.getIntroduced());
 		modelMap.put("discontinued", computer.getDiscontinued());
 		modelMap.put("currentCompany", computer.getCompany().getId());
-	}
-	
-	public static boolean isInteger(String str) {
-	    if (str == null) {
-	        return false;
-	    }
-	    int length = str.length();
-	    if (length == 0) {
-	        return false;
-	    }
-	    int i = 0;
-	    if (str.charAt(0) == '-') {
-	        if (length == 1) {
-	            return false;
-	        }
-	        i = 1;
-	    }
-	    for (; i < length; i++) {
-	        char c = str.charAt(i);
-	        if (c < '0' || c > '9') {
-	            return false;
-	        }
-	    }
-	    return true;
 	}
 }

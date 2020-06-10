@@ -38,13 +38,19 @@
 					<h1><spring:message code="label.editComputer"/></h1>
 
 					<c:choose>
-						<c:when test="${ error == 'date' }">
+						<c:when test="${ error == 'incorrectDate' }">
 							<div class="alert alert-warning" role="alert">
-								<b><i class="fa fa-exclamation-triangle fa-lg"></i>
-								&nbsp;&nbsp;<spring:message code="label.incorrectDate"/></b>
+								<b><i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp;&nbsp;
+								<spring:message code="label.incorrectDate"/></b>
 							</div>
 						</c:when>
-						<c:when test="${ cheatingError == 'cheat' }">
+						<c:when test="${ error == 'incorrectName' }">
+							<div class="alert alert-warning" role="alert">
+								<b><i class="fa fa-exclamation-triangle fa-lg"></i>&nbsp;&nbsp;
+								<spring:message code="label.incorrectName"/></b>
+							</div>
+						</c:when>
+						<c:when test="${ error == 'cheat' }">
 							<div class="alert alert-warning" role="alert">
 								<div style="font-size: 30px; display: inline">&#x1F620;</div>
 								<b>&nbsp;&nbsp;<spring:message code="label.cheat"/></b>

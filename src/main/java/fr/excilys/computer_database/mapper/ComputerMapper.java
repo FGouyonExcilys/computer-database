@@ -69,8 +69,15 @@ public class ComputerMapper implements RowMapper<Computer> {
 		int id = computerDTO.getId();
 		String name = computerDTO.getName();
 		CompanyDTO companyDTO = computerDTO.getCompanyDTO();
-		LocalDate introduced = LocalDate.parse(computerDTO.getIntroduced());
-		LocalDate discontinued = LocalDate.parse(computerDTO.getDiscontinued());
+
+		LocalDate introduced = null;
+		if (computerDTO.getIntroduced() != null && !computerDTO.getIntroduced().isEmpty()) {
+			introduced = LocalDate.parse(computerDTO.getIntroduced());
+		}
+		LocalDate discontinued = null;
+		if (computerDTO.getDiscontinued() != null && !computerDTO.getDiscontinued().isEmpty()) {
+			discontinued = LocalDate.parse(computerDTO.getDiscontinued());
+		}
 		Company company = CompanyMapper.convertCompanyDTOtoCompany(companyDTO);
 		Computer computer = new Computer.ComputerBuilder(name).setIntroduced(introduced).setDiscontinued(discontinued)
 				.setCompany(company).build();

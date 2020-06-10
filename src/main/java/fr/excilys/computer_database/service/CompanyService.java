@@ -1,6 +1,6 @@
 package fr.excilys.computer_database.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -21,11 +21,11 @@ public class CompanyService {
 		
 	}
 	
-	public ArrayList<Company> getCompanyList() throws DAOConfigurationException {
+	public List<Company> getCompanyList() throws DAOConfigurationException {
 		return companyDao.lister();
 	}
 	
-	public ArrayList<Company> getCompanyListPaginer(int offset, int pas) throws DAOConfigurationException {
+	public List<Company> getCompanyListPaginer(int offset, int pas) throws DAOConfigurationException {
 		return companyDao.lister(offset, pas);
 	}
 	

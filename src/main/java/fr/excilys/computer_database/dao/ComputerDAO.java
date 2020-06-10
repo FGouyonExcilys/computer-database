@@ -1,6 +1,6 @@
 package fr.excilys.computer_database.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -92,9 +92,9 @@ public class ComputerDAO {
 	 * @return ArrayList<Computer>
 	 * @throws DAOConfigurationException
 	 */
-	public ArrayList<Computer> lister() throws DAOConfigurationException {
+	public List<Computer> lister() throws DAOConfigurationException {
 		
-		return (ArrayList<Computer>) namedParameterJdbcTemplate.query(Requete.LIST_COMPUTER.getMessage()+";",new ComputerMapper());
+		return (List<Computer>) namedParameterJdbcTemplate.query(Requete.LIST_COMPUTER.getMessage()+";",new ComputerMapper());
 
 	}
 	
@@ -103,7 +103,7 @@ public class ComputerDAO {
 	 * @return ArrayList<Computer>
 	 * @throws DAOConfigurationException
 	 */
-	public ArrayList<Computer> lister(Paginer paginer) throws DAOConfigurationException {
+	public List<Computer> lister(Paginer paginer) throws DAOConfigurationException {
 		
 		SqlParameterSource namedParameters  = new MapSqlParameterSource()
 				.addValue("offset",paginer.getOffset())
@@ -113,7 +113,7 @@ public class ComputerDAO {
 
 		String requete = ComputerMapper.requestMapper(testOrderBy, "noSearch");
 
-		return (ArrayList<Computer>) namedParameterJdbcTemplate.query(requete, namedParameters, new ComputerMapper());
+		return (List<Computer>) namedParameterJdbcTemplate.query(requete, namedParameters, new ComputerMapper());
 
 	}
 
@@ -122,12 +122,12 @@ public class ComputerDAO {
 	 * @return ArrayList<Computer>
 	 * @throws DAOConfigurationException
 	 */
-	public ArrayList<Computer> listSearch(String search) throws DAOConfigurationException {
+	public List<Computer> listSearch(String search) throws DAOConfigurationException {
 		
 		SqlParameterSource namedParameters  = new MapSqlParameterSource()
 				.addValue("search", '%' + search + '%');
 
-		return (ArrayList<Computer>) namedParameterJdbcTemplate.query(Requete.LIST_SEARCH.getMessage(), namedParameters, new ComputerMapper());
+		return (List<Computer>) namedParameterJdbcTemplate.query(Requete.LIST_SEARCH.getMessage(), namedParameters, new ComputerMapper());
 	}
 	
 	/**
@@ -135,7 +135,7 @@ public class ComputerDAO {
 	 * @return ArrayList<Computer>
 	 * @throws DAOConfigurationException
 	 */
-	public ArrayList<Computer> listSearch(Paginer paginer) throws DAOConfigurationException {
+	public List<Computer> listSearch(Paginer paginer) throws DAOConfigurationException {
 		
 		SqlParameterSource namedParameters  = new MapSqlParameterSource()
 				.addValue("offset",paginer.getOffset())
@@ -146,7 +146,7 @@ public class ComputerDAO {
 
 		String requete = ComputerMapper.requestMapper(testOrderBy, "search");
 
-		return (ArrayList<Computer>) namedParameterJdbcTemplate.query(requete, namedParameters, new ComputerMapper());
+		return (List<Computer>) namedParameterJdbcTemplate.query(requete, namedParameters, new ComputerMapper());
 	}
 	
 	/**

@@ -1,6 +1,6 @@
 package fr.excilys.computer_database.dao;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -41,19 +41,19 @@ public class CompanyDAO {
 		
 	}
 	
-	public ArrayList<Company> lister() throws DAOConfigurationException {
+	public List<Company> lister() throws DAOConfigurationException {
 
-		return (ArrayList<Company>) namedParameterJdbcTemplate.query(Requete.LIST_COMPANY.getMessage()+";",new CompanyMapper());
+		return namedParameterJdbcTemplate.query(Requete.LIST_COMPANY.getMessage()+";",new CompanyMapper());
 
 	}
 	
-	public ArrayList<Company> lister(int offset, int step) throws DAOConfigurationException {
+	public List<Company> lister(int offset, int step) throws DAOConfigurationException {
 
 		SqlParameterSource namedParameters  = new MapSqlParameterSource()
 				.addValue("offset",offset)
 				.addValue("step",step);
 
-		return (ArrayList<Company>)
+		return (List<Company>)
 				namedParameterJdbcTemplate.query(Requete.LIST_COMPANY.getMessage()+Requete.LIMIT.getMessage(),
 						namedParameters, new CompanyMapper());
 

@@ -1,6 +1,6 @@
 package fr.excilys.computer_database.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -18,19 +18,19 @@ public class ComputerService {
 		this.computerDao = computerDao;
 	}
 
-	public ArrayList<Computer> getComputerList() throws DAOConfigurationException {
+	public List<Computer> getComputerList() throws DAOConfigurationException {
 		return computerDao.lister();
 	}
 
-	public ArrayList<Computer> getComputerListPaginer(Paginer paginer) throws DAOConfigurationException {
+	public List<Computer> getComputerListPaginer(Paginer paginer) throws DAOConfigurationException {
 		return computerDao.lister(paginer);
 	}
 	
-	public ArrayList<Computer> getComputerListSearched(String search) throws DAOConfigurationException {
+	public List<Computer> getComputerListSearched(String search) throws DAOConfigurationException {
 		return computerDao.listSearch(search);
 	}
 	
-	public ArrayList<Computer> getComputerListSearchedPaginer(Paginer paginer) throws DAOConfigurationException {
+	public List<Computer> getComputerListSearchedPaginer(Paginer paginer) throws DAOConfigurationException {
 		return computerDao.listSearch(paginer);
 	}
 	
