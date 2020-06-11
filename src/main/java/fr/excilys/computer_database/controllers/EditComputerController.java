@@ -39,7 +39,7 @@ public class EditComputerController {
 								  ModelMap modelMap) {
 		
 		try {
-
+			
 			List<Company> companyList = companyServ.getCompanyList();
 
 			testIdComputerToEditNotNull(id);
@@ -68,12 +68,12 @@ public class EditComputerController {
 
 		try {
 
-			testIdComputerToEditNotNull(id);
-
 			CompanyDTO companyDTO = new CompanyDTO(Integer.parseInt(companyIdStr));
 			ComputerDTO computerDTO = new ComputerDTO(computerName, introducedStr, discontinuedStr, companyDTO);
 			
 			Computer computer = ComputerMapper.convertComputerDTOtoComputer(computerDTO);
+			testIdComputerToEditNotNull(id);
+			computer.setId(Integer.parseInt(id));
 			
 			ComputerValidator.validateComputer(computer);
 
@@ -85,7 +85,7 @@ public class EditComputerController {
 			
 
 		} catch (DAOConfigurationException e) {
-			Loggers.afficherMessageError("DAOConfigurationException in EditComputer Servlet" + e.getMessage());
+			Loggers.afficherMessageError("DAOConfigurationException in EditComputer Controller " + e.getMessage());
 			return "redirect:/editComputer";
 		} catch (DateException e) {
 			modelMap.put("error", "incorrectDate");
@@ -101,13 +101,11 @@ public class EditComputerController {
 	}
 	
 	
-	private String testIdComputerToEditNotNull(String id) {
+	private void testIdComputerToEditNotNull(String id) {
 		try {
 			idComputer = Integer.parseInt(id);
-			return null;
 		} catch (NumberFormatException eNumFormat) {
-			Loggers.afficherMessageError("NumberFormatException in EditComputer Controller" + eNumFormat.getMessage());
-			return "redirect:/dashboard?pageIterator=1";
+			Loggers.afficherMessageError("NumberFormatException in EditComputer Controller " + eNumFormat.getMessage());
 		}
 		
 	}

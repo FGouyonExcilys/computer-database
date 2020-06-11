@@ -52,16 +52,12 @@ public class ComputerDAO {
 	 */
 	public int modifier(Computer computer) throws DAOConfigurationException {
 		
-		Object introduced = computer.getIntroduced() != null ? computer.getIntroduced() : null;
-		Object discontinued = computer.getDiscontinued() != null ? computer.getDiscontinued() : null;
-		Object companyId = (computer.getCompany() != null) ? computer.getCompany().getId() : null;
-		
 		SqlParameterSource namedParameters  = new MapSqlParameterSource()
 				.addValue("computer.id", computer.getId())
 				.addValue("name",computer.getName())
-				.addValue("introduced", introduced)
-				.addValue("discontinued", discontinued)
-				.addValue("company.id", companyId );
+				.addValue("introduced", computer.getIntroduced())
+				.addValue("discontinued", computer.getDiscontinued())
+				.addValue("company.id", computer.getCompany().getId());
 		
 		return namedParameterJdbcTemplate.update(Requete.EDIT_COMPUTER.getMessage(), namedParameters);
 
