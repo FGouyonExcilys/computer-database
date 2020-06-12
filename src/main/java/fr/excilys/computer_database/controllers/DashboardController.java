@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import fr.excilys.computer_database.dao.ComputerDAO;
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
 import fr.excilys.computer_database.model.Computer;
@@ -50,6 +51,11 @@ public class DashboardController {
 							  @RequestParam(value="deleteSuccess", defaultValue="0", required = false) int deleteSuccess,
 							  ModelMap modelMap)
 									  throws ServletException, IOException, DAOConfigurationException {
+//		
+//		ComputerDAO compd=new ComputerDAO();
+//		List<Computer> ncomp=compd.findComputerByName("IPhone");
+//		
+//		System.out.println(ncomp);
 		
 		if (search != null) {
 

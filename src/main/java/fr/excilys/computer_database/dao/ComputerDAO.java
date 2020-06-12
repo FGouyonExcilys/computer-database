@@ -2,31 +2,64 @@ package fr.excilys.computer_database.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import javax.sql.DataSource;
 
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.mapper.ComputerMapper;
 import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.model.Paginer;
-import fr.excilys.computer_database.utilisateur.Requete;
 
 @Repository
 public class ComputerDAO {
 	
+	
+	@PersistenceContext
+	private  EntityManager em;
+	 
+	 
+    // constructor
+ 
+	public ComputerDAO() {
+		// TODO Auto-generated constructor stub
+	}
+    public  List<Computer> findComputerByName(String name) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Computer> cq = cb.createQuery(Computer.class);
+ 
+        Root<Computer> computer = cq.from(Computer.class);
+        Predicate computerNamePredicate = cb.like(computer.get("name"), "%name%");
+        cq.where(computerNamePredicate);
+ 
+        TypedQuery<Computer> query = em.createQuery(cq);
+        return query.getResultList();
+    }
+	
 	private DataSource dataSource;
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+//	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	ComputerMapper computerMapper;
 	
-	public ComputerDAO(NamedParameterJdbcTemplate namedParameterJdbcTemplate, DataSource dataSource) {
-		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+	public ComputerDAO(DataSource dataSource) {
+//		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 		this.dataSource=dataSource;
 		computerMapper=new ComputerMapper();
 	}
+
+	
 
 	/**
 	 * 
@@ -35,14 +68,15 @@ public class ComputerDAO {
 	 * @throws DAOConfigurationException
 	 */
 	public int ajouter(Computer computer) throws DAOConfigurationException {
-		SqlParameterSource namedParameters  = new MapSqlParameterSource()
-				.addValue("name",computer.getName())
-				.addValue("introduced",computer.getIntroduced())
-				.addValue("discontinued",computer.getDiscontinued())
-				.addValue("company.id", 
-							(computer.getCompany() != null) ? computer.getCompany().getId() : null );
-		
-		return namedParameterJdbcTemplate.update(Requete.ADD_COMPUTER.getMessage(), namedParameters);
+//		SqlParameterSource namedParameters  = new MapSqlParameterSource()
+//				.addValue("name",computer.getName())
+//				.addValue("introduced",computer.getIntroduced())
+//				.addValue("discontinued",computer.getDiscontinued())
+//				.addValue("company.id", 
+//							(computer.getCompany() != null) ? computer.getCompany().getId() : null );
+//		
+//		return namedParameterJdbcTemplate.update(Requete.ADD_COMPUTER.getMessage(), namedParameters);
+		return 0;
 	}
 	/**
 	 * 
@@ -52,14 +86,31 @@ public class ComputerDAO {
 	 */
 	public int modifier(Computer computer) throws DAOConfigurationException {
 		
-		SqlParameterSource namedParameters  = new MapSqlParameterSource()
-				.addValue("computer.id", computer.getId())
-				.addValue("name",computer.getName())
-				.addValue("introduced", computer.getIntroduced())
-				.addValue("discontinued", computer.getDiscontinued())
-				.addValue("company.id", computer.getCompany().getId());
+//		SqlParameterSource namedParameters  = new MapSqlParameterSource()
+//				.addValue("computer.id", computer.getId())
+//				.addValue("name",computer.getName())
+//				.addValue("introduced", computer.getIntroduced())
+//				.addValue("discontinued", computer.getDiscontinued())
+//				.addValue("company.id", computer.getCompany().getId());
+//		
+//		return namedParameterJdbcTemplate.update(Requete.EDIT_COMPUTER.getMessage(), namedParameters);
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaUpdate<Computer> criteriaUpdate = cb.createCriteriaUpdate(Computer.class);
+		Root<Computer> root = criteriaUpdate.from(Computer.class);
 		
-		return namedParameterJdbcTemplate.update(Requete.EDIT_COMPUTER.getMessage(), namedParameters);
+		criteriaUpdate.set("name", computer.getName());
+		criteriaUpdate.set("introduced", computer.getIntroduced());
+		criteriaUpdate.set("discontinued", computer.getDiscontinued());
+		criteriaUpdate.set("company_id", computer.getCompany().getId());
+		
+		criteriaUpdate.where(cb.equal(root.get("id"), computer.getId()));
+		 
+		em.createQuery(criteriaUpdate).executeUpdate();
+		
+		
+		return 0;
+
 
 	}
 
@@ -70,8 +121,20 @@ public class ComputerDAO {
 	 */
 	public int supprimer(int id) throws DAOConfigurationException {
 
-		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("id",id);
-		return namedParameterJdbcTemplate.update(Requete.DELETE_COMPUTER.getMessage(), namedParameters);
+//		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("id",id);
+//		return namedParameterJdbcTemplate.update(Requete.DELETE_COMPUTER.getMessage(), namedParameters);
+		
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+		CriteriaDelete<Computer> criteriaDelete = cb.createCriteriaDelete(Computer.class);
+		
+		Root<Computer> root = criteriaDelete.from(Computer.class);
+		Predicate computerIdPredicate = cb.equal(root.get("id"), id);
+		criteriaDelete.where(computerIdPredicate);
+		
+		em.createQuery(criteriaDelete).executeUpdate();
+		
+		return 0;
+
 	}
 	
 	/**
@@ -80,8 +143,10 @@ public class ComputerDAO {
 	 * @throws DAOConfigurationException
 	 */
 	public int deleteComputerByCompany(int id) throws DAOConfigurationException{
-		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("id",id);
-		return namedParameterJdbcTemplate.update(Requete.DELETE_COMPUTER_FOR_DELETE_COMPANY.getMessage(), namedParameters);
+//		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("id",id);
+//		return namedParameterJdbcTemplate.update(Requete.DELETE_COMPUTER_FOR_DELETE_COMPANY.getMessage(), namedParameters);
+		return 0;
+
 	}
 	
 	/**
@@ -90,8 +155,11 @@ public class ComputerDAO {
 	 */
 	public List<Computer> lister() throws DAOConfigurationException {
 		
-		return (List<Computer>) namedParameterJdbcTemplate.query(Requete.LIST_COMPUTER.getMessage()+";",new ComputerMapper());
-
+//		return (List<Computer>) namedParameterJdbcTemplate.query(Requete.LIST_COMPUTER.getMessage()+";",new ComputerMapper());
+		
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+//		Criteria crit = em.createCriteria(Computer.class);
+		return null;
 	}
 	
 	/**
@@ -101,16 +169,17 @@ public class ComputerDAO {
 	 */
 	public List<Computer> lister(Paginer paginer) throws DAOConfigurationException {
 		
-		SqlParameterSource namedParameters  = new MapSqlParameterSource()
-				.addValue("offset",paginer.getOffset())
-				.addValue("step",paginer.getStep());
+//		SqlParameterSource namedParameters  = new MapSqlParameterSource()
+//				.addValue("offset",paginer.getOffset())
+//				.addValue("step",paginer.getStep());
+//
+//		int testOrderBy = ComputerMapper.orderByMapper(paginer.getOrderBy(), paginer.getColumnName());
+//
+//		String requete = ComputerMapper.requestMapper(testOrderBy, "noSearch");
+//
+//		return (List<Computer>) namedParameterJdbcTemplate.query(requete, namedParameters, new ComputerMapper());
 
-		int testOrderBy = ComputerMapper.orderByMapper(paginer.getOrderBy(), paginer.getColumnName());
-
-		String requete = ComputerMapper.requestMapper(testOrderBy, "noSearch");
-
-		return (List<Computer>) namedParameterJdbcTemplate.query(requete, namedParameters, new ComputerMapper());
-
+		return null;
 	}
 
 	/**
@@ -120,10 +189,11 @@ public class ComputerDAO {
 	 */
 	public List<Computer> listSearch(String search) throws DAOConfigurationException {
 		
-		SqlParameterSource namedParameters  = new MapSqlParameterSource()
-				.addValue("search", '%' + search + '%');
-
-		return (List<Computer>) namedParameterJdbcTemplate.query(Requete.LIST_SEARCH.getMessage(), namedParameters, new ComputerMapper());
+//		SqlParameterSource namedParameters  = new MapSqlParameterSource()
+//				.addValue("search", '%' + search + '%');
+//
+//		return (List<Computer>) namedParameterJdbcTemplate.query(Requete.LIST_SEARCH.getMessage(), namedParameters, new ComputerMapper());
+		return null;
 	}
 	
 	/**
@@ -132,17 +202,18 @@ public class ComputerDAO {
 	 * @throws DAOConfigurationException
 	 */
 	public List<Computer> listSearch(Paginer paginer) throws DAOConfigurationException {
-		
-		SqlParameterSource namedParameters  = new MapSqlParameterSource()
-				.addValue("offset",paginer.getOffset())
-				.addValue("step",paginer.getStep())
-				.addValue("search", '%' + paginer.getSearch().toUpperCase() + '%');
-
-		int testOrderBy = ComputerMapper.orderByMapper(paginer.getOrderBy(), paginer.getColumnName());
-
-		String requete = ComputerMapper.requestMapper(testOrderBy, "search");
-
-		return (List<Computer>) namedParameterJdbcTemplate.query(requete, namedParameters, new ComputerMapper());
+//		
+//		SqlParameterSource namedParameters  = new MapSqlParameterSource()
+//				.addValue("offset",paginer.getOffset())
+//				.addValue("step",paginer.getStep())
+//				.addValue("search", '%' + paginer.getSearch().toUpperCase() + '%');
+//
+//		int testOrderBy = ComputerMapper.orderByMapper(paginer.getOrderBy(), paginer.getColumnName());
+//
+//		String requete = ComputerMapper.requestMapper(testOrderBy, "search");
+//
+//		return (List<Computer>) namedParameterJdbcTemplate.query(requete, namedParameters, new ComputerMapper());
+		return null;	
 	}
 	
 	/**
@@ -152,8 +223,9 @@ public class ComputerDAO {
 	 */
 	public Computer getComputerById(int id) throws DAOConfigurationException {
 
-		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("id",id);
-		return namedParameterJdbcTemplate.queryForObject(Requete.GET_COMPUTER_BY_ID.getMessage(), namedParameters, new ComputerMapper());
+//		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("id",id);
+//		return namedParameterJdbcTemplate.queryForObject(Requete.GET_COMPUTER_BY_ID.getMessage(), namedParameters, new ComputerMapper());
+		return null;
 	}
 
 }

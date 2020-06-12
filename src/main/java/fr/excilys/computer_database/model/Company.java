@@ -1,15 +1,18 @@
 package fr.excilys.computer_database.model;
 
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-@Embeddable
+@Table(name = "company")
 public class Company {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
 	@Column(name="name")
@@ -18,6 +21,11 @@ public class Company {
 	private Company(CompanyBuilder builder) {
 		this.id = builder.id;
 		this.name = builder.name;
+	}
+
+	public Company() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getId() {
