@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 
 import org.springframework.stereotype.Controller;
@@ -22,6 +23,8 @@ import fr.excilys.computer_database.service.ComputerService;
 
 @Controller
 public class DashboardController {
+	
+	EntityManager entityManager;
 	
 	ComputerService computerServ;
 	CompanyService companyServ;
@@ -51,11 +54,11 @@ public class DashboardController {
 							  @RequestParam(value="deleteSuccess", defaultValue="0", required = false) int deleteSuccess,
 							  ModelMap modelMap)
 									  throws ServletException, IOException, DAOConfigurationException {
-//		
-//		ComputerDAO compd=new ComputerDAO();
-//		List<Computer> ncomp=compd.findComputerByName("IPhone");
-//		
-//		System.out.println(ncomp);
+		
+		ComputerDAO compd = new ComputerDAO(entityManager);
+		List<Computer> ncomp=compd.findComputerByName("IPhone");
+		
+		System.out.println(ncomp);
 		
 		if (search != null) {
 
