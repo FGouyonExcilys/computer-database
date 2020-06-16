@@ -133,7 +133,7 @@ public class Computer{
 	@Override
 	public String toString() {
 		return "Computer [ id= " + id + ", name= " + name + ", introduced= " + introduced + ", discontinued= "
-				+ discontinued + ", company= " + company.getName() + " ]";
+				+ discontinued + ", company= " + (company != null ? company.toString() : "null" ) + " ]";
 	}
 
 }

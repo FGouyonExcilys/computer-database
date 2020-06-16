@@ -18,36 +18,28 @@ public class ComputerService {
 		this.computerDao = computerDao;
 	}
 
-	public List<Computer> getComputerList() throws DAOConfigurationException {
-		return computerDao.lister();
+	public List<Computer> getComputerList(Paginer paginer) throws DAOConfigurationException {
+		return computerDao.computerList(paginer);
+	}
+	
+	public List<Computer> getComputerListInfo(Paginer paginer) throws DAOConfigurationException {
+		return computerDao.computerListInfo(paginer);
+	}
+	
+	public void addComputer(Computer computer) throws DAOConfigurationException {
+		computerDao.ajouter(computer);
 	}
 
-	public List<Computer> getComputerListPaginer(Paginer paginer) throws DAOConfigurationException {
-		return computerDao.lister(paginer);
+	public void editComputer(Computer computer) throws DAOConfigurationException {
+		computerDao.modifier(computer);
 	}
 	
-	public List<Computer> getComputerListSearched(String search) throws DAOConfigurationException {
-		return computerDao.listSearch(search);
-	}
-	
-	public List<Computer> getComputerListSearchedPaginer(Paginer paginer) throws DAOConfigurationException {
-		return computerDao.listSearch(paginer);
-	}
-	
-	public int addComputer(Computer computer) throws DAOConfigurationException {
-		return computerDao.ajouter(computer);
-	}
-
-	public int editComputer(Computer computer) throws DAOConfigurationException {
-		return computerDao.modifier(computer);
-	}
-	
-	public int deleteComputer(int id) throws DAOConfigurationException {
-		return computerDao.supprimer(id);
+	public void deleteComputer(int id) throws DAOConfigurationException {
+		computerDao.supprimer(id);
 	}
 
 	public Computer getComputerById(int id) throws DAOConfigurationException {
-		return computerDao.getComputerById(id);
+		return computerDao.getComputerById(id).get();
 	}
 
 	

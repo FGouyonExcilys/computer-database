@@ -1,8 +1,17 @@
 package fr.excilys.computer_database.dao;
 
 import java.util.List;
+import java.util.Optional;
 
-import javax.sql.DataSource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,59 +23,65 @@ import fr.excilys.computer_database.model.Company;
 @Repository
 public class CompanyDAO {
 
+	@PersistenceUnit
+	private EntityManagerFactory entityManagerFactory;
+	
+	private CriteriaBuilder criteriaBuilder;
+	
 	ComputerDAO computerDao;
 	CompanyMapper companyMapper;
-//	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-	private DataSource dataSource;
-
-	private CompanyDAO(DataSource dataSource) {
-		super();
-		computerDao = new ComputerDAO(dataSource);
-		this.dataSource = dataSource;
-//		this.namedParameterJdbcTemplate=namedParameterJdbcTemplate;
-		companyMapper = new CompanyMapper();
-	}
-
-	public CompanyDAO() {
-		super();
-		// TODO Auto-generated constructor stub
+	
+	public void init() {
+		this.criteriaBuilder = entityManagerFactory.getCriteriaBuilder();
 	}
 
 	@Transactional
-	public int deleteCompany(int companyId) throws DAOConfigurationException {
+	public void deleteCompany(int companyId) throws DAOConfigurationException {
 
-//		computerDao.deleteComputerByCompany(companyId);
-//		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("id",companyId);
-//		return namedParameterJdbcTemplate.update(Requete.DELETE_COMPANY.getMessage(),namedParameters);
-		return 0;
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.joinTransaction();
+		criteriaBuilder= entityManager.getCriteriaBuilder();
+		CriteriaDelete< Company>criteriaDelete=criteriaBuilder.createCriteriaDelete(Company.class);
+		
+		Root<Company>root=criteriaDelete.from(Company.class);
+		Predicate byId=criteriaBuilder.equal(root.get("id"), companyId);
+		
+		criteriaDelete.where(byId);
+		entityManager.createQuery(criteriaDelete).executeUpdate();
 
 	}
 
 	public List<Company> lister() throws DAOConfigurationException {
 
-//		return namedParameterJdbcTemplate.query(Requete.LIST_COMPANY.getMessage()+";",new CompanyMapper());
-		return null;
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		criteriaBuilder = entityManager.getCriteriaBuilder();
+		CriteriaQuery<Company> criteriaQuery = criteriaBuilder.createQuery(Company.class);
+		
+		Root<Company> root = criteriaQuery.from(Company.class);
+		criteriaQuery.select(root);
+		
+		TypedQuery<Company> companyList = entityManager.createQuery(criteriaQuery);
+		return companyList.getResultList();
 	}
 
-	public List<Company> lister(int offset, int step) throws DAOConfigurationException {
-
-//		SqlParameterSource namedParameters  = new MapSqlParameterSource()
-//				.addValue("offset",offset)
-//				.addValue("step",step);
-//
-//		return (List<Company>)
-//				namedParameterJdbcTemplate.query(Requete.LIST_COMPANY.getMessage()+Requete.LIMIT.getMessage(),
-//						namedParameters, new CompanyMapper());
-		return null;
-
-	}
-
-	public Company getCompanyById(int id) throws DAOConfigurationException {
-
-//		SqlParameterSource namedParameters  = new MapSqlParameterSource().addValue("id",id);
-//		return namedParameterJdbcTemplate.queryForObject(Requete.GET_COMPANY_BY_ID.getMessage(), namedParameters, new CompanyMapper());
-//	
-		return null;
+	public Optional<Company> getCompanyById(int id) throws DAOConfigurationException {
+		
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		criteriaBuilder=entityManager.getCriteriaBuilder();
+		CriteriaQuery<Company> criteriaQuery=criteriaBuilder.createQuery(Company.class);
+		
+		Root<Company>root=criteriaQuery.from(Company.class);
+		Predicate byId = criteriaBuilder.equal(root.get("id"),id);
+		
+		criteriaQuery.where(byId);
+		 
+		TypedQuery<Company> typedQuery = entityManager.createQuery(criteriaQuery);
+	    Company company = typedQuery.getSingleResult();
+		if(company !=null) {
+			return Optional.of(company);
+		}
+		return Optional.empty();
+		
 	}
 
 }

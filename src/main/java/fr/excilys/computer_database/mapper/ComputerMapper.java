@@ -7,6 +7,10 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +18,6 @@ import fr.excilys.computer_database.dto.CompanyDTO;
 import fr.excilys.computer_database.dto.ComputerDTO;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
-import fr.excilys.computer_database.utilisateur.Requete;
 
 @Component
 public class ComputerMapper implements RowMapper<Computer> {
@@ -57,7 +60,6 @@ public class ComputerMapper implements RowMapper<Computer> {
 			
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -103,98 +105,5 @@ public class ComputerMapper implements RowMapper<Computer> {
 		compDTO.setId(id);
 		return compDTO;
 	}
-	
-
-	public static int orderByMapper(String orderBy, String columnName) {
-
-		if (orderBy == null || columnName == null) {
-			return 0;
-		}
-
-		if (orderBy.equals("asc")) {
-			
-			switch (columnName) {
-
-			case "computerName":
-				return 1;
-			case "introduced":
-				return 2;
-			case "discontinued":
-				return 3;
-			case "companyName":
-				return 4;
-			default:
-				return 0;
-			}
-
-		} else if (orderBy.equals("desc")) {
-			
-			switch (columnName) {
-
-			case "computerName":
-				return -1;
-			case "introduced":
-				return -2;
-			case "discontinued":
-				return -3;
-			case "companyName":
-				return -4;
-			default:
-				return 0;
-			}
-
-		} else {
-			return 0;
-		}
-	}
-	
-	public static String requestMapper(int type, String search) {
-		
-		if(search == "search") {
-			switch(type) {
-			case 1:
-				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.LIMIT.getMessage();
-			case 2:
-				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.LIMIT.getMessage();
-			case 3:
-				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.LIMIT.getMessage();
-			case 4:
-				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.LIMIT.getMessage();
-			case -1:
-				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
-			case -2:
-				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
-			case -3:
-				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
-			case -4:
-				return Requete.LIST_SEARCH.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
-			default:
-				return Requete.LIST_SEARCH.getMessage() + Requete.LIMIT.getMessage();
-			}
-		}else {
-			switch(type) {
-			case 1:
-				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.LIMIT.getMessage();
-			case 2:
-				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.LIMIT.getMessage();
-			case 3:
-				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.LIMIT.getMessage();
-			case 4:
-				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.LIMIT.getMessage();
-			case -1:
-				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_COMPUTER_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
-			case -2:
-				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_INTRODUCED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
-			case -3:
-				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_DISCONTINUED.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
-			case -4:
-				return Requete.LIST_COMPUTER.getMessage() + Requete.ORDER_BY_COMPANY_NAME.getMessage() + Requete.DESC.getMessage() + Requete.LIMIT.getMessage();
-			default:
-				return Requete.LIST_COMPUTER.getMessage() + Requete.LIMIT.getMessage();
-			}
-		}
-		
-	}
-	
 
 }

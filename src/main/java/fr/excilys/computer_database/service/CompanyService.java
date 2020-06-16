@@ -25,12 +25,8 @@ public class CompanyService {
 		return companyDao.lister();
 	}
 	
-	public List<Company> getCompanyListPaginer(int offset, int pas) throws DAOConfigurationException {
-		return companyDao.lister(offset, pas);
-	}
-	
 	public Company getCompanyById(int id) throws DAOConfigurationException {
-		return companyDao.getCompanyById(id);
+		return companyDao.getCompanyById(id).get();
 	}
 
 }

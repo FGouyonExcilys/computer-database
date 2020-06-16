@@ -52,15 +52,5 @@ public class CompanyServiceTest {
 		assertEquals(compServ.getCompanyList(), companies);
 	}
 	
-	@Test
-	public void testGetCompanyListPaginer() throws ClassNotFoundException, DAOConfigurationException  {
-		ArrayList<Company> companies = new ArrayList<>();
-		Mockito.when(companyDao.lister(0,20)).thenReturn(companies);
-		
-		CompanyService compServ = new CompanyService(companyDao);
-		
-		assertEquals(compServ.getCompanyListPaginer(0,20), companies);
-	}
-	
 
 }

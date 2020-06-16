@@ -31,9 +31,8 @@
 			<a class="dropdown-item" href="?lang=<spring:message code="label.urlswitch"/>
 			
 							<c:if test="${ step != null }">&step=${ step }</c:if>
-							<c:if test="${ search != null }">&search=${ search }</c:if>
-							<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-							<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
+							<c:if test="${ search != '' }">&search=${ search }</c:if>
+							<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>">
 			<span class="flag-icon flag-icon-<spring:message code="label.flag" /> navbar-brand" style="width:1%; "></span></a>
 			<a class="navbar-brand" href="dashboard">&nbsp;&nbsp;&nbsp;Application - 
 				<spring:message code="label.title"/> </a>
@@ -60,20 +59,20 @@
 				</c:when>
 			</c:choose>
 			<c:choose>
-				<c:when test="${ search != null }">
-					<c:if test="${ listeOrdiSearched.size() != 1 }">
-						<h1 id="homeTitle">${ listeOrdiSearched.size() } <spring:message code="label.computersFoundFor"/> "${ search }" </h1>
+				<c:when test="${ search != '' }">
+					<c:if test="${ computerList.size() != 1 }">
+						<h1 id="homeTitle">${ computerList.size() } <spring:message code="label.computersFoundFor"/> "${ search }" </h1>
 					</c:if>
-					<c:if test="${ listeOrdiSearched.size() == 1 }">
-						<h1 id="homeTitle">${ listeOrdiSearched.size() } <spring:message code="label.computerFoundFor"/> "${ search }" </h1>
+					<c:if test="${ computerList.size() == 1 }">
+						<h1 id="homeTitle">${ computerList.size() } <spring:message code="label.computerFoundFor"/> "${ search }" </h1>
 					</c:if>
 				</c:when>
 				<c:otherwise>
-					<c:if test="${ listeOrdi.size() != 1 }">
-						<h1 id="homeTitle">${ listeOrdi.size() } <spring:message code="label.computersFound"/></h1>
+					<c:if test="${ computerList.size() != 1 }">
+						<h1 id="homeTitle">${ computerList.size() } <spring:message code="label.computersFound"/></h1>
 					</c:if>
-					<c:if test="${ listeOrdi.size() == 1 }">
-						<h1 id="homeTitle">${ listeOrdi.size() } <spring:message code="label.computerFound"/></h1>
+					<c:if test="${ computerList.size() == 1 }">
+						<h1 id="homeTitle">${ computerList.size() } <spring:message code="label.computerFound"/></h1>
 					</c:if>
 				</c:otherwise>
 			</c:choose>
@@ -125,23 +124,23 @@
 						</span></th>
 
 						<th><c:choose>
-								<c:when test="${ orderBy == 'asc' && columnName.equals('computerName') }">
-									<a href="dashboard?columnName=computerName&orderBy=desc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+								<c:when test="${ orderBy == 'name asc' }">
+									<a href="dashboard?orderBy=name desc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
 										id="orderByComputerName"
 										class="alert-link"><spring:message code="label.computerName" /></a> &#x25bc;
 								</c:when>
-								<c:when test="${ orderBy == 'desc' && columnName.equals('computerName') }">
-									<a href="dashboard?columnName=computerName&orderBy=asc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+								<c:when test="${ orderBy == 'name desc' }">
+									<a href="dashboard?orderBy=name asc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
 										id="orderByComputerName"
 										class="alert-link"><spring:message code="label.computerName" /></a> &#x25b2;
 								</c:when>
 								<c:otherwise>
-									<a href="dashboard?columnName=computerName&orderBy=asc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+									<a href="dashboard?orderBy=name asc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
 										id="orderByComputerName"
 										class="alert-link"><spring:message code="label.computerName" /></a>
@@ -149,73 +148,73 @@
 							</c:choose></th>
 
 						<th><c:choose>
-								<c:when test="${ orderBy == 'asc' && columnName.equals('introduced') }">
-									<a href="dashboard?columnName=introduced&orderBy=desc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+								<c:when test="${ orderBy == 'introduced asc' }">
+									<a href="dashboard?orderBy=introduced desc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
-										id="orderByComputerName"
+										id="orderByIntroduced"
 										class="alert-link"><spring:message code="label.dateIntro" /></a> &#x25bc;
 								</c:when>
-								<c:when test="${ orderBy == 'desc' && columnName.equals('introduced') }">
-									<a href="dashboard?columnName=introduced&orderBy=asc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+								<c:when test="${ orderBy == 'introduced desc' }">
+									<a href="dashboard?orderBy=introduced asc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
-										id="orderByComputerName"
+										id="orderByIntroduced"
 										class="alert-link"><spring:message code="label.dateIntro" /></a> &#x25b2;
 								</c:when>
 								<c:otherwise>
-									<a href="dashboard?columnName=introduced&orderBy=asc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+									<a href="dashboard?orderBy=introduced asc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
-										id="orderByComputerName"
+										id="orderByIntroduced"
 										class="alert-link"><spring:message code="label.dateIntro" /></a>
 								</c:otherwise>
 							</c:choose></th>
 						<!-- Table header for Discontinued Date -->
 						<th><c:choose>
-								<c:when test="${ orderBy == 'asc' && columnName.equals('discontinued') }">
-									<a href="dashboard?columnName=discontinued&orderBy=desc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+								<c:when test="${ orderBy == 'discontinued asc' }">
+									<a href="dashboard?orderBy=discontinued desc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
-										id="orderByComputerName"
+										id="orderByDiscontinued"
 										class="alert-link"><spring:message code="label.dateDisc" /></a> &#x25bc;
 								</c:when>
-								<c:when test="${ orderBy == 'desc' && columnName.equals('discontinued') }">
-									<a href="dashboard?columnName=discontinued&orderBy=asc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+								<c:when test="${ orderBy == 'discontinued desc' }">
+									<a href="dashboard?orderBy=discontinued asc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
-										id="orderByComputerName"
+										id="orderByDiscontinued"
 										class="alert-link"><spring:message code="label.dateDisc" /></a> &#x25b2;
 								</c:when>
 								<c:otherwise>
-									<a href="dashboard?columnName=discontinued&orderBy=asc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+									<a href="dashboard?orderBy=discontinued asc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
-										id="orderByComputerName"
+										id="orderByDiscontinued"
 										class="alert-link"><spring:message code="label.dateDisc" /></a>
 								</c:otherwise>
 							</c:choose></th>
 						<!-- Table header for Company -->
 						<th><c:choose>
-								<c:when test="${ orderBy == 'asc' && columnName.equals('companyName') }">
-									<a href="dashboard?columnName=companyName&orderBy=desc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+								<c:when test="${ orderBy == 'company.name asc' }">
+									<a href="dashboard?orderBy=company.name desc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
-										id="orderByComputerName"
+										id="orderByCompanyName"
 										class="alert-link"><spring:message code="label.company" /></a> &#x25bc;
 								</c:when>
-								<c:when test="${ orderBy == 'desc' && columnName.equals('companyName') }">
-									<a href="dashboard?columnName=companyName&orderBy=asc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+								<c:when test="${ orderBy == 'company.name desc' }">
+									<a href="dashboard?orderBy=company.name asc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
-										id="orderByComputerName"
+										id="orderByCompanyName"
 										class="alert-link"><spring:message code="label.company" /></a> &#x25b2;
 								</c:when>
 								<c:otherwise>
-									<a href="dashboard?columnName=companyName&orderBy=asc
-										<c:if test="${ search != null }">&search=${ search }</c:if>
+									<a href="dashboard?orderBy=company.name asc
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
 										<c:if test="${ step != null }">&step=${ step }</c:if>"
-										id="orderByComputerName"
+										id="orderByCompanyName"
 										class="alert-link"><spring:message code="label.company" /></a>
 								</c:otherwise>
 							</c:choose></th>
@@ -225,8 +224,8 @@
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 					<c:choose>
-						<c:when test="${ search != null }">
-							<c:forEach items="${ listeOrdiSearchedPaginer }" var="computer">
+						<c:when test="${ search != '' }">
+							<c:forEach items="${ computerListDisplayed }" var="computer">
 								<tr>
 									<td class="editMode"><input type="checkbox" name="cb"
 										class="cb" value="${ computer.getId() }"></td>
@@ -240,7 +239,7 @@
 
 						</c:when>
 						<c:otherwise>
-							<c:forEach items="${ listeOrdiPaginer }" var="computer">
+							<c:forEach items="${ computerListDisplayed }" var="computer">
 								<tr>
 									<td class="editMode"><input type="checkbox" name="cb"
 										class="cb" value="${ computer.getId() }"></td>
@@ -268,9 +267,8 @@
 									<a 
 										href="dashboard?pageIterator=${ pageIterator - 1 }
 										<c:if test="${ step != null }">&step=${ step }</c:if>
-										<c:if test="${ search != null }">&search=${ search }</c:if>
-										<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-										<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>"
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
+										<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>"
 										aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 									</a>
 								</c:when>
@@ -278,9 +276,8 @@
 						<li><a
 							href="dashboard?pageIterator=1
 								<c:if test="${ step != null }">&step=${ step }</c:if>
-								<c:if test="${ search != null }">&search=${ search }</c:if>
-								<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-								<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
+								<c:if test="${ search != '' }">&search=${ search }</c:if>
+								<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>">
 								<c:out value="1" />
 						</a></li>
 
@@ -296,9 +293,8 @@
 									<li><a
 										href="dashboard?pageIterator=${ i }
 										<c:if test="${ step != null }">&step=${ step }</c:if>
-										<c:if test="${ search != null }">&search=${ search }</c:if>
-										<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-										<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
+										<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>">
 											<c:out value="${ i }" />
 									</a></li>
 								</c:forEach>
@@ -310,9 +306,8 @@
 									<li><a
 										href="dashboard?pageIterator=${ i }
 										<c:if test="${ step != null }">&step=${ step }</c:if>
-										<c:if test="${ search != null }">&search=${ search }</c:if>
-										<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-										<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
+										<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>">
 											<c:out value="${ i }" />
 									</a></li>
 								</c:forEach>
@@ -323,9 +318,8 @@
 									<li><a
 										href="dashboard?pageIterator=${ i }
 										<c:if test="${ step != null }">&step=${ step }</c:if>
-										<c:if test="${ search != null }">&search=${ search }</c:if>
-										<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-										<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
+										<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>">
 											<c:out value="${ i }" />
 									</a></li>
 								</c:forEach>
@@ -341,9 +335,8 @@
 						<li><a
 							href="dashboard?pageIterator=${ lastPageIndex }
 							<c:if test="${ step != null }">&step=${ step }</c:if>
-							<c:if test="${ search != null }">&search=${ search }</c:if>
-							<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-							<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
+							<c:if test="${ search != '' }">&search=${ search }</c:if>
+							<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>">
 								<c:out value="${ lastPageIndex }" />
 						</a></li>
 
@@ -352,9 +345,8 @@
 									<a
 										href="dashboard?pageIterator=${ pageIterator + 1 }
 										<c:if test="${ step != null }">&step=${ step }</c:if>
-										<c:if test="${ search != null }">&search=${ search }</c:if>
-										<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-										<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>"
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
+										<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>"
 										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
 								</c:when>
 							</c:choose></li>
@@ -365,9 +357,8 @@
 									<a
 										href="dashboard?pageIterator=${ pageIterator - 1 }
 										<c:if test="${ step != null }">&step=${ step }</c:if>
-										<c:if test="${ search != null }">&search=${ search }</c:if>
-										<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-										<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>"
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
+										<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>"
 										aria-label="Previous"> <span aria-hidden="true">&laquo;</span></a>
 								</c:when>
 							</c:choose></li>
@@ -375,9 +366,8 @@
 							<li><a
 								href="dashboard?pageIterator=${ i }
 								<c:if test="${ step != null }">&step=${ step }</c:if>
-								<c:if test="${ search != null }">&search=${ search }</c:if>
-								<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-								<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
+								<c:if test="${ search != '' }">&search=${ search }</c:if>
+								<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>">
 									<c:out value="${ i }" />
 							</a></li>
 						</c:forEach>
@@ -386,9 +376,8 @@
 									<a
 										href="dashboard?pageIterator=${ pageIterator + 1 }
 										<c:if test="${ step != null }">&step=${ step }</c:if>
-										<c:if test="${ search != null }">&search=${ search }</c:if>
-										<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-										<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>"
+										<c:if test="${ search != '' }">&search=${ search }</c:if>
+										<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>"
 										aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
 								</c:when>
 							</c:choose></li>
@@ -397,24 +386,21 @@
 			</ul>
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<a href="dashboard?pageIterator=1&step=10
-					<c:if test="${ search != null }">&search=${ search }</c:if>
-					<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-					<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
+					<c:if test="${ search != '' }">&search=${ search }</c:if>
+					<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>">
 					<button type="button" class="btn btn-default"
 						onclick="<c:set var="pageIterator" value="1" />">10</button>
 				</a>
 				<a href="dashboard?pageIterator=1&step=50
-					<c:if test="${ search != null }">&search=${ search }</c:if>
-					<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-					<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
+					<c:if test="${ search != '' }">&search=${ search }</c:if>
+					<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>">
 					<button
 						type="button" class="btn btn-default"
 						onclick="<c:set var="pageIterator" value="1" />">50</button>
 				</a>
 				<a href="dashboard?pageIterator=1&step=100
-					<c:if test="${ search != null }">&search=${ search }</c:if>
-					<c:if test="${ orderBy != null }">&orderBy=${ orderBy }</c:if>
-					<c:if test="${ columnName != null }">&columnName=${ columnName }</c:if>">
+					<c:if test="${ search != '' }">&search=${ search }</c:if>
+					<c:if test="${ orderBy != '' }">&orderBy=${ orderBy }</c:if>">
 					<button
 						type="button" class="btn btn-default"
 						onclick="<c:set var="pageIterator" value="1" />">100</button>
