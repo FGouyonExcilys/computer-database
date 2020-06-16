@@ -8,7 +8,7 @@
 	<groupId>fr.excilys</groupId>
 	<artifactId>computer-database</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
 
 	<name>computer-database Maven Webapp</name>
 	<!-- FIXME change it to the project's website -->
@@ -192,4 +192,12 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<modules>
+		<module>core</module>
+		<module>persistence</module>
+		<module>service</module>
+		<module>binding</module>
+		<module>console</module>
+		<module>webapp</module>
+	</modules>
 </project>
