@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import fr.excilys.computer_database.exceptions.DAOConfigurationException;
 import fr.excilys.computer_database.logging.Loggers;
-import fr.excilys.computer_database.mapper.ComputerMapper;
 import fr.excilys.computer_database.model.Company;
 import fr.excilys.computer_database.model.Computer;
 import fr.excilys.computer_database.model.Paginer;
@@ -33,8 +32,6 @@ public class ComputerDAO {
 	private EntityManagerFactory entityManagerFactory;
 
 	private CriteriaBuilder criteriaBuilder;
-
-	ComputerMapper computerMapper;
 
 	/**
 	 * 
