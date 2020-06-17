@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.servlet.ServletException;
 
 import org.springframework.stereotype.Controller;
@@ -23,9 +21,6 @@ import fr.excilys.computer_database.service.ComputerService;
 
 @Controller
 public class DashboardController {
-
-	@PersistenceContext
-	EntityManager entityManager;
 
 	ComputerService computerServ;
 	CompanyService companyServ;
