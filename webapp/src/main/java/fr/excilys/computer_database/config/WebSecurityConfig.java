@@ -18,7 +18,7 @@ import fr.excilys.computer_database.service.DBAuthenticationService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	DBAuthenticationService dbAauthenticationService;
+	DBAuthenticationService dbAuthenticationService;
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -29,13 +29,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.inMemoryAuthentication().withUser("admin1").password("12345").roles("USER, ADMIN");
 
 		// For User in database.
-		auth.userDetailsService(dbAauthenticationService);
+		auth.userDetailsService(dbAuthenticationService);
 
-	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-	    return new BCryptPasswordEncoder();
 	}
 
 	@Override
@@ -51,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/user").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
 		// For ADMIN only.
-		http.authorizeRequests().antMatchers("/dashboard", "/addComputer", "/editComputer").access("hasRole('ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/dashboard", "/addComputer", "/editComputer")
+				.access("hasRole('ROLE_ADMIN')");
 
 		// When the user has logged in as XX.
 		// But access a page that requires role YY,
@@ -70,5 +66,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// Config for Logout Page
 				.and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
 
+	}
+
+	@Autowired
+	public void configureAuthenticationManagerBuilder(AuthenticationManagerBuilder authenticationManagerBuilder)
+			throws Exception {
+
+		authenticationManagerBuilder.userDetailsService(dbAuthenticationService).passwordEncoder(passwordEncoder());
+		authenticationManagerBuilder.inMemoryAuthentication().withUser("user1")
+				.password(passwordEncoder().encode("toto")).roles("USER");
+		authenticationManagerBuilder.inMemoryAuthentication().withUser("admin1")
+				.password(passwordEncoder().encode("12345")).roles("ADMIN");
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 }

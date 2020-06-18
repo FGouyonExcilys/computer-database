@@ -2,19 +2,20 @@ package fr.excilys.computer_database.controllers;
 
 import java.security.Principal;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import fr.excilys.computer_database.service.DBAuthenticationService;
+
 @Controller
 public class LoginController {
-
-	UserDetailsService userDetailsService;
 	
-	public LoginController(UserDetailsService userDetailsService) {
-		this.userDetailsService = userDetailsService;
+	DBAuthenticationService dbAuthServ;
+	
+	public LoginController(DBAuthenticationService dbAuthServ) {
+		this.dbAuthServ = dbAuthServ;
 	}
 	
 	@GetMapping(value = "/login")
