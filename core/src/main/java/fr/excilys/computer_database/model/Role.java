@@ -21,6 +21,8 @@ public class Role {
 	@Column(name = "user_role")
 	private String user_role;
 
+	public Role() {}
+	
 	private Role(RoleBuilder roleBuilder) {
 		this.username = roleBuilder.username;
 		this.user_role = roleBuilder.user_role;

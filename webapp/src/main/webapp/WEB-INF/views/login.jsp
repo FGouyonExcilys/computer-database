@@ -23,8 +23,8 @@
 	<h3>Enter username and password:</h3>
 
 	<form name='f' id="f"
-		action="<c:url value="${pageContext.request.contextPath}/j_spring_security_check"/>"
-		method='POST' role="from">
+		action="<c:url value="/j_spring_security_check"/>"
+		method='POST' role="form">
 		<table>
 			<tr>
 				<td>User:</td>

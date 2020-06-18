@@ -21,6 +21,8 @@ public class User {
 	@Column(name = "password")
 	private String password;
 
+	public User() {}
+	
 	private User(UserBuilder userBuilder) {
 		this.username = userBuilder.username;
 		this.password = userBuilder.password;

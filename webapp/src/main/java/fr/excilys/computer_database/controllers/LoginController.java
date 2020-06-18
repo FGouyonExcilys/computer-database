@@ -23,12 +23,6 @@ public class LoginController {
 		return "login";
 
 	}
-	
-	@PostMapping(value = "/login")
-	public String postLogin(ModelMap modelMap) {
-		return "login";
-		
-	}
 
 	@GetMapping(value = "/user")
 	public String user(ModelMap modelMap, Principal principal) {

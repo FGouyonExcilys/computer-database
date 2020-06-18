@@ -25,7 +25,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = { "fr.excilys.computer_database.dao", "fr.excilys.computer_database.service",
-		"fr.excilys.computer_database.mapper", "fr.excilys.computer_database.controllers" })
+		"fr.excilys.computer_database.mapper", "fr.excilys.computer_database.controllers", "fr.excilys.computer_database.config" })
 @PropertySource("classpath:datasource.properties")
 public class SpringConfig implements WebApplicationInitializer, WebMvcConfigurer {
 

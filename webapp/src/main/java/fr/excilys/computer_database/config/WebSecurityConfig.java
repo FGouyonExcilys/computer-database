@@ -21,16 +21,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	DBAuthenticationService dbAuthenticationService;
 
 	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	public void configureAuthenticationManagerBuilder(AuthenticationManagerBuilder authenticationManagerBuilder)
+			throws Exception {
 
-		// Users in memory.
+		authenticationManagerBuilder.userDetailsService(dbAuthenticationService).passwordEncoder(passwordEncoder());
+		
+		authenticationManagerBuilder.inMemoryAuthentication()
+									.withUser("user1")
+									.password(passwordEncoder().encode("toto"))
+									.roles("USER");
+		
+		authenticationManagerBuilder.inMemoryAuthentication()
+									.withUser("admin1")
+									.password(passwordEncoder().encode("12345"))
+									.roles("ADMIN");
+		
+		authenticationManagerBuilder.inMemoryAuthentication()
+									.withUser("Florent")
+									.password(passwordEncoder().encode("coucou"))
+									.roles("ADMIN");
+	}
 
-		auth.inMemoryAuthentication().withUser("user1").password("12345").roles("USER");
-		auth.inMemoryAuthentication().withUser("admin1").password("12345").roles("USER, ADMIN");
-
-		// For User in database.
-		auth.userDetailsService(dbAuthenticationService);
-
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 
 	@Override
@@ -68,19 +82,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	}
 
-	@Autowired
-	public void configureAuthenticationManagerBuilder(AuthenticationManagerBuilder authenticationManagerBuilder)
-			throws Exception {
-
-		authenticationManagerBuilder.userDetailsService(dbAuthenticationService).passwordEncoder(passwordEncoder());
-		authenticationManagerBuilder.inMemoryAuthentication().withUser("user1")
-				.password(passwordEncoder().encode("toto")).roles("USER");
-		authenticationManagerBuilder.inMemoryAuthentication().withUser("admin1")
-				.password(passwordEncoder().encode("12345")).roles("ADMIN");
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+	
 }
