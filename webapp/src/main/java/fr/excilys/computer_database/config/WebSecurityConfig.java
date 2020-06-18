@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import fr.excilys.computer_database.services.dbAuthenticationService;
+import fr.excilys.computer_database.service.DBAuthenticationService;
 
 @Configuration
 // @EnableWebSecurity = @EnableWebMVCSecurity + Extra features
@@ -18,7 +18,7 @@ import fr.excilys.computer_database.services.dbAuthenticationService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	dbAuthenticationService dbAauthenticationService;
+	DBAuthenticationService dbAauthenticationService;
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/user").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
 		// For ADMIN only.
-		http.authorizeRequests().antMatchers("/dashboard").access("hasRole('ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/dashboard", "/addComputer", "/editComputer").access("hasRole('ROLE_ADMIN')");
 
 		// When the user has logged in as XX.
 		// But access a page that requires role YY,

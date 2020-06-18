@@ -20,11 +20,11 @@
 		</div>
 	</c:if>
 
-	<h3>Enter user name and password:</h3>
+	<h3>Enter username and password:</h3>
 
-	<form name='f'
-		action="/j_spring_security_check"
-		method='POST'>
+	<form name='f' id="f"
+		action="<c:url value="${pageContext.request.contextPath}/j_spring_security_check"/>"
+		method='POST' role="from">
 		<table>
 			<tr>
 				<td>User:</td>

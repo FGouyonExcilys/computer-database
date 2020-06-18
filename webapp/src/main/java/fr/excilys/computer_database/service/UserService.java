@@ -1,4 +1,4 @@
-package fr.excilys.computer_database.services;
+package fr.excilys.computer_database.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;

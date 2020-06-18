@@ -1,4 +1,4 @@
-package fr.excilys.computer_database.services;
+package fr.excilys.computer_database.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import fr.excilys.computer_database.dao.UserDAO;
 import fr.excilys.computer_database.model.User;
  
 @Service
-public class dbAuthenticationService implements UserDetailsService {
+public class DBAuthenticationService implements UserDetailsService {
  
     @Autowired
     private UserDAO userDAO;

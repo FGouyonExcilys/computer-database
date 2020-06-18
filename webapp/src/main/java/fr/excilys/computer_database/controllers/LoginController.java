@@ -1,17 +1,32 @@
 package fr.excilys.computer_database.controllers;
 
 import java.security.Principal;
+
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class LoginController {
 
+	UserDetailsService userDetailsService;
+	
+	public LoginController(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
+	
 	@GetMapping(value = "/login")
-	public String login(ModelMap modelMap) {
+	public String getLogin(ModelMap modelMap) {
 		return "login";
 
+	}
+	
+	@PostMapping(value = "/login")
+	public String postLogin(ModelMap modelMap) {
+		return "login";
+		
 	}
 
 	@GetMapping(value = "/user")
