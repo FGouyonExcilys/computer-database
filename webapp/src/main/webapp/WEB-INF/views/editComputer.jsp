@@ -24,7 +24,8 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container" style="white-space:nowrap">
-			<a class="dropdown-item" href="?lang=<spring:message code="label.urlswitch" />">
+			<a class="dropdown-item" href="?<c:if test="${ id != null }">id=${ id }</c:if>&lang=<spring:message code="label.urlswitch" />
+						">
 			<span class="flag-icon flag-icon-<spring:message code="label.flag" /> navbar-brand" style="width:1%; "></span></a>
 			<a class="navbar-brand" href="dashboard">&nbsp;&nbsp;&nbsp;Application - 
 				<spring:message code="label.title"/> </a>

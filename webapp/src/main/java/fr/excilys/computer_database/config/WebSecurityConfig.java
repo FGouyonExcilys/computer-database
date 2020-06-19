@@ -24,7 +24,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configureAuthenticationManagerBuilder(AuthenticationManagerBuilder authenticationManagerBuilder)
 			throws Exception {
 
-		authenticationManagerBuilder.userDetailsService(dbAuthenticationService).passwordEncoder(passwordEncoder());
+		authenticationManagerBuilder.userDetailsService(dbAuthenticationService)
+									.passwordEncoder(passwordEncoder());
 		
 		authenticationManagerBuilder.inMemoryAuthentication()
 									.withUser("user1")
@@ -34,12 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		authenticationManagerBuilder.inMemoryAuthentication()
 									.withUser("admin1")
 									.password(passwordEncoder().encode("12345"))
-									.roles("ADMIN");
-		
-		authenticationManagerBuilder.inMemoryAuthentication()
-									.withUser("Florent")
-									.password(passwordEncoder().encode("coucou"))
-									.roles("ADMIN");
+									.roles("ADMIN", "USER");
 	}
 
 	@Bean
@@ -53,15 +49,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.csrf().disable();
 
 		// The pages does not require login
-		http.authorizeRequests().antMatchers("/", "/login", "/logout").permitAll();
+		http.authorizeRequests()
+			.antMatchers("/", "/login", "/logout").permitAll();
 
 		// /userInfo page requires login as USER or ADMIN.
 		// If no login, it will redirect to /login page.
-		http.authorizeRequests().antMatchers("/user").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/dashboard").access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')");
 
 		// For ADMIN only.
-		http.authorizeRequests().antMatchers("/dashboard", "/addComputer", "/editComputer")
-				.access("hasRole('ROLE_ADMIN')");
+		http.authorizeRequests().antMatchers("/addComputer", "/editComputer")
+								.access("hasRole('ROLE_ADMIN')");
 
 		// When the user has logged in as XX.
 		// But access a page that requires role YY,
@@ -73,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// Submit URL of login page.
 				.loginProcessingUrl("/j_spring_security_check") // Submit URL
 				.loginPage("/login")//
-				.defaultSuccessUrl("/user")//
+				.defaultSuccessUrl("/dashboard")//
 				.failureUrl("/login?error=true")//
 				.usernameParameter("username")//
 				.passwordParameter("password")
@@ -81,6 +78,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().logout().logoutUrl("/logout").logoutSuccessUrl("/logoutSuccessful");
 
 	}
-
 	
 }

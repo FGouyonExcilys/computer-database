@@ -3,7 +3,7 @@
 
 <%@ page isELIgnored="false"%>
 
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>  
 
@@ -38,7 +38,7 @@
 				<spring:message code="label.title"/> </a>
 		</div>
 	</header>
-
+	<jsp:include page="_menu.jsp" />
 	<section id="main">
 		<div class="container">
 			<c:choose>

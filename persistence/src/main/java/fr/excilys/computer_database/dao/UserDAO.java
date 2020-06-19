@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.sql.DataSource;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -34,6 +35,7 @@ public class UserDAO extends JdbcDaoSupport {
 		this.setDataSource(dataSource);
 	}
 
+	@Transactional
 	public Optional<User> findUser(String username) {
 
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -54,23 +56,22 @@ public class UserDAO extends JdbcDaoSupport {
 
 	public List<String> getUserRoles(String username) {
 
-		List<String> roleList = new ArrayList<>();
-
+		List<String> rolesList = new ArrayList<String>();
+		
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		criteriaBuilder = entityManager.getCriteriaBuilder();
 		CriteriaQuery<Role> criteriaQuery = criteriaBuilder.createQuery(Role.class);
 		Root<Role> root = criteriaQuery.from(Role.class);
-		Predicate roles = criteriaBuilder.equal(root.get("username"), username);
+		
 		criteriaQuery.select(root);
-		criteriaQuery.where(roles);
-
-		TypedQuery<Role> tqRole = entityManager.createQuery(criteriaQuery);
-
-		for (Role role : tqRole.getResultList()) {
-			roleList.add(role.getUsername());
+		criteriaQuery.where(criteriaBuilder.equal(root.get("username"), username));
+		
+		for(Role role : entityManager.createQuery(criteriaQuery).getResultList()) {
+			rolesList.add(role.getUserRole());
 		}
-
-		return roleList;
+		System.out.println("Roles: " + rolesList);
+		
+		return rolesList;
 	}
 
 }

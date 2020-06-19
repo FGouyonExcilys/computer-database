@@ -15,18 +15,14 @@
 <spring:url value="resources/css/bootstrap.min.css" var="bootstrapCSS" />
 <spring:url value="resources/css/font-awesome.css" var="fontAwesomeCSS" />
 <spring:url value="resources/css/main.css" var="mainCSS" />
+<spring:url value="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css" var="flagCSS" />
 <link href="${bootstrapCSS}" rel="stylesheet" media="screen">
 <link href="${fontAwesomeCSS}" rel="stylesheet" media="screen">
 <link href="${mainCSS}" rel="stylesheet" media="screen">
+<link href="${flagCSS}" rel="stylesheet" media="screen">
 </head>
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
-				Computer Database </a>
-		</div>
-	</header>
-
+	<jsp:include page="_menu.jsp" /><br />
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
