@@ -81,14 +81,15 @@ public class DashboardController {
 		for (String s : deleteSelectionArray) {
 			try {
 				computerServ.deleteComputer(Integer.parseInt(s));
+				return "redirect:/dashboard?deleteSuccess=1";
 			} catch (NumberFormatException e) {
-				Loggers.afficherMessageError("NumberFormatException in Dashboard Servlet" + e.getMessage());
+				Loggers.afficherMessageError("NumberFormatException in Dashboard Servlet " + e.getMessage());
 			} catch (DAOConfigurationException e) {
-				Loggers.afficherMessageError("DAOConfigurationException in Dashboard Servlet" + e.getMessage());
+				Loggers.afficherMessageError("DAOConfigurationException in Dashboard Servlet " + e.getMessage());
 			}
 		}
 
-		return "redirect:/dashboard?deleteSuccess=1";
+		return "redirect:/dashboard";
 
 	}
 

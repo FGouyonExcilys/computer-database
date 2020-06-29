@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fr.excilys</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>8.0.1-SNAPSHOT</version>
 	</parent>
 	
 	<artifactId>persistence</artifactId>
@@ -21,12 +21,12 @@
 		<dependency>
 			<groupId>fr.excilys</groupId>
 			<artifactId>core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>8.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>fr.excilys</groupId>
 			<artifactId>binding</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>8.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

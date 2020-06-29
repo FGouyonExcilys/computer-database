@@ -27,7 +27,7 @@ public class ComputerRestController {
 		this.companyServ = companyServ;
 	}
 
-	@GetMapping("/")
+	@GetMapping
 	public List<Computer> getAllComputers() throws DAOConfigurationException {
 		
 		Paginer paginer = new Paginer.PaginerBuilder().setSearch("").setOrderBy("").build();
@@ -35,7 +35,7 @@ public class ComputerRestController {
 		return computerList;
 	}
 
-	@GetMapping("/computer/{id}")
+	@GetMapping("/{id}")
 	public Computer getOneComputer(@PathVariable Integer id) throws DAOConfigurationException {
 		return computerServ.getComputerById(id);
 		

@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>computer-database</artifactId>
 		<groupId>fr.excilys</groupId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>8.0.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>webapp</artifactId>
@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>fr.excilys</groupId>
 			<artifactId>service</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>8.0.1-SNAPSHOT</version>
 		</dependency>
 
 	</dependencies>
