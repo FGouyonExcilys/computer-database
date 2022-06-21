@@ -24,7 +24,7 @@
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.login>463fc2fc770084e1c8d93b1d16d6feb3ea1246ae</sonar.login>
 
-		<mysql.version>8.0.20</mysql.version>
+		<mysql.version>8.0.28</mysql.version>
 		<h2.version>1.4.199</h2.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.9.5</mockito.version>
